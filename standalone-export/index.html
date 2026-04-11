@@ -4,302 +4,291 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shorelinesky</title>
-  <meta name="description" content="一个简洁、稳定、适合手机和电脑展示的首页。">
+  <meta name="description" content="shorelinesky · 张天硕的全屏首页，适配手机和电脑。">
   <style>
     :root{
-      --bg:#f8fafc;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#64748b;
-      --line:#dbe4ef;
-      --accent:#0284c7;
-      --accent-soft:rgba(2,132,199,.12);
-      --shadow:0 24px 60px rgba(15,23,42,.08);
-      --radius:28px;
-      font-synthesis-weight:none;
-      text-rendering:optimizeLegibility;
+      --bg:#07111f;
+      --text:#f8fafc;
+      --muted:rgba(248,250,252,.76);
+      --line:rgba(255,255,255,.18);
+      --accent:#f2b8c6;
+      --shadow:0 24px 80px rgba(0,0,0,.28);
+      --font-display:"Iowan Old Style","Palatino Linotype","Noto Serif SC","Songti SC",serif;
+      --font-body:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html{scroll-behavior:smooth;background:var(--bg)}
     body{
       margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      font-family:var(--font-body);
       color:var(--text);
-      background:
-        radial-gradient(circle at top right, rgba(56,189,248,.18), transparent 34%),
-        radial-gradient(circle at bottom left, rgba(59,130,246,.14), transparent 28%),
-        var(--bg);
-      line-height:1.6;
+      background:var(--bg);
+      overflow-x:hidden;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+      font-synthesis-weight:none;
     }
     a{color:inherit;text-decoration:none}
-    .wrap{max-width:1120px;margin:0 auto;padding:24px}
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      padding:4px 0 18px;
+    .page{min-height:100svh;background:var(--bg)}
+    .hero{
+      position:relative;
+      isolation:isolate;
+      min-height:100svh;
+      overflow:clip;
+      display:grid;
+      align-items:end;
     }
-    .brand{display:flex;align-items:center;gap:14px}
-    .mark{
-      width:44px;height:44px;border-radius:14px;
-      display:grid;place-items:center;
-      background:linear-gradient(180deg,#fff,#f1f5f9);
+    .hero-bg,.hero-veil,.hero-vignette{position:absolute;inset:0}
+    .hero-bg{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center 34%;
+      transform:scale(1.06);
+      animation:slow-zoom 18s ease-in-out infinite alternate;
+    }
+    .hero-veil{
+      background:
+        linear-gradient(110deg, rgba(4,8,16,.86) 0%, rgba(4,8,16,.42) 42%, rgba(4,8,16,.18) 100%),
+        linear-gradient(180deg, rgba(4,8,16,.12) 0%, rgba(4,8,16,.38) 100%);
+    }
+    .hero-vignette{
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255,255,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(255,211,220,.22), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(0,0,0,0), rgba(0,0,0,.18) 100%);
+    }
+    .hero-shell{
+      position:relative;
+      z-index:1;
+      width:min(1120px, calc(100% - 32px));
+      margin:0 auto;
+      padding:28px 0 34px;
+      min-height:100svh;
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:40px;
+    }
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      gap:14px;
+      width:fit-content;
+      padding:8px 12px 8px 8px;
       border:1px solid var(--line);
-      box-shadow:0 8px 20px rgba(15,23,42,.06);
-      font-weight:700;letter-spacing:.08em;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      backdrop-filter:blur(14px);
+      box-shadow:0 10px 30px rgba(0,0,0,.14);
+      animation:fade-in-up 900ms ease both;
     }
-    .logo{
-      width:44px;height:44px;border-radius:14px;
+    .brand-mark{
+      width:38px;
+      height:38px;
       display:block;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:0 8px 20px rgba(15,23,42,.06);
-      padding:4px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.12);
       object-fit:cover;
     }
-    .brand small{display:block;color:var(--muted);font-size:.92rem}
-    .brand strong{display:block;font-size:1rem}
-    .nav{display:none;gap:24px;color:var(--muted);font-size:.95rem}
-    .nav a:hover{color:var(--text)}
-
-    .hero{
-      display:grid;gap:22px;align-items:center;
-      padding:42px 0 24px;
+    .brand-copy{display:grid;gap:2px}
+    .brand-name{
+      margin:0;
+      font-size:.78rem;
+      line-height:1;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.82);
+    }
+    .brand-subtitle{
+      margin:0;
+      font-size:.95rem;
+      line-height:1.2;
+      color:rgba(255,255,255,.74);
+    }
+    .hero-copy{
+      align-self:end;
+      max-width:760px;
+      padding:clamp(12px, 2vw, 24px) 0 0;
+      animation:fade-in-up 1000ms ease 120ms both;
     }
     .eyebrow{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid rgba(2,132,199,.18);
-      background:rgba(255,255,255,.78);
-      color:#0369a1;
-      border-radius:999px;
-      padding:10px 16px;
-      font-size:.92rem;
+      margin:0;
       width:fit-content;
-      backdrop-filter:blur(8px);
+      padding:8px 14px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.84);
+      font-size:.88rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      backdrop-filter:blur(12px);
     }
     h1{
       margin:18px 0 0;
-      font-size:clamp(2.4rem,6vw,4.6rem);
-      line-height:1.08;
-      letter-spacing:-.04em;
-      max-width:12ch;
+      max-width:9ch;
+      font-family:var(--font-display);
+      font-size:clamp(3.8rem, 10vw, 8.2rem);
+      line-height:.92;
+      letter-spacing:-.06em;
+      color:#fff;
+      text-shadow:0 8px 28px rgba(0,0,0,.24);
     }
     .lede{
       margin:18px 0 0;
-      max-width:62ch;
-      font-size:clamp(1rem,2vw,1.15rem);
+      max-width:58ch;
+      font-size:clamp(1rem, 2vw, 1.18rem);
+      line-height:1.85;
       color:var(--muted);
+      text-wrap:balance;
     }
-    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      min-height:46px;padding:0 20px;border-radius:999px;
-      font-weight:600;font-size:.95rem;transition:transform .18s ease,background .18s ease,border-color .18s ease;
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:30px;
     }
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--text);color:#fff;box-shadow:0 14px 30px rgba(15,23,42,.14)}
-    .btn-secondary{background:#fff;border:1px solid #cbd5e1;color:#334155}
-    .stats{display:grid;gap:12px;margin-top:30px;grid-template-columns:repeat(1,minmax(0,1fr))}
-    .stat{
-      background:rgba(255,255,255,.82);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:16px 18px;
-      box-shadow:0 10px 24px rgba(15,23,42,.04);
+    .button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:48px;
+      padding:0 20px;
+      border-radius:999px;
+      border:1px solid transparent;
+      font-size:.96rem;
+      font-weight:600;
+      letter-spacing:.01em;
+      transition:transform 180ms ease, border-color 180ms ease, background-color 180ms ease, color 180ms ease;
     }
-    .stat span{display:block;color:var(--muted);font-size:.88rem}
-    .stat strong{display:block;margin-top:4px;font-size:1.05rem}
-
-    .panel{
-      background:rgba(255,255,255,.92);
-      border:1px solid var(--line);
-      border-radius:calc(var(--radius) + 4px);
-      box-shadow:var(--shadow);
-      padding:22px;
+    .button:hover{transform:translateY(-1px)}
+    .button-primary{
+      background:rgba(255,255,255,.96);
+      color:#102032;
+      box-shadow:0 16px 34px rgba(0,0,0,.18);
     }
-    .panel-head{
-      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
-      padding-bottom:18px;border-bottom:1px solid var(--line);
+    .button-primary:hover{background:#fff}
+    .button-secondary{
+      border-color:rgba(255,255,255,.2);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.92);
+      backdrop-filter:blur(10px);
     }
-    .chip{
-      display:inline-flex;align-items:center;justify-content:center;
-      border-radius:999px;background:#ecfeff;color:#0f766e;
-      padding:6px 12px;font-size:.85rem;font-weight:600;
-      white-space:nowrap;
+    .button-secondary:hover{
+      border-color:rgba(255,255,255,.32);
+      background:rgba(255,255,255,.1);
     }
-    .card-grid{display:grid;gap:14px;margin-top:18px}
-    .card{
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px;
-      background:#f8fafc;
+    .footnote{
+      margin:18px 0 0;
+      max-width:54ch;
+      font-size:.95rem;
+      line-height:1.8;
+      color:rgba(255,255,255,.7);
     }
-    .card h3,.section h2{margin:0}
-    .card p{margin:8px 0 0;color:var(--muted);font-size:.95rem}
-    .quote{
-      margin-top:18px;
-      border-radius:22px;
-      background:#0f172a;
-      color:#fff;
-      padding:18px;
+    .scroll-hint{
+      position:absolute;
+      right:0;
+      bottom:18px;
+      z-index:2;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      color:rgba(255,255,255,.74);
+      font-size:.86rem;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(12px);
+      animation:fade-in-up 1100ms ease 220ms both;
     }
-    .quote p{margin:8px 0 0;color:#cbd5e1}
-
-    .section{padding:12px 0 0}
-    .section-grid{display:grid;gap:16px}
-    .section-box{
-      background:#fff;border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:0 10px 24px rgba(15,23,42,.04);
+    .scroll-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 0 rgba(242,184,198,.65);
+      animation:pulse 2.4s ease-in-out infinite;
     }
-    .section-box ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(1,minmax(0,1fr))}
-    .section-box li{
-      display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:#f8fafc;color:#334155;
+    @keyframes fade-in-up{
+      from{opacity:0;transform:translateY(16px)}
+      to{opacity:1;transform:translateY(0)}
     }
-    .dot{width:10px;height:10px;border-radius:999px;background:var(--accent);flex:none}
-
-    .cta{
-      margin:18px 0 10px;
-      background:#0f172a;color:#fff;border-radius:34px;padding:26px;
-      box-shadow:0 26px 60px rgba(15,23,42,.18);
+    @keyframes slow-zoom{
+      from{transform:scale(1.04) translate3d(0,0,0)}
+      to{transform:scale(1.1) translate3d(0,-1.2%,0)}
     }
-    .cta p{color:#cbd5e1}
-    .footer{padding:18px 0 30px;color:var(--muted);font-size:.92rem}
-
-    @media (min-width: 768px){
-      .wrap{padding:28px 32px}
-      .nav{display:flex}
-      .hero{grid-template-columns:1.1fr .9fr;padding:56px 0 30px}
-      .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .section-box ul{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .cta{padding:34px}
+    @keyframes pulse{
+      0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(242,184,198,.45)}
+      50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(242,184,198,0)}
     }
-    @media (min-width: 1024px){
-      .wrap{padding:32px 40px}
-      .hero{padding:72px 0 34px}
-      .panel{padding:28px}
-      .card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:767px){
+      .hero-bg{object-position:50% 32%}
+      .hero-shell{
+        width:min(100%, calc(100% - 24px));
+        padding:18px 0 24px;
+        gap:24px;
+      }
+      .hero-copy{padding-bottom:28px}
+      h1{max-width:8ch;font-size:clamp(3rem, 16vw, 4.8rem)}
+      .scroll-hint{
+        left:12px;
+        right:12px;
+        justify-content:center;
+        text-align:center;
+        bottom:12px;
+      }
+    }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .hero-bg,.brand,.hero-copy,.scroll-hint,.scroll-dot{animation:none !important}
+      .button{transition:none}
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <img class="logo" src="ecust-logo.png" alt="站点标志">
-        <div>
-          <strong>shorelinesky</strong>
-          <small>张天硕</small>
-        </div>
-      </div>
-      <nav class="nav" aria-label="主要导航">
-        <a href="#highlights">亮点</a>
-        <a href="#sections">内容</a>
-        <a href="#contact">联系</a>
-      </nav>
-    </header>
+  <main class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-bg" src="sakura-wallpaper.jpg" alt="" aria-hidden="true">
+      <div class="hero-veil"></div>
+      <div class="hero-vignette"></div>
 
-    <section class="hero">
-      <div>
-        <div class="eyebrow">简洁首页 · 手机和电脑都能正常显示</div>
-        <h1>一个干净、稳定、便于继续扩展的首页。</h1>
-        <p class="lede">
-          这版页面重点放在排版、间距和响应式结构上。手机上是一列，桌面上自动展开成两列和卡片区，不依赖复杂交互，也更不容易出问题。
-        </p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#contact">继续下一步</a>
-          <a class="btn btn-secondary" href="#highlights">查看内容</a>
-        </div>
+      <div class="hero-shell">
+        <header class="brand" id="brand">
+          <img class="brand-mark" src="ecust-logo.png" alt="shorelinesky 标志">
+          <div class="brand-copy">
+            <p class="brand-name">shorelinesky</p>
+            <p class="brand-subtitle">张天硕</p>
+          </div>
+        </header>
 
-        <div class="stats">
-          <div class="stat">
-            <span>适配方式</span>
-            <strong>移动优先</strong>
+        <div class="hero-copy">
+          <p class="eyebrow">Sakura / Responsive / Cloudflare Pages</p>
+          <h1 id="hero-title">shorelinesky</h1>
+          <p class="lede">
+            一个干净、克制、能在手机和电脑上稳定显示的首页。用樱花壁纸做全屏主视觉，把品牌、标题和下一步动作放进同一张画面里。
+          </p>
+
+          <div class="actions">
+            <a class="button button-primary" href="/defense">查看展示页</a>
+            <a class="button button-secondary" href="mailto:hello@example.com">联系我</a>
           </div>
-          <div class="stat">
-            <span>视觉风格</span>
-            <strong>干净克制</strong>
-          </div>
-          <div class="stat">
-            <span>结构</span>
-            <strong>单页清晰</strong>
-          </div>
+
+          <p class="footnote">
+            桌面端保持宽屏构图，移动端自动收拢为单列，避免信息堆叠和卡片噪音。
+          </p>
         </div>
       </div>
 
-      <div class="panel" aria-label="页面概览">
-        <div class="panel-head">
-          <div>
-            <small style="color:var(--muted);display:block;">当前首页</small>
-            <h2 style="margin-top:4px;font-size:1.55rem;">清晰信息区</h2>
-          </div>
-          <div class="chip">Ready</div>
-        </div>
-
-        <div class="card-grid">
-          <article class="card">
-            <h3>清晰展示</h3>
-            <p>首屏直接说明页面用途，不堆内容，不做复杂动效。</p>
-          </article>
-          <article class="card">
-            <h3>响应式布局</h3>
-            <p>手机单列、桌面双列，自然适配不同屏幕宽度。</p>
-          </article>
-          <article class="card">
-            <h3>易于扩展</h3>
-            <p>后续要加产品、文章、联系方式，都能直接往下接。</p>
-          </article>
-          <article class="card">
-            <h3>稳定易维护</h3>
-            <p>样式直接内嵌，发布和排查都更简单。</p>
-          </article>
-        </div>
-
-        <div class="quote">
-          <small style="color:#94a3b8;display:block;">设计目标</small>
-          <p>页面不用华丽，但要整齐、稳定、容易看，手机和电脑打开都不会乱。</p>
-        </div>
-      </div>
+      <a class="scroll-hint" href="#brand" aria-label="返回顶部">
+        <span class="scroll-dot"></span>
+        <span>shorelinesky · 张天硕</span>
+      </a>
     </section>
-
-    <section id="highlights" class="section">
-      <div class="section-grid">
-        <div class="section-box">
-          <h2>页面特点</h2>
-          <ul>
-            <li><span class="dot"></span><span>内容简洁</span></li>
-            <li><span class="dot"></span><span>留白充足</span></li>
-            <li><span class="dot"></span><span>对比清楚</span></li>
-            <li><span class="dot"></span><span>移动端友好</span></li>
-          </ul>
-        </div>
-        <div class="section-box">
-          <h2>适合做什么</h2>
-          <ul>
-            <li><span class="dot"></span><span>个人主页</span></li>
-            <li><span class="dot"></span><span>产品首页</span></li>
-            <li><span class="dot"></span><span>项目入口</span></li>
-            <li><span class="dot"></span><span>简单介绍页</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="sections" class="section">
-      <div class="cta">
-        <p style="margin:0;color:#94a3b8;text-transform:uppercase;letter-spacing:.18em;font-size:.82rem;">下一步</p>
-        <h2 style="margin:10px 0 0;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.15;">如果你要正式上线，我可以继续帮你补内容。</h2>
-        <p style="margin:14px 0 0;max-width:62ch;">
-          可以继续做成个人主页、企业首页、产品介绍页，或者把这个首页接到你的 Cloudflare 域名上。
-        </p>
-        <div class="actions" id="contact">
-          <a class="btn btn-primary" href="mailto:hello@example.com">邮件联系</a>
-          <a class="btn btn-secondary" href="#highlights">备用入口</a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      shorelinesky · 简洁首页
-    </footer>
-  </div>
+  </main>
 </body>
 </html>
