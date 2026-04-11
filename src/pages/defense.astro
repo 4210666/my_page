@@ -63,7 +63,7 @@ const totalSlides = presentationSlides.length;
     </header>
 
     <section class="presentation-stage">
-      <swiper-container class="presentation-swiper" init="false" a11y="true" data-total={totalSlides}></swiper-container>
+      <swiper-container class="presentation-swiper" init="false" a11y="true" data-total={totalSlides}>
 
       <div class="presentation-meta">
         <div class="meta-topline">
@@ -75,7 +75,6 @@ const totalSlides = presentationSlides.length;
     </section>
   </main>
 
-  <template id="slidesTemplate">
     <swiper-slide>
       <article class="scene scene-cover" data-scene="cover">
         <div class="scene-backdrop stage-backdrop"></div>
@@ -376,13 +375,12 @@ const totalSlides = presentationSlides.length;
         </div>
       </article>
     </swiper-slide>
-  </template>
+  </swiper-container>
 
   <script is:inline src="/vendor/swiper/swiper-element-bundle.min.js"></script>
   <script is:inline src="/vendor/gsap/gsap.min.js"></script>
   <script is:inline>
     const swiperElement = document.querySelector('.presentation-swiper');
-    const slidesTemplate = document.querySelector('#slidesTemplate');
     const progressBar = document.querySelector('#progressBar');
     const pageIndicator = document.querySelector('#pageIndicator');
     const fullscreenButton = document.querySelector('#fullscreenButton');
@@ -714,8 +712,7 @@ const totalSlides = presentationSlides.length;
 
     const resolveSwiper = (event) => event?.detail?.[0] || event?.target?.swiper || swiperElement?.swiper;
 
-    if (swiperElement && slidesTemplate) {
-      swiperElement.innerHTML = slidesTemplate.innerHTML;
+    if (swiperElement) {
       ensureBackdropLayers();
 
       Object.assign(swiperElement, {
