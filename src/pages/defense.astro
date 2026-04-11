@@ -64,17 +64,6 @@ const totalSlides = presentationSlides.length;
 
     <section class="presentation-stage">
       <swiper-container class="presentation-swiper" init="false" a11y="true" data-total={totalSlides}>
-
-      <div class="presentation-meta">
-        <div class="meta-topline">
-          <span class="meta-caption">Presentation Progress</span>
-          <p id="pageIndicator" class="page-indicator">01 / {String(totalSlides).padStart(2, '0')}</p>
-        </div>
-        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
-      </div>
-    </section>
-  </main>
-
     <swiper-slide>
       <article class="scene scene-cover" data-scene="cover">
         <div class="scene-backdrop stage-backdrop"></div>
@@ -376,6 +365,16 @@ const totalSlides = presentationSlides.length;
       </article>
     </swiper-slide>
   </swiper-container>
+
+      <div class="presentation-meta">
+        <div class="meta-topline">
+          <span class="meta-caption">Presentation Progress</span>
+          <p id="pageIndicator" class="page-indicator">01 / {String(totalSlides).padStart(2, '0')}</p>
+        </div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+    </section>
+  </main>
 
   <script is:inline src="/vendor/swiper/swiper-element-bundle.min.js"></script>
   <script is:inline src="/vendor/gsap/gsap.min.js"></script>
