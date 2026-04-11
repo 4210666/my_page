@@ -2,78 +2,216 @@
 import Layout from '~/layouts/Layout.astro';
 import logo from '~/assets/images/ecust-logo.png';
 import sakuraBg from '~/assets/images/sakura-wallpaper.jpg';
+import labBg from '~/assets/images/lab-wallpaper.jpg';
 
 const metadata = {
   title: 'shorelinesky',
-  description: 'shorelinesky · 张天硕的全屏首页，适配手机和电脑。',
+  description: 'shorelinesky home with sakura and lab theme switching.',
   ignoreTitleTemplate: true,
 };
 ---
 
 <Layout metadata={metadata}>
+  <script is:inline slot="head">
+    (() => {
+      try {
+        const saved = localStorage.getItem('shorelinesky-theme');
+        const theme = saved === 'lab' ? 'lab' : 'sakura';
+        document.documentElement.dataset.theme = theme;
+      } catch {
+        document.documentElement.dataset.theme = 'sakura';
+      }
+    })();
+  </script>
+
   <main class="page">
     <section class="hero" aria-labelledby="hero-title">
-      <img
-        class="hero-bg"
-        src={sakuraBg.src}
-        alt=""
-        aria-hidden="true"
-      />
-      <div class="hero-veil"></div>
-      <div class="hero-vignette"></div>
+      <div class="hero-stage" aria-hidden="true">
+        <img class="hero-bg hero-bg--sakura" src={sakuraBg.src} alt="" decoding="async" fetchpriority="high" />
+        <img class="hero-bg hero-bg--lab" src={labBg.src} alt="" decoding="async" fetchpriority="low" />
+        <div class="hero-veil"></div>
+        <div class="hero-glow hero-glow--one"></div>
+        <div class="hero-glow hero-glow--two"></div>
+        <div class="hero-grain"></div>
+      </div>
 
       <div class="hero-shell">
-        <header class="brand" id="brand">
-          <img class="brand-mark" src={logo.src} alt="shorelinesky 标志" />
-          <div class="brand-copy">
+        <header class="masthead">
+          <button class="theme-crest" type="button" aria-label="Switch theme" aria-pressed="false">
+            <span class="theme-crest__frame">
+              <span class="theme-crest__flipper" data-flipper>
+                <span class="theme-crest__face theme-crest__face--front" data-theme-face="sakura">
+                  <span class="theme-crest__medallion theme-crest__medallion--sakura">
+                    <img class="theme-crest__logo" src={logo.src} alt="" aria-hidden="true" />
+                  </span>
+                </span>
+                <span class="theme-crest__face theme-crest__face--back" data-theme-face="lab">
+                  <span class="theme-crest__medallion theme-crest__medallion--lab" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" class="theme-crest__glyph">
+                      <defs>
+                        <linearGradient id="lab-stroke" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stop-color="#89ffe4" />
+                          <stop offset="100%" stop-color="#1a4d55" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M50 11 82 29v42L50 89 18 71V29z" fill="none" stroke="url(#lab-stroke)" stroke-width="4.5" />
+                      <path d="M50 26 69 37v26L50 74 31 63V37z" fill="none" stroke="rgba(217,255,249,0.85)" stroke-width="2.4" />
+                      <circle cx="50" cy="50" r="7.5" fill="#8ffbf1" opacity="0.96" />
+                      <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(143,251,241,0.22)" stroke-width="1.5" />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+
+          <div class="masthead-copy">
             <p class="brand-name">shorelinesky</p>
-            <p class="brand-subtitle">张天硕</p>
+            <p class="brand-subtitle">Zhang Tianshuo</p>
           </div>
         </header>
 
         <div class="hero-copy">
-          <p class="eyebrow">Sakura / Responsive / Cloudflare Pages</p>
+          <p class="eyebrow">Sakura / Lab</p>
           <h1 id="hero-title">shorelinesky</h1>
-          <p class="lede">
-            一个干净、克制、能在手机和电脑上稳定显示的首页。用樱花壁纸做全屏主视觉，把品牌、标题和下一步动作放进同一张画面里。
-          </p>
-
+          <p class="lede">Click the crest in the corner. It flips first, then ripples the whole page into the other world.</p>
           <div class="actions">
-            <a class="button button-primary" href="/defense">进入展示页</a>
-            <a class="button button-secondary" href="mailto:hello@example.com">联系我</a>
+            <a class="button button-primary" href="/defense">Enter Showcase</a>
           </div>
-
-          <p class="footnote">
-            桌面端保持宽屏构图，移动端自动收拢为单列，避免信息堆叠和卡片噪音。
-          </p>
         </div>
       </div>
 
-      <a class="scroll-hint" href="#brand" aria-label="返回顶部">
-        <span class="scroll-dot"></span>
-        <span>shorelinesky · 张天硕</span>
-      </a>
+      <div class="ripple-layer" aria-hidden="true" data-ripple-layer></div>
     </section>
   </main>
+
+  <script type="module">
+    import gsap from 'gsap';
+
+    const root = document.documentElement;
+    const hero = document.querySelector('.hero');
+    const crest = document.querySelector('.theme-crest');
+    const flipper = document.querySelector('[data-flipper]');
+    const ripple = document.querySelector('[data-ripple-layer]');
+
+    if (hero && crest && flipper && ripple) {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const state = {
+        theme: root.dataset.theme === 'lab' ? 'lab' : 'sakura',
+        running: false,
+      };
+
+      const applyTheme = (theme) => {
+        state.theme = theme;
+        root.dataset.theme = theme;
+        crest.setAttribute('aria-pressed', theme === 'lab' ? 'true' : 'false');
+        try {
+          localStorage.setItem('shorelinesky-theme', theme);
+        } catch {
+          // Ignore storage failures in restricted modes.
+        }
+      };
+
+      applyTheme(state.theme);
+
+      const updateFlip = () => {
+        const targetRotation = state.theme === 'lab' ? 180 : 0;
+        gsap.set(flipper, { rotateY: targetRotation });
+      };
+
+      updateFlip();
+
+      crest.addEventListener('click', () => {
+        if (state.running) return;
+
+        const nextTheme = state.theme === 'sakura' ? 'lab' : 'sakura';
+        const bounds = crest.getBoundingClientRect();
+        const originX = bounds.left + bounds.width / 2;
+        const originY = bounds.top + bounds.height / 2;
+        const maxX = Math.max(originX, window.innerWidth - originX);
+        const maxY = Math.max(originY, window.innerHeight - originY);
+        const radius = Math.hypot(maxX, maxY) + 32;
+
+        if (prefersReducedMotion) {
+          applyTheme(nextTheme);
+          gsap.set(flipper, { rotateY: nextTheme === 'lab' ? 180 : 0 });
+          return;
+        }
+
+        state.running = true;
+        crest.disabled = true;
+        crest.setAttribute('aria-busy', 'true');
+
+        ripple.dataset.theme = nextTheme;
+        gsap.set(ripple, {
+          clipPath: `circle(0px at ${originX}px ${originY}px)`,
+          opacity: 1,
+        });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power2.inOut' },
+          onComplete: () => {
+            applyTheme(nextTheme);
+            gsap.set(flipper, { rotateY: nextTheme === 'lab' ? 180 : 0 });
+            gsap.set(ripple, { opacity: 0, clipPath: `circle(0px at ${originX}px ${originY}px)` });
+            crest.disabled = false;
+            crest.removeAttribute('aria-busy');
+            state.running = false;
+          },
+        });
+
+        tl.to(flipper, { rotateY: nextTheme === 'lab' ? 180 : 0, duration: 0.58 }, 0);
+        tl.to(crest, { scale: 1.04, duration: 0.22, ease: 'power3.out' }, 0.02);
+        tl.to(crest, { scale: 1, duration: 0.28, ease: 'power2.out' }, 0.28);
+        tl.to(ripple, { clipPath: `circle(${radius}px at ${originX}px ${originY}px)`, duration: 0.9 }, 0.12);
+        tl.call(() => applyTheme(nextTheme), undefined, 0.42);
+        tl.to(ripple, { opacity: 0, duration: 0.18 }, 0.9);
+      });
+    }
+  </script>
 </Layout>
 
 <style>
   :global(:root) {
-    --bg: #07111f;
-    --bg-soft: rgba(7, 17, 31, 0.52);
-    --text: #f8fafc;
-    --muted: rgba(248, 250, 252, 0.76);
-    --line: rgba(255, 255, 255, 0.18);
-    --accent: #f2b8c6;
-    --accent-strong: #ffffff;
-    --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-    --font-display: "Iowan Old Style", "Palatino Linotype", "Noto Serif SC", "Songti SC", serif;
-    --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+    --font-body: "Avenir Next", "Segoe UI", sans-serif;
+    --bg: #f7e6e9;
+    --bg-accent: radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.52), transparent 32%), radial-gradient(circle at 78% 22%, rgba(255, 214, 227, 0.34), transparent 28%), linear-gradient(140deg, #f8e6ea 0%, #f5dbe7 45%, #f6efe8 100%);
+    --text: #20141c;
+    --text-muted: rgba(32, 20, 28, 0.72);
+    --surface: rgba(255, 255, 255, 0.18);
+    --surface-strong: rgba(255, 255, 255, 0.28);
+    --border: rgba(255, 255, 255, 0.32);
+    --accent: #c86f89;
+    --shadow: 0 20px 60px rgba(78, 42, 62, 0.18);
+    --radius-panel: 34px;
+    --radius-button: 999px;
+    --hero-image: url("${sakuraBg.src}");
+  }
+
+  :global(html[data-theme='lab']) {
+    --bg: #051218;
+    --bg-accent: radial-gradient(circle at 24% 18%, rgba(63, 255, 223, 0.18), transparent 26%), radial-gradient(circle at 76% 28%, rgba(34, 102, 112, 0.28), transparent 30%), linear-gradient(145deg, #051218 0%, #071a1b 48%, #0b2a2e 100%);
+    --text: #ecfffb;
+    --text-muted: rgba(236, 255, 251, 0.72);
+    --surface: rgba(7, 24, 28, 0.28);
+    --surface-strong: rgba(7, 24, 28, 0.42);
+    --border: rgba(135, 255, 238, 0.22);
+    --accent: #84f0df;
+    --shadow: 0 28px 72px rgba(2, 10, 12, 0.44);
+    --radius-panel: 28px;
+    --radius-button: 18px;
+    --hero-image: url("${labBg.src}");
   }
 
   :global(html) {
-    scroll-behavior: smooth;
+    color-scheme: light;
     background: var(--bg);
+    scroll-behavior: smooth;
+  }
+
+  :global(html[data-theme='lab']) {
+    color-scheme: dark;
   }
 
   :global(body) {
@@ -103,76 +241,231 @@ const metadata = {
     min-height: 100svh;
     overflow: clip;
     display: grid;
-    align-items: end;
+    align-items: stretch;
   }
 
-  .hero-bg,
+  .hero-stage,
   .hero-veil,
-  .hero-vignette {
+  .hero-glow,
+  .hero-grain,
+  .ripple-layer {
     position: absolute;
     inset: 0;
   }
 
   .hero-bg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center 34%;
-    transform: scale(1.06);
-    animation: slow-zoom 18s ease-in-out infinite alternate;
+    transform: scale(1.05);
+    filter: saturate(0.96) contrast(1.04);
+    transition: opacity 700ms ease, transform 14s ease-in-out;
+    will-change: opacity, transform;
+  }
+
+  .hero-bg--sakura {
+    opacity: 1;
+  }
+
+  .hero-bg--lab {
+    opacity: 0;
+  }
+
+  :global(html[data-theme='lab']) .hero-bg--sakura {
+    opacity: 0;
+  }
+
+  :global(html[data-theme='lab']) .hero-bg--lab {
+    opacity: 1;
+  }
+
+
+  :global(html[data-theme='sakura']) .hero-bg--sakura {
+    object-position: 62% 42%;
+    transform: scale(1.02);
+    filter: saturate(1.08) contrast(1.06) brightness(1.03);
   }
 
   .hero-veil {
     background:
-      linear-gradient(110deg, rgba(4, 8, 16, 0.86) 0%, rgba(4, 8, 16, 0.42) 42%, rgba(4, 8, 16, 0.18) 100%),
-      linear-gradient(180deg, rgba(4, 8, 16, 0.12) 0%, rgba(4, 8, 16, 0.38) 100%);
+      linear-gradient(118deg, rgba(255, 248, 249, 0.10) 0%, rgba(255, 248, 249, 0.03) 34%, rgba(2, 8, 12, 0.03) 72%, rgba(2, 8, 12, 0.12) 100%),
+      var(--bg-accent);
+    mix-blend-mode: normal;
+    transition: background 700ms ease;
   }
 
-  .hero-vignette {
-    pointer-events: none;
+  :global(html[data-theme='lab']) .hero-veil {
     background:
-      radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.12), transparent 28%),
-      radial-gradient(circle at 82% 24%, rgba(255, 211, 220, 0.22), transparent 24%),
-      radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.18) 100%);
+      linear-gradient(118deg, rgba(3, 18, 20, 0.20) 0%, rgba(3, 18, 20, 0.10) 36%, rgba(2, 8, 12, 0.16) 72%, rgba(2, 8, 12, 0.38) 100%),
+      var(--bg-accent);
+  }
+
+  .hero-glow {
+    filter: blur(30px);
+    opacity: 0.75;
+    transition: opacity 700ms ease, transform 700ms ease, background 700ms ease;
+  }
+
+  .hero-glow--one {
+    inset: auto auto 10% 56%;
+    width: min(44vw, 720px);
+    height: min(44vw, 720px);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0) 66%);
+  }
+
+  .hero-glow--two {
+    inset: 12% auto auto 8%;
+    width: min(32vw, 520px);
+    height: min(32vw, 520px);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 183, 207, 0.34), rgba(255, 183, 207, 0) 70%);
+  }
+
+  :global(html[data-theme='lab']) .hero-glow--one {
+    background: radial-gradient(circle, rgba(132, 240, 223, 0.22), rgba(132, 240, 223, 0) 68%);
+  }
+
+  :global(html[data-theme='lab']) .hero-glow--two {
+    background: radial-gradient(circle, rgba(0, 128, 140, 0.36), rgba(0, 128, 140, 0) 68%);
+  }
+
+  .hero-grain {
+    opacity: 0.12;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mix-blend-mode: soft-light;
   }
 
   .hero-shell {
     position: relative;
     z-index: 1;
-    width: min(1120px, calc(100% - 32px));
+    width: min(1140px, calc(100% - 32px));
     margin: 0 auto;
-    padding: 28px 0 34px;
+    padding: 26px 0 36px;
     min-height: 100svh;
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 40px;
   }
 
-  .brand {
+  .masthead {
     display: inline-flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     width: fit-content;
-    padding: 8px 12px 8px 8px;
-    border: 1px solid var(--line);
+    padding: 8px 16px 8px 8px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
-    animation: fade-in-up 900ms ease both;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow);
+    transition: background 700ms ease, border-color 700ms ease, box-shadow 700ms ease;
   }
 
-  .brand-mark {
-    width: 38px;
-    height: 38px;
+  .theme-crest {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    perspective: 1200px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+
+  .theme-crest:disabled {
+    cursor: wait;
+  }
+
+  .theme-crest:hover {
+    transform: translateY(-1px);
+  }
+
+  .theme-crest__frame {
+    position: relative;
     display: block;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.12);
-    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    box-shadow: 0 14px 34px rgba(12, 14, 20, 0.18);
   }
 
-  .brand-copy {
+  .theme-crest__flipper {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 560ms cubic-bezier(0.22, 0.82, 0.18, 1);
+    will-change: transform;
+  }
+
+  .theme-crest__face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+    transition: background 700ms ease, border-color 700ms ease, box-shadow 700ms ease;
+  }
+
+  .theme-crest__face--front {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .theme-crest__face--back {
+    transform: rotateY(180deg);
+    background: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+  }
+
+  .theme-crest__medallion {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+
+  .theme-crest__medallion--sakura {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.24) 56%, rgba(255, 255, 255, 0.06) 100%),
+      linear-gradient(145deg, rgba(255, 232, 238, 0.88), rgba(255, 214, 224, 0.82));
+    box-shadow: inset 0 0 0 1px rgba(199, 111, 137, 0.22);
+  }
+
+  .theme-crest__medallion--lab {
+    background:
+      radial-gradient(circle at 50% 35%, rgba(132, 240, 223, 0.14), rgba(132, 240, 223, 0.02) 58%, rgba(255, 255, 255, 0.04) 100%),
+      linear-gradient(145deg, rgba(7, 27, 31, 0.92), rgba(10, 49, 53, 0.82));
+    box-shadow: inset 0 0 0 1px rgba(132, 240, 223, 0.18);
+  }
+
+  .theme-crest__logo {
+    width: 29px;
+    height: 29px;
+    object-fit: contain;
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .theme-crest__glyph {
+    width: 32px;
+    height: 32px;
+    display: block;
+  }
+
+  .masthead-copy {
     display: grid;
     gap: 2px;
   }
@@ -181,37 +474,40 @@ const metadata = {
     margin: 0;
     font-size: 0.78rem;
     line-height: 1;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.82);
+    color: color-mix(in srgb, var(--text) 80%, transparent);
+    transition: color 700ms ease;
   }
 
   .brand-subtitle {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.96rem;
     line-height: 1.2;
-    color: rgba(255, 255, 255, 0.74);
+    color: var(--text-muted);
+    transition: color 700ms ease;
   }
 
   .hero-copy {
     align-self: end;
     max-width: 760px;
     padding: clamp(12px, 2vw, 24px) 0 0;
-    animation: fade-in-up 1000ms ease 120ms both;
   }
 
   .eyebrow {
     margin: 0;
     width: fit-content;
     padding: 8px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.84);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-button);
+    background: color-mix(in srgb, var(--surface) 80%, transparent);
+    color: color-mix(in srgb, var(--text) 84%, transparent);
     font-size: 0.88rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     backdrop-filter: blur(12px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    transition: background 700ms ease, border-color 700ms ease, color 700ms ease;
   }
 
   h1 {
@@ -221,17 +517,19 @@ const metadata = {
     font-size: clamp(3.8rem, 10vw, 8.2rem);
     line-height: 0.92;
     letter-spacing: -0.06em;
-    color: var(--accent-strong);
-    text-shadow: 0 8px 28px rgba(0, 0, 0, 0.24);
+    color: var(--text);
+    text-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+    transition: color 700ms ease, text-shadow 700ms ease;
   }
 
   .lede {
     margin: 18px 0 0;
     max-width: 58ch;
     font-size: clamp(1rem, 2vw, 1.18rem);
-    line-height: 1.85;
-    color: var(--muted);
+    line-height: 1.8;
+    color: var(--text-muted);
     text-wrap: balance;
+    transition: color 700ms ease;
   }
 
   .actions {
@@ -247,12 +545,12 @@ const metadata = {
     justify-content: center;
     min-height: 48px;
     padding: 0 20px;
-    border-radius: 999px;
-    border: 1px solid transparent;
+    border-radius: var(--radius-button);
+    border: 1px solid var(--border);
     font-size: 0.96rem;
     font-weight: 600;
     letter-spacing: 0.01em;
-    transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+    transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
   }
 
   .button:hover {
@@ -260,122 +558,80 @@ const metadata = {
   }
 
   .button-primary {
-    background: rgba(255, 255, 255, 0.96);
-    color: #102032;
-    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+    background: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+    color: var(--text);
+    box-shadow: var(--shadow);
   }
 
   .button-primary:hover {
-    background: #ffffff;
+    background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
   }
 
-  .button-secondary {
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(10px);
+  .ripple-layer {
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+    clip-path: circle(0px at 0 0);
+    transition: opacity 160ms ease;
   }
 
-  .button-secondary:hover {
-    border-color: rgba(255, 255, 255, 0.32);
-    background: rgba(255, 255, 255, 0.1);
+  .ripple-layer[data-theme='sakura'] {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.16) 28%, rgba(248, 208, 220, 0.9) 58%, rgba(247, 230, 233, 0.98) 100%),
+      radial-gradient(circle at 35% 24%, rgba(255, 255, 255, 0.5), transparent 34%),
+      linear-gradient(135deg, rgba(248, 230, 233, 0.96), rgba(255, 219, 229, 0.94));
   }
 
-  .footnote {
-    margin: 18px 0 0;
-    max-width: 54ch;
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .scroll-hint {
-    position: absolute;
-    right: 0;
-    bottom: 18px;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 999px;
-    color: rgba(255, 255, 255, 0.74);
-    font-size: 0.86rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(12px);
-    animation: fade-in-up 1100ms ease 220ms both;
-  }
-
-  .scroll-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    background: var(--accent);
-    box-shadow: 0 0 0 0 rgba(242, 184, 198, 0.65);
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slow-zoom {
-    from {
-      transform: scale(1.04) translate3d(0, 0, 0);
-    }
-    to {
-      transform: scale(1.1) translate3d(0, -1.2%, 0);
-    }
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(242, 184, 198, 0.45);
-    }
-    50% {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 10px rgba(242, 184, 198, 0);
-    }
+  .ripple-layer[data-theme='lab'] {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(170, 255, 246, 0.5), rgba(132, 240, 223, 0.16) 28%, rgba(7, 26, 30, 0.96) 60%, rgba(3, 10, 14, 0.98) 100%),
+      radial-gradient(circle at 42% 30%, rgba(154, 255, 240, 0.42), transparent 34%),
+      linear-gradient(135deg, rgba(5, 18, 24, 0.96), rgba(11, 44, 48, 0.96));
   }
 
   @media (max-width: 767px) {
     .hero-bg {
-      object-position: 50% 32%;
+      object-position: 52% 32%;
     }
 
     .hero-shell {
-      width: min(100%, calc(100% - 24px));
-      padding: 18px 0 24px;
+      width: min(100%, calc(100% - 20px));
+      padding: 16px 0 24px;
       gap: 24px;
     }
 
-    .hero-copy {
-      padding-bottom: 28px;
+    .masthead {
+      gap: 12px;
+      padding-right: 12px;
+    }
+
+    .theme-crest {
+      width: 52px;
+      height: 52px;
+    }
+
+    .theme-crest__medallion {
+      width: 42px;
+      height: 42px;
+    }
+
+    .theme-crest__logo {
+      width: 25px;
+      height: 25px;
+    }
+
+    .theme-crest__glyph {
+      width: 28px;
+      height: 28px;
     }
 
     h1 {
       max-width: 8ch;
-      font-size: clamp(3rem, 16vw, 4.8rem);
+      font-size: clamp(3.2rem, 15vw, 4.8rem);
     }
 
-    .scroll-hint {
-      left: 12px;
-      right: 12px;
-      justify-content: center;
-      text-align: center;
-      bottom: 12px;
+    .lede {
+      max-width: 34ch;
     }
   }
 
@@ -385,15 +641,18 @@ const metadata = {
     }
 
     .hero-bg,
-    .brand,
+    .masthead,
     .hero-copy,
-    .scroll-hint,
-    .scroll-dot {
+    .button,
+    .theme-crest__flipper,
+    .theme-crest,
+    .eyebrow,
+    h1,
+    .lede,
+    .brand-name,
+    .brand-subtitle {
+      transition: none !important;
       animation: none !important;
-    }
-
-    .button {
-      transition: none;
     }
   }
 </style>
