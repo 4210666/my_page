@@ -56,6 +56,14 @@ const totalSlides = presentationSlides.length;
         ))}
       </nav>
 
+      <div class="bar-progress" aria-label="Presentation progress">
+        <div class="bar-progress-topline">
+          <span class="bar-progress-label">Presentation Progress</span>
+          <p id="pageIndicator" class="page-indicator">01 / {String(totalSlides).padStart(2, '0')}</p>
+        </div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+
       <div class="bar-actions">
         <a class="bar-home" href="/">Home</a>
         <button id="fullscreenButton" type="button">Fullscreen</button>
@@ -366,13 +374,6 @@ const totalSlides = presentationSlides.length;
     </swiper-slide>
   </swiper-container>
 
-      <div class="presentation-meta">
-        <div class="meta-topline">
-          <span class="meta-caption">Presentation Progress</span>
-          <p id="pageIndicator" class="page-indicator">01 / {String(totalSlides).padStart(2, '0')}</p>
-        </div>
-        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
-      </div>
     </section>
   </main>
 
@@ -839,12 +840,14 @@ const totalSlides = presentationSlides.length;
     margin: 0;
     min-height: 100%;
     background: #020814;
+    overflow-x: hidden;
   }
 
   :global(body) {
     font-family: 'Iowan Old Style', 'Palatino Linotype', 'Noto Serif SC', 'Songti SC', serif;
     color: #eff4ff;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   :global(*) {
@@ -854,7 +857,9 @@ const totalSlides = presentationSlides.length;
   .presentation-app {
     position: relative;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
+    padding-bottom: 4rem;
     background:
       linear-gradient(180deg, rgba(4, 8, 16, 0.52), rgba(4, 8, 16, 0.8)),
       var(--wallpaper) center / cover no-repeat fixed,
@@ -947,8 +952,9 @@ const totalSlides = presentationSlides.length;
     right: 0.9rem;
     z-index: 40;
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1rem;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 0.9rem;
     align-items: center;
     padding: 0.95rem 1rem;
     border-radius: 26px;
@@ -959,6 +965,7 @@ const totalSlides = presentationSlides.length;
   }
 
   .bar-brand,
+  .bar-progress,
   .bar-actions,
   .scene-tabs,
   .stack,
@@ -970,6 +977,7 @@ const totalSlides = presentationSlides.length;
   }
 
   .bar-brand,
+  .bar-progress,
   .stack,
   .cover-stage,
   .results-notes,
@@ -1008,6 +1016,48 @@ const totalSlides = presentationSlides.length;
     gap: 0.55rem;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .bar-progress {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: min(38rem, 100%);
+    justify-self: center;
+    margin-top: 0.15rem;
+  }
+
+  .bar-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .scene-tabs {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .bar-actions {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .bar-progress-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .bar-progress-label {
+    margin: 0;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #f2b8c6;
   }
 
   .scene-tab,
@@ -1066,6 +1116,7 @@ const totalSlides = presentationSlides.length;
     margin: 0 auto;
     padding-top: 6.55rem;
     padding-bottom: 6.6rem;
+    margin-bottom: 3rem;
     box-sizing: border-box;
     display: grid;
     align-items: center;
@@ -1158,28 +1209,6 @@ const totalSlides = presentationSlides.length;
   :global(.presentation-swiper .swiper-button-next::after) {
     font-size: 1rem;
     font-weight: 800;
-  }
-
-  .presentation-meta {
-    position: fixed;
-    left: 50%;
-    bottom: 1rem;
-    transform: translateX(-50%);
-    z-index: 40;
-    width: min(34rem, 86vw);
-    padding: 0.9rem 1rem 1rem;
-    border-radius: 22px;
-    border: 1px solid rgba(255, 209, 219, 0.14);
-    background: linear-gradient(180deg, rgba(10, 14, 24, 0.84), rgba(10, 14, 24, 0.58));
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(18px);
-  }
-
-  .meta-topline {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
   }
 
   .progress-track {
@@ -2268,13 +2297,23 @@ const totalSlides = presentationSlides.length;
   @media (max-width: 1220px) {
     .presentation-bar {
       grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto;
       justify-items: center;
       text-align: center;
+    }
+
+    .bar-brand,
+    .scene-tabs,
+    .bar-progress,
+    .bar-actions {
+      grid-column: 1;
+      grid-row: auto;
     }
 
     .presentation-stage {
       width: calc(100vw - 1rem);
       padding-bottom: 6rem;
+      margin-bottom: 2.5rem;
     }
 
     .scene {
@@ -2316,9 +2355,8 @@ const totalSlides = presentationSlides.length;
       display: none;
     }
 
-    .presentation-meta {
-      width: calc(100vw - 1.2rem);
-      bottom: 0.6rem;
+    .bar-progress {
+      width: min(32rem, 100%);
     }
 
     .presentation-stage {
@@ -2326,6 +2364,7 @@ const totalSlides = presentationSlides.length;
       padding-top: 6.7rem;
       aspect-ratio: auto;
       min-height: calc(100vh - 9rem);
+      margin-bottom: 2.75rem;
     }
 
     .scene {
