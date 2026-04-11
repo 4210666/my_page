@@ -1,0 +1,2474 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '~/layouts/Layout.astro';
+import logo from '~/assets/images/ecust-logo.png';
+import sakuraBg from '~/assets/images/sakura-wallpaper.jpg';
+
+const defenseEntry = await getEntry('presentation', 'defense');
+
+if (!defenseEntry) {
+  throw new Error('Presentation content entry presentation/defense not found.');
+}
+
+const defenseDeck = defenseEntry.data;
+
+const metadata = {
+  title: defenseDeck.meta.title,
+  description: defenseDeck.meta.description,
+  robots: { index: false, follow: false },
+};
+
+const presentationSlides = [
+  { id: 'cover', label: '封面' },
+  { id: 'overview', label: '结构' },
+  { id: 'problem', label: '问题' },
+  { id: 'theorem', label: '定理' },
+  { id: 'results', label: '结果' },
+  { id: 'compare', label: '价值' },
+  { id: 'method', label: '路径' },
+  { id: 'closing', label: '结束' },
+];
+
+const totalSlides = presentationSlides.length;
+---
+
+<Layout metadata={metadata}>
+  <link slot="head" rel="stylesheet" href="/vendor/swiper/swiper-bundle.min.css" />
+
+  <main class="presentation-app" style={`--wallpaper: url(${sakuraBg.src})`}>
+    <div class="presentation-noise"></div>
+    <div class="presentation-vignette"></div>
+    <div class="presentation-aurora presentation-aurora-a"></div>
+    <div class="presentation-aurora presentation-aurora-b"></div>
+
+    <header class="presentation-bar">
+      <div class="bar-brand">
+        <p class="bar-kicker">shorelinesky</p>
+        <p class="bar-title">张天硕 · Defense Deck</p>
+      </div>
+
+      <nav class="scene-tabs" aria-label="Slides">
+        {presentationSlides.map((slide, index) => (
+          <button class={`scene-tab ${index === 0 ? 'is-active' : ''}`} data-slide-go={index} type="button">
+            <span class="scene-tab-index">{String(index + 1).padStart(2, '0')}</span>
+            <span class="scene-tab-label">{slide.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div class="bar-actions">
+        <a class="bar-home" href="/">Home</a>
+        <button id="fullscreenButton" type="button">Fullscreen</button>
+      </div>
+    </header>
+
+    <section class="presentation-stage">
+      <swiper-container class="presentation-swiper" init="false" a11y="true" data-total={totalSlides}></swiper-container>
+
+      <div class="presentation-meta">
+        <div class="meta-topline">
+          <span class="meta-caption">Presentation Progress</span>
+          <p id="pageIndicator" class="page-indicator">01 / {String(totalSlides).padStart(2, '0')}</p>
+        </div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <template id="slidesTemplate">
+    <swiper-slide>
+      <article class="scene scene-cover" data-scene="cover">
+        <div class="scene-backdrop stage-backdrop"></div>
+        <div class="scene-grid cover-grid">
+          <section class="stack cover-copy" data-animate-group="intro">
+            <p class="eyebrow" data-animate="eyebrow">{defenseDeck.hero.eyebrow}</p>
+            <h1 data-animate="title">{defenseDeck.hero.title}</h1>
+            <p class="lede cover-lede" data-animate="copy">{defenseDeck.hero.subtitle}</p>
+
+            <div class="meta-grid">
+              {defenseDeck.hero.meta.map((item, index) => (
+                <div class="info-card meta-card" data-animate="card" data-delay={index}>{item}</div>
+              ))}
+            </div>
+
+            <div class="badge-row hero-badges" data-animate="chips">
+              {defenseDeck.hero.badges.map((item) => <span class="badge hero-badge">{item}</span>)}
+            </div>
+          </section>
+
+          <section class="cover-stage" data-animate-group="visual">
+            <div class="visual-card orbit-panel" data-animate="visual">
+              <div class="orbital-shell" data-spin="slow">
+                <div class="orbital-ring orbital-ring-a"></div>
+                <div class="orbital-ring orbital-ring-b"></div>
+                <div class="orbital-ring orbital-ring-c"></div>
+                <div class="orbital-node orbital-node-a" data-float="soft"></div>
+                <div class="orbital-node orbital-node-b" data-float="wide"></div>
+                <div class="orbital-node orbital-node-c" data-float="soft"></div>
+              </div>
+              <div class="hero-core" data-pulse="hero">
+                <img src={logo.src} alt="ECUST logo" class="hero-logo" />
+              </div>
+              <div class="hero-signal hero-signal-a"></div>
+              <div class="hero-signal hero-signal-b"></div>
+            </div>
+
+            <div class="signal-row" data-animate="support">
+              <div class="info-card signal-card">
+                <span class="signal-label">Structure</span>
+                <strong>8 Scenes</strong>
+              </div>
+              <div class="info-card signal-card signal-card-warm">
+                <span class="signal-label">Delivery</span>
+                <strong>Stage-first</strong>
+              </div>
+            </div>
+          </section>
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article class="scene scene-overview" data-scene="overview">
+        <div class="scene-backdrop grid-backdrop"></div>
+        <div class="scene-head scene-head-wide" data-animate-group="intro">
+          <p class="eyebrow" data-animate="eyebrow">{defenseDeck.overview.eyebrow}</p>
+          <h2 data-animate="title">{defenseDeck.overview.title}</h2>
+          <p class="lede" data-animate="copy">{defenseDeck.overview.subtitle}</p>
+        </div>
+
+        <div class="overview-layout">
+          <div class="overview-map visual-card" data-animate="visual">
+            <div class="map-line"></div>
+            <div class="map-node map-node-a"><span>01</span><strong>Identity</strong></div>
+            <div class="map-node map-node-b"><span>02</span><strong>Problem</strong></div>
+            <div class="map-node map-node-c"><span>03</span><strong>Theorem</strong></div>
+            <div class="map-node map-node-d"><span>04</span><strong>Proof</strong></div>
+            <div class="map-node map-node-e"><span>05</span><strong>Results</strong></div>
+          </div>
+
+          <div class="card-grid overview-grid">
+            {defenseDeck.overview.cards.map((item, index) => (
+              <article class="info-card overview-card" data-animate="card" data-delay={index}>
+                <span class="index-tag">0{index + 1}</span>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div class="chapter-pills overview-pills" data-animate="chips">
+          {defenseDeck.overview.bullets.map((item) => <span class="badge overview-pill">{item}</span>)}
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article class="scene scene-problem" data-scene="problem">
+        <div class="scene-backdrop problem-backdrop"></div>
+        <div class="scene-grid split-grid problem-grid">
+          <section class="stack" data-animate-group="intro">
+            <div class="scene-head compact-head">
+              <p class="eyebrow" data-animate="eyebrow">{defenseDeck.problem.eyebrow}</p>
+              <h2 data-animate="title">{defenseDeck.problem.title}</h2>
+              <p class="lede" data-animate="copy">{defenseDeck.problem.subtitle}</p>
+            </div>
+
+            <div class="info-card emphasis-card" data-animate="visual">
+              <div class="section-glow"></div>
+              <h3>为什么这一页必须先建立张力</h3>
+              <ul class="bullet-list">
+                {defenseDeck.problem.points.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          </section>
+
+          <section class="stack problem-aside">
+            <div class="visual-card radar-panel" data-animate="visual">
+              <div class="radar-ring radar-ring-a"></div>
+              <div class="radar-ring radar-ring-b"></div>
+              <div class="radar-grid"></div>
+              <div class="radar-shape"></div>
+              <div class="radar-point radar-point-a" data-pulse="soft"></div>
+              <div class="radar-point radar-point-b" data-pulse="soft"></div>
+              <div class="radar-point radar-point-c" data-pulse="soft"></div>
+            </div>
+
+            <div class="metric-grid problem-metrics">
+              {defenseDeck.problem.metrics.map((item, index) => (
+                <div class="metric-box problem-metric" data-animate="card" data-delay={index}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article class="scene scene-theorem" data-scene="theorem">
+        <div class="scene-backdrop theorem-backdrop"></div>
+        <div class="scene-grid theorem-grid">
+          <section class="visual-card theorem-stage" data-animate="visual">
+            <div class="theorem-axis"></div>
+            <div class="theorem-curve theorem-curve-a"></div>
+            <div class="theorem-curve theorem-curve-b"></div>
+            <div class="theorem-node theorem-node-a" data-pulse="soft"></div>
+            <div class="theorem-node theorem-node-b" data-pulse="soft"></div>
+            <div class="theorem-proof-card">
+              <span>Convergence</span>
+              <strong>Stable Bound</strong>
+            </div>
+          </section>
+
+          <section class="stack theorem-copy">
+            <div class="scene-head compact-head" data-animate-group="intro">
+              <p class="eyebrow" data-animate="eyebrow">{defenseDeck.theorem.eyebrow}</p>
+              <h2 data-animate="title">{defenseDeck.theorem.title}</h2>
+              <p class="lede" data-animate="copy">{defenseDeck.theorem.subtitle}</p>
+            </div>
+
+            <div class="info-card theorem-card" data-animate="card">
+              <h3>主定理</h3>
+              <p>{defenseDeck.theorem.theorem}</p>
+            </div>
+
+            <div class="assumption-grid">
+              {defenseDeck.theorem.assumptions.map((item, index) => (
+                <div class="info-card assumption-card" data-animate="card" data-delay={index}>
+                  <span class="index-tag">H{index + 1}</span>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+
+            <div class="badge-row theorem-takeaways" data-animate="chips">
+              {defenseDeck.theorem.takeaways.map((item) => <span class="badge theorem-pill">{item}</span>)}
+            </div>
+          </section>
+        </div>
+      </article>
+    </swiper-slide>
+    <swiper-slide>
+      <article class="scene scene-results" data-scene="results">
+        <div class="scene-backdrop results-backdrop"></div>
+        <div class="scene-head results-head" data-animate-group="intro">
+          <p class="eyebrow" data-animate="eyebrow">{defenseDeck.results.eyebrow}</p>
+          <h2 data-animate="title">{defenseDeck.results.title}</h2>
+          <p class="lede" data-animate="copy">{defenseDeck.results.subtitle}</p>
+        </div>
+
+        <div class="results-layout">
+          <div class="visual-card results-visual" data-animate="visual">
+            <div class="results-grid"></div>
+            <div class="scan-line" data-drift="scan"></div>
+            <div class="beam beam-a"></div>
+            <div class="beam beam-b"></div>
+            <div class="beam beam-c"></div>
+            <div class="heat-cluster heat-cluster-a"></div>
+            <div class="heat-cluster heat-cluster-b"></div>
+            <div class="chart-caption chart-caption-a">Theory</div>
+            <div class="chart-caption chart-caption-b">Experiment</div>
+          </div>
+
+          <aside class="results-notes">
+            {defenseDeck.results.sideNotes.map((item, index) => (
+              <article class="info-card side-note" data-animate="card" data-delay={index}>
+                <span class="signal-label">Focus {index + 1}</span>
+                <p>{item}</p>
+              </article>
+            ))}
+          </aside>
+        </div>
+
+        <div class="overlay-strip results-strip" data-animate="chips">
+          {defenseDeck.results.bullets.map((item) => <span class="overlay-pill">{item}</span>)}
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article class="scene scene-contribution" data-scene="compare">
+        <div class="scene-backdrop contribution-backdrop"></div>
+        <div class="scene-head scene-head-wide" data-animate-group="intro">
+          <p class="eyebrow" data-animate="eyebrow">{defenseDeck.contributions.eyebrow}</p>
+          <h2 data-animate="title">{defenseDeck.contributions.title}</h2>
+          <p class="lede" data-animate="copy">{defenseDeck.contributions.subtitle}</p>
+        </div>
+
+        <div class="contribution-band" data-animate="support">
+          <span>Problem</span>
+          <span class="band-sep"></span>
+          <span>Breakthrough</span>
+          <span class="band-sep"></span>
+          <span>Value</span>
+        </div>
+
+        <div class="card-grid contribution-grid">
+          {defenseDeck.contributions.cards.map((item, index) => (
+            <article class="info-card contribution-card" data-animate="card" data-delay={index}>
+              <div class="card-number">0{index + 1}</div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article class="scene scene-method" data-scene="method">
+        <div class="scene-backdrop method-backdrop"></div>
+        <div class="scene-head scene-head-wide" data-animate-group="intro">
+          <p class="eyebrow" data-animate="eyebrow">{defenseDeck.method.eyebrow}</p>
+          <h2 data-animate="title">{defenseDeck.method.title}</h2>
+          <p class="lede" data-animate="copy">{defenseDeck.method.subtitle}</p>
+        </div>
+
+        <div class="method-layout">
+          <div class="method-line" data-animate="support"></div>
+          <div class="timeline-grid method-grid">
+            {defenseDeck.method.steps.map((step, index) => (
+              <article class="info-card timeline-card" data-animate="card" data-delay={index}>
+                <span class="index-tag">0{index + 1}</span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </article>
+            ))}
+          </div>
+          <div class="visual-card method-console" data-animate="visual">
+            <div class="console-header">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="console-line"><strong>Astro</strong><span>scene composition</span></div>
+            <div class="console-line"><strong>Content</strong><span>editable structure</span></div>
+            <div class="console-line"><strong>Swiper</strong><span>reliable navigation</span></div>
+            <div class="console-line"><strong>GSAP</strong><span>staged motion system</span></div>
+          </div>
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article class="scene scene-closing" data-scene="closing">
+        <div class="scene-backdrop closing-backdrop"></div>
+        <div class="closing-shell">
+          <div class="closing-rings" data-spin="slow">
+            <div class="closing-ring closing-ring-a"></div>
+            <div class="closing-ring closing-ring-b"></div>
+            <div class="closing-ring closing-ring-c"></div>
+          </div>
+          <div class="closing-core" data-pulse="hero">
+            <img src={logo.src} alt="ECUST logo" class="closing-logo" />
+          </div>
+        </div>
+
+        <div class="closing-copy stack" data-animate-group="intro">
+          <p class="eyebrow" data-animate="eyebrow">{defenseDeck.closing.eyebrow}</p>
+          <h2 class="closing-title" data-animate="title">{defenseDeck.closing.title}</h2>
+          <p class="chapter-copy" data-animate="copy">{defenseDeck.closing.quote}</p>
+          <div class="chapter-pills closing-pills" data-animate="chips">
+            {defenseDeck.closing.footer.map((item) => <span class="badge">{item}</span>)}
+          </div>
+        </div>
+      </article>
+    </swiper-slide>
+  </template>
+
+  <script is:inline src="/vendor/swiper/swiper-element-bundle.min.js"></script>
+  <script is:inline src="/vendor/gsap/gsap.min.js"></script>
+  <script is:inline>
+    const swiperElement = document.querySelector('.presentation-swiper');
+    const slidesTemplate = document.querySelector('#slidesTemplate');
+    const progressBar = document.querySelector('#progressBar');
+    const pageIndicator = document.querySelector('#pageIndicator');
+    const fullscreenButton = document.querySelector('#fullscreenButton');
+    const slideTabs = Array.from(document.querySelectorAll('[data-slide-go]'));
+    const total = Number(swiperElement?.dataset.total || 0);
+    const slideTimelines = new WeakMap();
+    const ambientSets = new WeakMap();
+    const sheenTimers = new WeakMap();
+    const sheenSelector = '.info-card, .visual-card, .metric-box, .contribution-band';
+    const interactiveCardSelector = '.info-card, .visual-card, .metric-box, .contribution-band';
+    const sheenProfiles = {
+      cover: { baseDelay: 0.12, step: 0.18, duration: 1.95 },
+      overview: { baseDelay: 0.22, step: 0.28, duration: 2.35 },
+      problem: { baseDelay: 0.18, step: 0.26, duration: 2.2 },
+      theorem: { baseDelay: 0.2, step: 0.3, duration: 2.45 },
+      results: { baseDelay: 0.34, step: 0.44, duration: 2.9 },
+      compare: { baseDelay: 0.28, step: 0.4, duration: 2.7 },
+      method: { baseDelay: 0.24, step: 0.34, duration: 2.55 },
+      closing: { baseDelay: 0.14, step: 0.16, duration: 1.85 },
+    };
+
+    const ensureBackdropLayers = () => {
+      document.querySelectorAll('.scene-backdrop').forEach((backdrop) => {
+        if (backdrop.querySelector('.ambient-orb-a')) return;
+
+        const orbA = document.createElement('div');
+        orbA.className = 'ambient-orb ambient-orb-a';
+
+        const orbB = document.createElement('div');
+        orbB.className = 'ambient-orb ambient-orb-b';
+
+        const sweep = document.createElement('div');
+        sweep.className = 'ambient-sweep-band';
+
+        backdrop.append(orbA, orbB, sweep);
+      });
+    };
+
+    const getSheenConfig = (slide, element, index) => {
+      const sceneId = slide.querySelector('.scene')?.dataset.scene || 'overview';
+      const profile = sheenProfiles[sceneId] || sheenProfiles.overview;
+      let delay = profile.baseDelay + index * profile.step;
+      let duration = profile.duration;
+
+      if (element.classList.contains('visual-card')) {
+        delay += sceneId === 'results' ? 0.16 : 0.08;
+        duration += sceneId === 'results' ? 0.35 : 0.12;
+      }
+
+      if (element.classList.contains('meta-card') || element.classList.contains('signal-card')) {
+        delay = 0.08 + index * 0.14;
+        duration = 1.75;
+      }
+
+      if (element.classList.contains('overview-card')) {
+        delay = 0.24 + index * 0.32;
+        duration = 2.4;
+      }
+
+      if (element.classList.contains('problem-metric')) {
+        delay = 0.52 + index * 0.26;
+        duration = 2.05;
+      }
+
+      if (element.classList.contains('theorem-card')) {
+        delay = 0.22;
+        duration = 2.6;
+      }
+
+      if (element.classList.contains('assumption-card')) {
+        delay = 0.54 + index * 0.34;
+        duration = 2.4;
+      }
+
+      if (element.classList.contains('side-note')) {
+        delay = 0.68 + index * 0.52;
+        duration = 3.05;
+      }
+
+      if (element.classList.contains('contribution-band')) {
+        delay = 0.18;
+        duration = 2.2;
+      }
+
+      if (element.classList.contains('contribution-card')) {
+        delay = 0.62 + index * 0.46;
+        duration = 2.9;
+      }
+
+      if (element.classList.contains('timeline-card')) {
+        delay = 0.46 + index * 0.36;
+        duration = 2.55;
+      }
+
+      return { delay, duration };
+    };
+
+    const clearAnimations = (slide) => {
+      if (!slide || !window.gsap) return;
+
+      const timeline = slideTimelines.get(slide);
+      if (timeline) {
+        timeline.kill();
+        slideTimelines.delete(slide);
+      }
+
+      const ambient = ambientSets.get(slide) || [];
+      ambient.forEach((animation) => animation.kill());
+      ambientSets.delete(slide);
+
+      const backdrop = slide.querySelector('.scene-backdrop');
+      if (backdrop && window.gsap) {
+        gsap.set(backdrop.querySelectorAll('.ambient-orb, .ambient-sweep-band'), {
+          clearProps: 'all',
+          opacity: 0,
+          xPercent: 0,
+          yPercent: 0,
+          scale: 1,
+          rotate: 0,
+        });
+      }
+
+      const sheenTimer = sheenTimers.get(slide);
+      if (sheenTimer) {
+        sheenTimer.kill();
+        sheenTimers.delete(slide);
+      }
+
+      gsap.killTweensOf(slide.querySelectorAll('[data-animate], [data-float], [data-pulse], [data-spin], [data-drift]'));
+      slide.classList.remove('sheen-active');
+      slide.querySelectorAll(sheenSelector).forEach((element) => {
+        element.style.removeProperty('--sheen-delay');
+        element.style.removeProperty('--sheen-duration');
+      });
+      slide.classList.remove('is-current');
+    };
+
+    const startAmbient = (slide) => {
+      const animations = [];
+
+      const backdrop = slide.querySelector('.scene-backdrop');
+      if (backdrop) {
+        const orbA = backdrop.querySelector('.ambient-orb-a');
+        const orbB = backdrop.querySelector('.ambient-orb-b');
+        const sweep = backdrop.querySelector('.ambient-sweep-band');
+
+        if (orbA) {
+          gsap.set(orbA, { opacity: 0.42 });
+          animations.push(
+            gsap.to(orbA, {
+              xPercent: 16,
+              yPercent: -8,
+              scale: 1.12,
+              duration: 7.2,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+            })
+          );
+        }
+
+        if (orbB) {
+          gsap.set(orbB, { opacity: 0.34 });
+          animations.push(
+            gsap.to(orbB, {
+              xPercent: -14,
+              yPercent: 10,
+              scale: 1.08,
+              duration: 8.4,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+            })
+          );
+        }
+
+        if (sweep) {
+          gsap.set(sweep, { opacity: 0.18, xPercent: -120 });
+          animations.push(
+            gsap.to(sweep, {
+              xPercent: 120,
+              opacity: 0.58,
+              duration: 5.6,
+              repeat: -1,
+              ease: 'none',
+            })
+          );
+        }
+      }
+
+      slide.querySelectorAll('[data-float]').forEach((element, index) => {
+        animations.push(
+          gsap.to(element, {
+            y: index % 2 === 0 ? -16 : 14,
+            x: index % 2 === 0 ? 10 : -8,
+            duration: 3.8 + index,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+        );
+      });
+
+      slide.querySelectorAll('[data-pulse]').forEach((element, index) => {
+        animations.push(
+          gsap.to(element, {
+            scale: index % 2 === 0 ? 1.08 : 1.04,
+            opacity: 0.9,
+            duration: 1.8 + index * 0.4,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+        );
+      });
+
+      slide.querySelectorAll('[data-spin]').forEach((element, index) => {
+        animations.push(
+          gsap.to(element, {
+            rotate: index % 2 === 0 ? 360 : -360,
+            duration: 28 + index * 8,
+            repeat: -1,
+            ease: 'none',
+          })
+        );
+      });
+
+      slide.querySelectorAll('[data-drift]').forEach((element, index) => {
+        animations.push(
+          gsap.to(element, {
+            xPercent: index % 2 === 0 ? 12 : -12,
+            duration: 4.5 + index,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+        );
+      });
+
+      ambientSets.set(slide, animations);
+    };
+
+    const triggerSheen = (slide) => {
+      if (!slide) return;
+      slide.classList.remove('sheen-active');
+      void slide.offsetWidth;
+      slide.classList.add('sheen-active');
+    };
+
+    const resetCardTilt = (element) => {
+      element.style.removeProperty('--card-tilt-x');
+      element.style.removeProperty('--card-tilt-y');
+      element.style.removeProperty('--card-glow-x');
+      element.style.removeProperty('--card-glow-y');
+      element.classList.remove('is-hover');
+    };
+
+    const animateSlide = (slide) => {
+      if (!slide || !window.gsap) return;
+
+      slide.classList.add('is-current');
+      const sheenTargets = Array.from(slide.querySelectorAll(sheenSelector));
+      const animated = slide.querySelectorAll('[data-animate]');
+      const chips = slide.querySelectorAll('[data-animate="chips"] .badge, [data-animate="chips"] .overlay-pill');
+      const cards = Array.from(slide.querySelectorAll('[data-animate="card"]'));
+      const visuals = slide.querySelectorAll('[data-animate="visual"], [data-animate="support"]');
+
+      sheenTargets.forEach((element, index) => {
+        const { delay, duration } = getSheenConfig(slide, element, index);
+        element.style.setProperty('--sheen-delay', `${delay}s`);
+        element.style.setProperty('--sheen-duration', `${duration}s`);
+      });
+
+      gsap.set(animated, { clearProps: 'all' });
+      gsap.set(cards, { opacity: 0, y: 34, rotateX: -10, transformOrigin: '50% 100%' });
+      gsap.set(visuals, { opacity: 0, y: 20, scale: 0.96, filter: 'blur(10px)' });
+      gsap.set(chips, { opacity: 0, y: 18, scale: 0.96 });
+      gsap.set(slide.querySelectorAll('[data-animate="eyebrow"]'), { opacity: 0, y: 28, letterSpacing: '0.38em' });
+      gsap.set(slide.querySelectorAll('[data-animate="title"]'), { opacity: 0, y: 40, filter: 'blur(18px)' });
+      gsap.set(slide.querySelectorAll('[data-animate="copy"]'), { opacity: 0, y: 26 });
+
+      const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      timeline
+        .to(slide.querySelectorAll('[data-animate="eyebrow"]'), { opacity: 1, y: 0, letterSpacing: '0.24em', duration: 0.55 })
+        .to(slide.querySelectorAll('[data-animate="title"]'), { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8 }, '-=0.24')
+        .to(slide.querySelectorAll('[data-animate="copy"]'), { opacity: 1, y: 0, duration: 0.55 }, '-=0.42')
+        .to(visuals, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.8, stagger: 0.08 }, '-=0.42')
+        .to(
+          cards,
+          {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 0.72,
+            stagger: (index, element) => 0.08 + Number(element.dataset.delay || index) * 0.04,
+          },
+          '-=0.54'
+        )
+        .to(chips, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.05 }, '-=0.44');
+
+      const sheenTimer = gsap.delayedCall(0.78, () => triggerSheen(slide));
+      sheenTimers.set(slide, sheenTimer);
+      slideTimelines.set(slide, timeline);
+      startAmbient(slide);
+    };
+
+    const updateMeta = (swiper) => {
+      if (!swiper) return;
+
+      const current = swiper.realIndex + 1;
+      progressBar.style.width = `${(current / total) * 100}%`;
+      pageIndicator.textContent = `${String(current).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+
+      slideTabs.forEach((tab, index) => {
+        tab.classList.toggle('is-active', index === swiper.realIndex);
+      });
+
+      swiper.slides.forEach((slide, index) => {
+        if (index === swiper.realIndex) {
+          clearAnimations(slide);
+          animateSlide(slide);
+          return;
+        }
+
+        clearAnimations(slide);
+      });
+    };
+
+    const resolveSwiper = (event) => event?.detail?.[0] || event?.target?.swiper || swiperElement?.swiper;
+
+    if (swiperElement && slidesTemplate) {
+      swiperElement.innerHTML = slidesTemplate.innerHTML;
+      ensureBackdropLayers();
+
+      Object.assign(swiperElement, {
+        slidesPerView: 1,
+        speed: 920,
+        spaceBetween: 12,
+        keyboard: { enabled: true, onlyInViewport: true },
+        mousewheel: { forceToAxis: true, releaseOnEdges: true },
+        navigation: true,
+        allowTouchMove: true,
+        grabCursor: true,
+        watchSlidesProgress: true,
+        effect: 'creative',
+        creativeEffect: {
+          limitProgress: 2,
+          perspective: true,
+          prev: {
+            shadow: false,
+            translate: ['-10%', 0, -120],
+            rotate: [0, 0, 0],
+            scale: 0.94,
+            opacity: 0.28,
+          },
+          next: {
+            shadow: false,
+            translate: ['10%', 0, -120],
+            rotate: [0, 0, 0],
+            scale: 0.94,
+            opacity: 0.28,
+          },
+        },
+      });
+
+      swiperElement.addEventListener('swiperslidechange', (event) => updateMeta(resolveSwiper(event)));
+      swiperElement.addEventListener('swiperinit', (event) => updateMeta(resolveSwiper(event)));
+      swiperElement.initialize();
+      requestAnimationFrame(() => updateMeta(swiperElement.swiper));
+    }
+
+    slideTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const index = Number(tab.dataset.slideGo || 0);
+        swiperElement?.swiper?.slideTo(index);
+      });
+    });
+
+    fullscreenButton?.addEventListener('click', async () => {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        return;
+      }
+
+      await document.exitFullscreen();
+    });
+
+    document.querySelectorAll(interactiveCardSelector).forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const activeSlide = card.closest('.swiper-slide-active');
+        if (!activeSlide) return;
+
+        const rect = card.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width;
+        const py = (event.clientY - rect.top) / rect.height;
+        const tiltY = (px - 0.5) * 7;
+        const tiltX = (0.5 - py) * 6;
+
+        card.style.setProperty('--card-tilt-x', `${tiltX.toFixed(2)}deg`);
+        card.style.setProperty('--card-tilt-y', `${tiltY.toFixed(2)}deg`);
+        card.style.setProperty('--card-glow-x', `${(px * 100).toFixed(1)}%`);
+        card.style.setProperty('--card-glow-y', `${(py * 100).toFixed(1)}%`);
+        card.classList.add('is-hover');
+      });
+
+      card.addEventListener('pointerleave', () => resetCardTilt(card));
+      card.addEventListener('pointercancel', () => resetCardTilt(card));
+    });
+  </script>
+</Layout>
+
+<style>
+  :global(html),
+  :global(body) {
+    margin: 0;
+    min-height: 100%;
+    background: #020814;
+  }
+
+  :global(body) {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Noto Serif SC', 'Songti SC', serif;
+    color: #eff4ff;
+    overflow: hidden;
+  }
+
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  .presentation-app {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(4, 8, 16, 0.52), rgba(4, 8, 16, 0.8)),
+      var(--wallpaper) center / cover no-repeat fixed,
+      radial-gradient(circle at 15% 16%, rgba(242, 184, 198, 0.18), transparent 24%),
+      radial-gradient(circle at 82% 20%, rgba(255, 255, 255, 0.1), transparent 24%),
+      linear-gradient(180deg, #07111f 0%, #030915 52%, #01050d 100%);
+  }
+
+  .presentation-app::before,
+  .presentation-app::after {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+    filter: blur(42px);
+    will-change: transform, opacity;
+  }
+
+  .presentation-app::before {
+    background:
+      radial-gradient(circle at 22% 26%, rgba(242, 184, 198, 0.34), transparent 20%),
+      radial-gradient(circle at 72% 28%, rgba(255, 225, 231, 0.2), transparent 24%),
+      radial-gradient(circle at 58% 76%, rgba(255, 198, 206, 0.16), transparent 16%);
+    animation: stage-drift-a 18s ease-in-out infinite alternate;
+  }
+
+  .presentation-app::after {
+    background:
+      linear-gradient(115deg, transparent 12%, rgba(242, 184, 198, 0.08) 24%, rgba(255, 214, 222, 0.12) 36%, transparent 52%),
+      radial-gradient(circle at 68% 18%, rgba(255, 211, 220, 0.2), transparent 18%),
+      radial-gradient(circle at 18% 72%, rgba(255, 198, 206, 0.16), transparent 22%),
+      radial-gradient(circle at 82% 78%, rgba(255, 225, 231, 0.16), transparent 18%);
+    opacity: 0.42;
+    animation: stage-drift-b 22s ease-in-out infinite alternate;
+  }
+
+  .presentation-app .presentation-noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 18%, rgba(114, 175, 255, 0.04) 34%, rgba(110, 220, 202, 0.08) 46%, transparent 62%);
+    mix-blend-mode: screen;
+    opacity: 0.65;
+    animation: ambient-sweep 16s linear infinite;
+  }
+
+  .presentation-noise,
+  .presentation-vignette,
+  .presentation-aurora {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .presentation-noise {
+    opacity: 0.06;
+    mix-blend-mode: screen;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 120px 120px;
+    mask-image: radial-gradient(circle at center, black 48%, transparent 100%);
+  }
+
+  .presentation-vignette {
+    background: radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+  }
+
+  .presentation-aurora {
+    filter: blur(80px);
+    opacity: 0.36;
+  }
+
+  .presentation-aurora-a {
+    background: radial-gradient(circle at 24% 34%, rgba(242, 184, 198, 0.42), transparent 22%);
+    animation: aurora-drift-a 16s ease-in-out infinite alternate;
+  }
+
+  .presentation-aurora-b {
+    background: radial-gradient(circle at 76% 62%, rgba(255, 224, 230, 0.26), transparent 26%);
+    animation: aurora-drift-b 22s ease-in-out infinite alternate;
+  }
+
+  .presentation-bar {
+    position: fixed;
+    top: 0.9rem;
+    left: 0.9rem;
+    right: 0.9rem;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.95rem 1rem;
+    border-radius: 26px;
+    border: 1px solid rgba(255, 209, 219, 0.16);
+    background: linear-gradient(180deg, rgba(10, 14, 24, 0.84), rgba(10, 14, 24, 0.54));
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(22px);
+  }
+
+  .bar-brand,
+  .bar-actions,
+  .scene-tabs,
+  .stack,
+  .cover-stage,
+  .signal-row,
+  .results-notes,
+  .closing-copy {
+    display: flex;
+  }
+
+  .bar-brand,
+  .stack,
+  .cover-stage,
+  .results-notes,
+  .closing-copy {
+    flex-direction: column;
+  }
+
+  .bar-kicker,
+  .bar-title,
+  .page-indicator,
+  .eyebrow,
+  .index-tag,
+  .signal-label,
+  .meta-caption {
+    margin: 0;
+  }
+
+  .bar-kicker,
+  .eyebrow,
+  .index-tag,
+  .signal-label,
+  .meta-caption {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: #f2b8c6;
+  }
+  .bar-title {
+    margin-top: 0.24rem;
+    color: #fff6f8;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .scene-tabs {
+    gap: 0.55rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .scene-tab,
+  .bar-actions button,
+  .bar-home {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 209, 219, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #dceaff;
+    cursor: pointer;
+    transition: 0.28s ease;
+  }
+
+  .scene-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.58rem 0.84rem;
+    min-width: 5rem;
+    justify-content: center;
+  }
+
+  .scene-tab:hover,
+  .scene-tab.is-active,
+  .bar-actions button:hover,
+  .bar-home:hover {
+    border-color: rgba(255, 204, 215, 0.38);
+    background: linear-gradient(180deg, rgba(242, 184, 198, 0.22), rgba(255, 225, 231, 0.1));
+    box-shadow: 0 10px 30px rgba(242, 184, 198, 0.18);
+  }
+
+  .scene-tab-index {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    color: #ffd0db;
+  }
+
+  .scene-tab-label {
+    font-size: 0.84rem;
+  }
+
+  .bar-actions button,
+  .bar-home {
+    padding: 0.72rem 1rem;
+    font-size: 0.88rem;
+  }
+
+  .presentation-stage {
+    position: relative;
+    width: min(96vw, 1500px);
+    aspect-ratio: 16 / 9;
+    margin: 0 auto;
+    padding-top: 6.55rem;
+    padding-bottom: 2.2rem;
+    box-sizing: border-box;
+    display: grid;
+    align-items: center;
+  }
+
+  :global(swiper-container.presentation-swiper),
+  :global(.presentation-swiper) {
+    display: block;
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    justify-self: stretch;
+    align-self: stretch;
+    --swiper-navigation-color: #ffd0db;
+    --swiper-theme-color: #ffd0db;
+  }
+
+  :global(.presentation-swiper .swiper) {
+    overflow: visible;
+  }
+
+  :global(.presentation-swiper .swiper-wrapper) {
+    align-items: stretch;
+  }
+
+  :global(.presentation-swiper swiper-slide) {
+    display: flex;
+    height: auto;
+    transform-origin: center center;
+    transition:
+      filter 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.82s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: saturate(0.84) brightness(0.78) blur(1.5px);
+    opacity: 0.66;
+  }
+
+  :global(.presentation-swiper .swiper-slide-active) {
+    opacity: 1;
+    filter: saturate(1) brightness(1);
+  }
+
+  :global(.presentation-swiper .swiper-slide-prev),
+  :global(.presentation-swiper .swiper-slide-next) {
+    opacity: 0.8;
+    filter: saturate(0.9) brightness(0.86) blur(0.8px);
+  }
+
+  :global(.presentation-swiper .scene) {
+    transition:
+      transform 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.82s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: scale(0.984) translateX(0);
+    opacity: 0.78;
+    filter: saturate(0.92);
+  }
+
+  :global(.presentation-swiper .swiper-slide-prev .scene) {
+    transform: scale(0.976) translateX(-1.2rem);
+    opacity: 0.56;
+    filter: saturate(0.86);
+  }
+
+  :global(.presentation-swiper .swiper-slide-next .scene) {
+    transform: scale(0.976) translateX(1.2rem);
+    opacity: 0.56;
+    filter: saturate(0.86);
+  }
+
+  :global(.presentation-swiper .swiper-slide-active .scene) {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+    filter: saturate(1);
+  }
+
+  :global(.presentation-swiper .swiper-button-prev),
+  :global(.presentation-swiper .swiper-button-next) {
+    width: 3.35rem;
+    height: 3.35rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 209, 219, 0.18);
+    background: linear-gradient(180deg, rgba(10, 14, 24, 0.92), rgba(10, 14, 24, 0.6));
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(16px);
+  }
+
+  :global(.presentation-swiper .swiper-button-prev::after),
+  :global(.presentation-swiper .swiper-button-next::after) {
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  .presentation-meta {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    z-index: 40;
+    width: min(34rem, 86vw);
+    padding: 0.9rem 1rem 1rem;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 209, 219, 0.14);
+    background: linear-gradient(180deg, rgba(10, 14, 24, 0.84), rgba(10, 14, 24, 0.58));
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(18px);
+  }
+
+  .meta-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    width: 12.5%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f2b8c6 0%, #ffd7df 55%, #ffe3b8 100%);
+    box-shadow: 0 0 22px rgba(242, 184, 198, 0.42);
+    transition: width 0.38s ease;
+  }
+
+  .page-indicator {
+    color: #fff1f4;
+    letter-spacing: 0.22em;
+    font-size: 0.82rem;
+  }
+
+  .scene {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 36px;
+    padding: 2.25rem 2.45rem;
+    background:
+      linear-gradient(180deg, rgba(9, 16, 28, 0.84), rgba(4, 10, 18, 0.9)),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 26%);
+    border: 1px solid rgba(255, 209, 219, 0.16);
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.38);
+  }
+
+  .scene::before,
+  .scene::after,
+  .scene-backdrop {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .scene::before {
+    background:
+      radial-gradient(circle at 18% 18%, rgba(242, 184, 198, 0.12), transparent 24%),
+      radial-gradient(circle at 82% 22%, rgba(255, 223, 230, 0.12), transparent 26%),
+      linear-gradient(140deg, rgba(255, 255, 255, 0.04), transparent 34%);
+    opacity: 0.94;
+    z-index: 0;
+    animation: scene-breathe 10s ease-in-out infinite alternate;
+  }
+
+  .scene::after {
+    inset: 1px;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    z-index: 1;
+  }
+
+  .scene-backdrop {
+    z-index: 0;
+    opacity: 1;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .scene-backdrop::before,
+  .scene-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .scene-backdrop::before {
+    background:
+      radial-gradient(circle at 18% 32%, rgba(242, 184, 198, 0.28), transparent 18%),
+      radial-gradient(circle at 76% 26%, rgba(255, 223, 230, 0.22), transparent 20%),
+      radial-gradient(circle at 70% 74%, rgba(255, 205, 214, 0.16), transparent 16%);
+    filter: blur(10px);
+    opacity: 0.92;
+    animation: backdrop-orbit 11s ease-in-out infinite alternate;
+  }
+
+  .scene-backdrop::after {
+    background:
+      linear-gradient(104deg, transparent 18%, rgba(242, 184, 198, 0.1) 34%, rgba(255, 223, 230, 0.16) 46%, rgba(255, 255, 255, 0.1) 50%, transparent 64%),
+      repeating-linear-gradient(90deg, transparent 0 148px, rgba(255, 205, 214, 0.06) 148px 150px, transparent 150px 296px);
+    background-size: 240% 100%, 296px 100%;
+    opacity: 0.66;
+    animation: backdrop-scan 9s ease-in-out infinite;
+  }
+
+  .presentation-swiper .swiper-slide:not(.swiper-slide-active) .scene-backdrop::before,
+  .presentation-swiper .swiper-slide:not(.swiper-slide-active) .scene-backdrop::after {
+    opacity: 0.28;
+    animation-play-state: paused;
+  }
+
+  .ambient-orb,
+  .ambient-sweep-band {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .ambient-orb {
+    width: 32rem;
+    height: 32rem;
+    border-radius: 50%;
+    filter: blur(28px);
+    mix-blend-mode: screen;
+  }
+
+  .ambient-orb-a {
+    left: -8rem;
+    top: -5rem;
+    background: radial-gradient(circle, rgba(242, 184, 198, 0.38) 0%, rgba(242, 184, 198, 0.14) 28%, transparent 64%);
+  }
+
+  .ambient-orb-b {
+    right: -7rem;
+    top: 8%;
+    background: radial-gradient(circle, rgba(255, 224, 230, 0.34) 0%, rgba(255, 224, 230, 0.12) 30%, transparent 66%);
+  }
+
+  .ambient-sweep-band {
+    inset: -8% -14%;
+    background:
+      linear-gradient(102deg, transparent 22%, rgba(242, 184, 198, 0.04) 38%, rgba(255, 223, 230, 0.18) 48%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 223, 230, 0.14) 54%, transparent 70%);
+    filter: blur(10px);
+    mix-blend-mode: screen;
+  }
+
+  .stage-backdrop {
+    background:
+      radial-gradient(circle at 64% 38%, rgba(242, 184, 198, 0.22), transparent 18%),
+      radial-gradient(circle at 76% 52%, rgba(255, 223, 230, 0.16), transparent 18%),
+      linear-gradient(90deg, transparent 0 49.4%, rgba(255, 255, 255, 0.04) 49.5% 50.5%, transparent 50.6%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 32%);
+    background-size: auto, auto, 140px 100%, auto;
+    animation: backdrop-pan-soft 18s linear infinite;
+  }
+
+  .grid-backdrop {
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      radial-gradient(circle at 18% 22%, rgba(242, 184, 198, 0.18), transparent 16%);
+    background-size: 88px 88px, 88px 88px, auto;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.78), transparent 100%);
+    animation: backdrop-grid-drift 12s linear infinite;
+  }
+
+  .problem-backdrop {
+    background:
+      radial-gradient(circle at 78% 44%, rgba(242, 118, 90, 0.14), transparent 18%),
+      radial-gradient(circle at 70% 58%, rgba(96, 154, 255, 0.18), transparent 26%);
+    animation: backdrop-pan-soft 20s ease-in-out infinite alternate;
+  }
+
+  .theorem-backdrop {
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px),
+      radial-gradient(circle at 24% 68%, rgba(79, 165, 255, 0.18), transparent 24%);
+    background-size: 120px 100%;
+    animation: backdrop-grid-drift 14s linear infinite;
+  }
+
+  .results-backdrop {
+    background:
+      radial-gradient(circle at 22% 64%, rgba(253, 139, 104, 0.16), transparent 16%),
+      radial-gradient(circle at 68% 28%, rgba(77, 176, 255, 0.2), transparent 20%),
+      radial-gradient(circle at 82% 72%, rgba(24, 201, 187, 0.16), transparent 18%);
+    animation: backdrop-pan-soft 16s ease-in-out infinite alternate;
+  }
+
+  .contribution-backdrop {
+    background:
+      linear-gradient(120deg, rgba(120, 174, 255, 0.12), transparent 34%),
+      radial-gradient(circle at 82% 34%, rgba(25, 198, 183, 0.14), transparent 20%);
+    animation: backdrop-pan-soft 18s ease-in-out infinite alternate;
+  }
+
+  .method-backdrop {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 110px);
+    background-size: auto, 110px 100%;
+    animation: backdrop-grid-drift 10s linear infinite;
+  }
+  .closing-backdrop {
+    background:
+      radial-gradient(circle at center, rgba(94, 142, 255, 0.18), transparent 18%),
+      radial-gradient(circle at center, rgba(27, 197, 182, 0.16), transparent 36%);
+    animation: backdrop-pan-soft 22s ease-in-out infinite alternate;
+  }
+
+  .scene > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .scene-head {
+    max-width: 56rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .scene-head-wide {
+    max-width: 66rem;
+  }
+
+  .compact-head {
+    margin-bottom: 0.7rem;
+  }
+
+  .scene-grid,
+  .meta-grid,
+  .timeline-grid,
+  .card-grid,
+  .metric-grid,
+  .assumption-grid,
+  .overview-layout,
+  .results-layout,
+  .method-layout {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .scene-grid {
+    grid-template-columns: 1.04fr 0.96fr;
+    align-items: stretch;
+  }
+
+  .cover-grid {
+    height: 100%;
+    align-items: center;
+    gap: 1.4rem;
+  }
+
+  .cover-copy {
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  .meta-grid {
+    margin-top: 1.15rem;
+  }
+
+  .hero-badges {
+    margin-top: 1.35rem;
+  }
+
+  .cover-stage {
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .overview-layout,
+  .results-layout {
+    grid-template-columns: 1.02fr 0.98fr;
+    align-items: stretch;
+  }
+
+  .problem-grid {
+    grid-template-columns: 1fr 0.92fr;
+  }
+
+  .problem-aside {
+    justify-content: flex-start;
+    gap: 1.9rem;
+  }
+
+  .problem-metrics {
+    margin-top: 0.8rem;
+  }
+
+  .theorem-grid {
+    grid-template-columns: 0.96fr 1.04fr;
+  }
+
+  .theorem-copy {
+    justify-content: flex-start;
+    gap: 1.2rem;
+  }
+
+  .theorem-card {
+    margin-top: 0.7rem;
+  }
+
+  .assumption-grid {
+    margin-top: 0.7rem;
+  }
+
+  .theorem-takeaways {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 1.15rem;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .theorem-pill {
+    display: flex;
+    align-items: center;
+    min-height: 100%;
+  }
+
+  .timeline-grid,
+  .card-grid,
+  .metric-grid,
+  .assumption-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 36rem;
+  }
+
+  .overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contribution-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 1rem;
+  }
+
+  .method-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .problem-metrics,
+  .assumption-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .signal-row,
+  .badge-row,
+  .chapter-pills,
+  .overlay-strip,
+  .contribution-band {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  li {
+    margin-top: 0;
+  }
+
+  h1,
+  h2 {
+    margin-bottom: 0.7rem;
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+    color: #f7fbff;
+    text-wrap: balance;
+  }
+
+  h1 {
+    max-width: 10.5ch;
+    font-size: clamp(2.5rem, 4.2vw, 4.4rem);
+    color: #eef6ff;
+    background: linear-gradient(180deg, #ffffff 0%, #d9ebff 40%, #9fc8ff 72%, #7fe4d7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 32px rgba(116, 196, 255, 0.12);
+  }
+
+  h2 {
+    max-width: 15ch;
+    font-size: clamp(1.8rem, 2.8vw, 3.1rem);
+  }
+
+  h3 {
+    margin-bottom: 0.5rem;
+    color: #f3f8ff;
+    font-size: 1.08rem;
+  }
+
+  .closing-title {
+    max-width: 10ch;
+  }
+
+  .lede,
+  .chapter-copy,
+  .scene li,
+  .scene p:not(.eyebrow):not(.bar-kicker):not(.bar-title):not(.page-indicator):not(.meta-caption):not(.signal-label) {
+    color: #b6c5d6;
+    line-height: 1.62;
+  }
+
+  .lede,
+  .chapter-copy {
+    max-width: 42rem;
+    font-size: 0.98rem;
+  }
+
+  .cover-lede {
+    max-width: 38rem;
+    font-size: 1rem;
+  }
+
+  .info-card,
+  .visual-card,
+  .badge,
+  .overlay-pill,
+  .metric-box,
+  .scene-tab,
+  .contribution-band {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(150, 188, 238, 0.16);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 26%),
+      linear-gradient(180deg, rgba(10, 22, 39, 0.9), rgba(6, 15, 27, 0.72));
+    box-shadow: 0 18px 52px rgba(0, 0, 0, 0.24);
+    transition:
+      transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.26s ease,
+      background 0.26s ease;
+  }
+
+  .info-card,
+  .visual-card {
+    border-radius: 24px;
+    padding: 1rem 1.05rem;
+  }
+
+  .badge,
+  .overlay-pill,
+  .contribution-band {
+    border-radius: 999px;
+    padding: 0.72rem 0.94rem;
+    color: #eef5ff;
+  }
+
+  .metric-box {
+    border-radius: 20px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+  }
+
+  .info-card,
+  .visual-card,
+  .metric-box,
+  .contribution-band {
+    --card-tilt-x: 0deg;
+    --card-tilt-y: 0deg;
+    --card-glow-x: 50%;
+    --card-glow-y: 50%;
+    transform:
+      perspective(1200px)
+      rotateX(var(--card-tilt-x))
+      rotateY(var(--card-tilt-y))
+      translateY(0)
+      scale(1);
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+  }
+
+  .info-card.is-hover,
+  .visual-card.is-hover,
+  .metric-box.is-hover,
+  .contribution-band.is-hover {
+    border-color: rgba(155, 213, 255, 0.34);
+    background:
+      radial-gradient(circle at var(--card-glow-x) var(--card-glow-y), rgba(142, 206, 255, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 24%),
+      linear-gradient(180deg, rgba(10, 22, 39, 0.94), rgba(6, 15, 27, 0.78));
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(136, 195, 255, 0.08),
+      0 0 28px rgba(89, 162, 255, 0.12);
+    transform:
+      perspective(1200px)
+      rotateX(var(--card-tilt-x))
+      rotateY(var(--card-tilt-y))
+      translateY(-6px)
+      scale(1.012);
+  }
+
+  .metric-box strong,
+  .signal-card strong,
+  .theorem-proof-card strong,
+  .chart-caption,
+  .card-number {
+    display: block;
+    color: #f8fbff;
+  }
+
+  .metric-box strong {
+    font-size: 1.42rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .info-card::before,
+  .visual-card::before,
+  .metric-box::before,
+  .contribution-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.01) 18%, transparent 38%),
+      linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.05) 36%, rgba(255, 255, 255, 0.22) 49%, rgba(134, 201, 255, 0.14) 56%, rgba(255, 255, 255, 0.05) 64%, transparent 78%);
+    opacity: 0;
+    transform: translate3d(-130%, 0, 0) skewX(-18deg);
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+
+  :global(.presentation-swiper .swiper-slide-active.sheen-active .info-card::before),
+  :global(.presentation-swiper .swiper-slide-active.sheen-active .visual-card::before),
+  :global(.presentation-swiper .swiper-slide-active.sheen-active .metric-box::before),
+  :global(.presentation-swiper .swiper-slide-active.sheen-active .contribution-band::before) {
+    animation: card-sheen var(--sheen-duration, 2.2s) cubic-bezier(0.22, 1, 0.36, 1) var(--sheen-delay, 0.25s) 1 both;
+  }
+
+  .orbit-panel,
+  .radar-panel,
+  .theorem-stage,
+  .results-visual,
+  .method-console {
+    min-height: 18rem;
+  }
+
+  .orbit-panel {
+    display: grid;
+    place-items: center;
+    min-height: 23rem;
+    background: radial-gradient(circle at center, rgba(115, 163, 255, 0.12), transparent 36%), linear-gradient(180deg, rgba(7, 17, 31, 0.92), rgba(7, 16, 28, 0.74));
+  }
+
+  .orbital-shell,
+  .closing-rings {
+    position: absolute;
+    inset: 8% 10%;
+  }
+
+  .orbital-ring,
+  .closing-ring,
+  .radar-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(144, 190, 255, 0.18);
+  }
+
+  .orbital-ring-a,
+  .closing-ring-a {
+    inset: 10%;
+  }
+
+  .orbital-ring-b,
+  .closing-ring-b {
+    inset: 22%;
+  }
+
+  .orbital-ring-c,
+  .closing-ring-c {
+    inset: 34%;
+  }
+
+  .orbital-ring-b,
+  .closing-ring-b {
+    border-style: dashed;
+  }
+
+  .orbital-node,
+  .radar-point,
+  .theorem-node {
+    position: absolute;
+    width: 0.95rem;
+    height: 0.95rem;
+    border-radius: 50%;
+    box-shadow: 0 0 0 10px rgba(129, 178, 255, 0.12);
+  }
+  .orbital-node-a,
+  .theorem-node-a,
+  .radar-point-a {
+    background: #86b7ff;
+  }
+
+  .orbital-node-b,
+  .theorem-node-b,
+  .radar-point-b {
+    background: #79dbc8;
+  }
+
+  .orbital-node-c,
+  .radar-point-c {
+    background: #f38061;
+  }
+
+  .orbital-node-a { top: 13%; right: 18%; }
+  .orbital-node-b { left: 14%; top: 46%; }
+  .orbital-node-c { right: 30%; bottom: 18%; }
+
+  .hero-core,
+  .closing-core {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 50%;
+    border: 1px solid rgba(158, 199, 255, 0.22);
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.22), rgba(8, 22, 40, 0.92));
+    box-shadow: inset 0 0 28px rgba(255, 255, 255, 0.12), 0 24px 60px rgba(45, 109, 216, 0.24);
+  }
+
+  .hero-logo,
+  .closing-logo {
+    width: 5.7rem;
+    filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.3));
+  }
+
+  .hero-signal {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(26px);
+    opacity: 0.48;
+  }
+
+  .hero-signal-a {
+    inset: 20% 14% auto auto;
+    width: 7rem;
+    height: 7rem;
+    background: rgba(72, 145, 255, 0.42);
+  }
+
+  .hero-signal-b {
+    inset: auto auto 12% 14%;
+    width: 8rem;
+    height: 8rem;
+    background: rgba(26, 208, 189, 0.28);
+  }
+
+  .signal-row {
+    justify-content: flex-end;
+  }
+
+  .signal-card {
+    min-width: 10.5rem;
+  }
+
+  .signal-card strong {
+    font-size: 1.18rem;
+    margin-top: 0.24rem;
+  }
+
+  .signal-card-warm strong {
+    color: #ffd2c0;
+  }
+
+  .overview-map {
+    position: relative;
+    min-height: 19rem;
+    padding: 1.2rem;
+  }
+
+  .map-line {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(140, 189, 255, 0.22), rgba(121, 219, 203, 0.5), rgba(242, 130, 97, 0.4));
+    box-shadow: 0 0 24px rgba(121, 219, 203, 0.22);
+  }
+
+  .map-node {
+    position: absolute;
+    display: grid;
+    gap: 0.24rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 18px;
+    min-width: 7.4rem;
+    background: linear-gradient(180deg, rgba(10, 22, 39, 0.88), rgba(7, 16, 29, 0.7));
+    border: 1px solid rgba(146, 181, 235, 0.16);
+  }
+
+  .map-node span {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #86b8ff;
+  }
+
+  .map-node strong {
+    font-size: 0.94rem;
+  }
+
+  .map-node-a { top: 16%; left: 10%; }
+  .map-node-b { top: 58%; left: 24%; }
+  .map-node-c { top: 14%; left: 42%; }
+  .map-node-d { top: 52%; left: 58%; }
+  .map-node-e { top: 18%; right: 10%; }
+
+  .overview-card,
+  .contribution-card,
+  .timeline-card,
+  .side-note,
+  .assumption-card,
+  .meta-card {
+    min-height: 8.7rem;
+  }
+
+  .overview-card p,
+  .contribution-card p,
+  .timeline-card p,
+  .assumption-card p,
+  .side-note p,
+  .meta-card {
+    font-size: 0.92rem;
+  }
+
+  .overview-pills,
+  .results-strip,
+  .closing-pills {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .overview-pill,
+  .theorem-pill,
+  .hero-badge,
+  .overlay-pill {
+    background: linear-gradient(180deg, rgba(12, 28, 48, 0.8), rgba(7, 18, 32, 0.58));
+  }
+
+  .emphasis-card {
+    min-height: 15rem;
+  }
+
+  .section-glow {
+    position: absolute;
+    right: -3rem;
+    top: -3rem;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(243, 129, 94, 0.22), transparent 72%);
+    filter: blur(4px);
+  }
+
+  .bullet-list {
+    padding-left: 1.1rem;
+    margin-bottom: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .bullet-list li::marker {
+    color: #79dbc8;
+  }
+
+  .radar-panel {
+    position: relative;
+    min-height: 16.4rem;
+    padding: 0;
+    background: radial-gradient(circle at center, rgba(133, 183, 255, 0.14), transparent 46%), linear-gradient(180deg, rgba(7, 17, 31, 0.92), rgba(7, 16, 28, 0.7));
+  }
+
+  .radar-grid {
+    position: absolute;
+    inset: 16% 18%;
+    border-radius: 50%;
+    border: 1px solid rgba(151, 190, 241, 0.1);
+  }
+
+  .radar-ring-a { inset: 18%; }
+  .radar-ring-b { inset: 30%; }
+
+  .radar-shape {
+    position: absolute;
+    inset: 20% 22%;
+    clip-path: polygon(50% 0%, 86% 32%, 74% 82%, 26% 78%, 10% 28%);
+    background: linear-gradient(180deg, rgba(130, 182, 255, 0.28), rgba(42, 211, 194, 0.16));
+    border: 1px solid rgba(147, 199, 255, 0.26);
+    filter: drop-shadow(0 0 24px rgba(107, 169, 255, 0.18));
+  }
+
+  .radar-point-a { top: 20%; left: 48%; }
+  .radar-point-b { right: 20%; top: 38%; }
+  .radar-point-c { left: 22%; bottom: 24%; }
+
+  .theorem-stage {
+    position: relative;
+    min-height: 20rem;
+    background: linear-gradient(180deg, rgba(7, 17, 31, 0.92), rgba(6, 15, 28, 0.72)), radial-gradient(circle at 30% 64%, rgba(111, 167, 255, 0.16), transparent 24%);
+  }
+
+  .theorem-axis {
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    top: 50%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .theorem-axis::before {
+    content: '';
+    position: absolute;
+    top: -42%;
+    bottom: -42%;
+    left: 44%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .theorem-curve {
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    border-top: 4px solid;
+    border-radius: 999px;
+  }
+  .theorem-curve-a {
+    top: 32%;
+    height: 24%;
+    border-color: #84b8ff;
+    clip-path: polygon(0 78%, 12% 64%, 30% 28%, 48% 12%, 66% 28%, 86% 60%, 100% 82%, 100% 100%, 0 100%);
+  }
+
+  .theorem-curve-b {
+    top: 54%;
+    height: 18%;
+    border-color: #79dbc8;
+    clip-path: polygon(0 54%, 14% 44%, 32% 12%, 52% 18%, 72% 46%, 100% 74%, 100% 100%, 0 100%);
+  }
+
+  .theorem-node-a { left: 38%; top: 28%; }
+  .theorem-node-b { right: 22%; bottom: 24%; }
+
+  .theorem-proof-card {
+    position: absolute;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    padding: 0.9rem 1rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(11, 28, 47, 0.86), rgba(7, 18, 31, 0.74));
+    border: 1px solid rgba(143, 196, 255, 0.18);
+  }
+
+  .theorem-proof-card span {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #89b7ff;
+  }
+
+  .theorem-proof-card strong {
+    margin-top: 0.28rem;
+    font-size: 1rem;
+  }
+
+  .results-head {
+    margin-bottom: 0.8rem;
+  }
+
+  .results-visual {
+    position: relative;
+    min-height: 20rem;
+    background: linear-gradient(180deg, rgba(7, 17, 31, 0.94), rgba(6, 15, 28, 0.78));
+  }
+
+  .results-grid {
+    position: absolute;
+    inset: 1.25rem;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: calc(100% / 10) calc(100% / 6);
+    opacity: 0.2;
+  }
+
+  .beam,
+  .heat-cluster,
+  .scan-line,
+  .chart-caption {
+    position: absolute;
+  }
+
+  .beam {
+    height: 5px;
+    border-radius: 999px;
+    box-shadow: 0 0 22px currentColor;
+  }
+
+  .beam-a {
+    left: 8%;
+    right: 20%;
+    bottom: 23%;
+    color: #8bbcff;
+    background: currentColor;
+    transform: skewX(-20deg);
+  }
+
+  .beam-b {
+    left: 18%;
+    right: 12%;
+    bottom: 40%;
+    color: #79dbc8;
+    background: currentColor;
+    transform: skewX(22deg);
+  }
+
+  .beam-c {
+    left: 10%;
+    right: 8%;
+    bottom: 58%;
+    color: #f4815f;
+    background: currentColor;
+    transform: skewX(-12deg);
+  }
+
+  .heat-cluster {
+    border-radius: 50%;
+    filter: blur(18px);
+    opacity: 0.58;
+  }
+
+  .heat-cluster-a {
+    right: 16%;
+    top: 18%;
+    width: 11rem;
+    height: 11rem;
+    background: radial-gradient(circle at 36% 38%, rgba(255, 175, 87, 0.9), transparent 18%), radial-gradient(circle at 58% 52%, rgba(250, 95, 88, 0.86), transparent 24%), radial-gradient(circle at 74% 44%, rgba(118, 219, 200, 0.44), transparent 28%);
+  }
+
+  .heat-cluster-b {
+    left: 16%;
+    bottom: 18%;
+    width: 9rem;
+    height: 9rem;
+    background: radial-gradient(circle at 44% 42%, rgba(118, 170, 255, 0.68), transparent 24%), radial-gradient(circle at 70% 52%, rgba(118, 219, 200, 0.42), transparent 28%);
+  }
+
+  .scan-line {
+    left: 12%;
+    right: 12%;
+    top: 24%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(128, 214, 255, 0.8), transparent);
+    box-shadow: 0 0 24px rgba(128, 214, 255, 0.44);
+  }
+
+  .chart-caption {
+    padding: 0.5rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(8, 20, 34, 0.78);
+    border: 1px solid rgba(150, 188, 238, 0.14);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .chart-caption-a { right: 10%; top: 16%; }
+  .chart-caption-b { left: 12%; bottom: 14%; }
+
+  .results-notes {
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .side-note {
+    min-height: 5.7rem;
+  }
+
+  .contribution-band {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.1rem;
+    color: #e7f2ff;
+  }
+
+  .band-sep {
+    width: 2.4rem;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(144, 191, 255, 0.16), rgba(121, 219, 203, 0.72));
+  }
+
+  .card-number {
+    margin-bottom: 0.8rem;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: transparent;
+    background: linear-gradient(180deg, #ffffff, #86b8ff 62%, #7de0d2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .method-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .method-line {
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, rgba(133, 183, 255, 0.18), rgba(121, 219, 203, 0.68), rgba(242, 130, 97, 0.26));
+    box-shadow: 0 0 18px rgba(121, 219, 203, 0.18);
+  }
+
+  .method-console {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+    min-height: 8.6rem;
+  }
+
+  .console-header {
+    display: flex;
+    gap: 0.38rem;
+  }
+
+  .console-header span {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .console-header span:first-child { background: #f4815f; }
+  .console-header span:nth-child(2) { background: #ffd17a; }
+  .console-header span:nth-child(3) { background: #79dbc8; }
+
+  .console-line {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: #b9c7d7;
+  }
+
+  .console-line strong {
+    color: #f4f9ff;
+  }
+
+  .scene-closing {
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+
+  .closing-shell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 16rem;
+    width: 100%;
+  }
+
+  .closing-rings {
+    inset: 10% 28%;
+  }
+
+  .closing-copy {
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 48rem;
+  }
+
+  :global(.presentation-swiper .swiper-slide-active .scene.is-current) {
+    box-shadow: 0 32px 110px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(150, 188, 238, 0.06);
+  }
+
+  @media (max-width: 1220px) {
+    .presentation-bar {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .presentation-stage {
+      width: calc(100vw - 1rem);
+    }
+
+    .scene {
+      padding: 2rem;
+    }
+
+    .scene-grid,
+    .overview-layout,
+    .results-layout,
+    .problem-grid,
+    .theorem-grid,
+    .contribution-grid,
+    .overview-grid,
+    .timeline-grid,
+    .method-grid,
+    .problem-metrics,
+    .assumption-grid,
+    .theorem-takeaways {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .closing-rings {
+      inset: 14% 20%;
+    }
+  }
+
+  @media (max-width: 860px) {
+    :global(body) {
+      overflow: auto;
+    }
+    .presentation-bar {
+      top: 0.6rem;
+      left: 0.6rem;
+      right: 0.6rem;
+      padding: 0.8rem;
+    }
+
+    .scene-tabs {
+      display: none;
+    }
+
+    .presentation-meta {
+      width: calc(100vw - 1.2rem);
+      bottom: 0.6rem;
+    }
+
+    .presentation-stage {
+      width: calc(100vw - 0.6rem);
+      padding-top: 6.7rem;
+      aspect-ratio: auto;
+      min-height: calc(100vh - 8rem);
+    }
+
+    .scene {
+      padding: 1.35rem;
+      min-height: calc(100vh - 11rem);
+      border-radius: 28px;
+    }
+
+    .scene-grid,
+    .overview-layout,
+    .results-layout,
+    .problem-grid,
+    .theorem-grid,
+    .meta-grid,
+    .overview-grid,
+    .contribution-grid,
+    .timeline-grid,
+    .method-grid,
+    .problem-metrics,
+    .assumption-grid,
+    .theorem-takeaways {
+      grid-template-columns: 1fr;
+    }
+
+    h1 {
+      max-width: 12ch;
+      font-size: clamp(2.1rem, 7.5vw, 3.2rem);
+    }
+
+    h2 {
+      max-width: none;
+      font-size: clamp(1.6rem, 6vw, 2.5rem);
+    }
+
+    .cover-stage,
+    .signal-row,
+    .results-notes {
+      width: 100%;
+    }
+
+    .signal-row {
+      flex-direction: column;
+    }
+
+    .orbit-panel,
+    .radar-panel,
+    .theorem-stage,
+    .results-visual {
+      min-height: 15rem;
+    }
+
+    .closing-rings {
+      inset: 8% 6%;
+    }
+  }
+
+  @keyframes card-sheen {
+    0% { opacity: 0; transform: translate3d(-130%, 0, 0) skewX(-18deg); }
+    14% { opacity: 0.88; }
+    52% { opacity: 0.42; }
+    100% { opacity: 0; transform: translate3d(130%, 0, 0) skewX(-18deg); }
+  }
+
+  @keyframes aurora-drift-a {
+    from { transform: translate3d(-3%, -2%, 0) scale(1); }
+    to { transform: translate3d(5%, 3%, 0) scale(1.12); }
+  }
+
+  @keyframes aurora-drift-b {
+    from { transform: translate3d(2%, 1%, 0) scale(1); }
+    to { transform: translate3d(-4%, -3%, 0) scale(1.1); }
+  }
+
+  @keyframes stage-drift-a {
+    0% { transform: translate3d(-3%, -2%, 0) scale(1); opacity: 0.42; }
+    50% { transform: translate3d(4%, 3%, 0) scale(1.08); opacity: 0.62; }
+    100% { transform: translate3d(2%, -3%, 0) scale(1.12); opacity: 0.48; }
+  }
+
+  @keyframes stage-drift-b {
+    0% { transform: translate3d(3%, 2%, 0) scale(1); opacity: 0.3; }
+    50% { transform: translate3d(-3%, -4%, 0) scale(1.08); opacity: 0.46; }
+    100% { transform: translate3d(-5%, 3%, 0) scale(1.12); opacity: 0.34; }
+  }
+
+  @keyframes scene-breathe {
+    0% { opacity: 0.74; transform: scale(1) translate3d(0, 0, 0); }
+    50% { opacity: 0.96; transform: scale(1.018) translate3d(0.7%, -0.5%, 0); }
+    100% { opacity: 0.82; transform: scale(1.012) translate3d(-0.5%, 0.6%, 0); }
+  }
+
+  @keyframes ambient-sweep {
+    0% { transform: translate3d(-36%, 0, 0) scaleX(0.92); opacity: 0; }
+    12% { opacity: 0.28; }
+    48% { opacity: 0.62; }
+    78% { opacity: 0.2; }
+    100% { transform: translate3d(38%, 0, 0) scaleX(1.08); opacity: 0; }
+  }
+
+  @keyframes backdrop-flow-a {
+    0% { transform: translate3d(-3%, -2%, 0) scale(1); opacity: 0.5; }
+    50% { transform: translate3d(3%, 2%, 0) scale(1.06); opacity: 0.82; }
+    100% { transform: translate3d(1%, -3%, 0) scale(1.08); opacity: 0.58; }
+  }
+
+  @keyframes backdrop-flow-b {
+    0% { transform: translate3d(-46%, 0, 0) scaleX(0.92); opacity: 0; }
+    10% { opacity: 0.16; }
+    45% { opacity: 0.38; }
+    70% { opacity: 0.12; }
+    100% { transform: translate3d(46%, 0, 0) scaleX(1.08); opacity: 0; }
+  }
+
+  @keyframes backdrop-orbit {
+    0% {
+      transform: translate3d(-3%, -2%, 0) scale(1);
+      opacity: 0.66;
+    }
+    50% {
+      transform: translate3d(3%, 2%, 0) scale(1.08);
+      opacity: 0.96;
+    }
+    100% {
+      transform: translate3d(2%, -3%, 0) scale(1.12);
+      opacity: 0.74;
+    }
+  }
+
+  @keyframes backdrop-scan {
+    0% {
+      background-position: -160% 0, 0 0;
+      opacity: 0.2;
+    }
+    18% {
+      opacity: 0.54;
+    }
+    50% {
+      opacity: 0.78;
+    }
+    82% {
+      opacity: 0.44;
+    }
+    100% {
+      background-position: 160% 0, 148px 0;
+      opacity: 0.2;
+    }
+  }
+
+  @keyframes backdrop-pan-soft {
+    0% {
+      background-position:
+        0 0,
+        0 0,
+        0 0,
+        0 0;
+    }
+    50% {
+      background-position:
+        14px -10px,
+        -20px 12px,
+        26px 0,
+        10px -8px;
+    }
+    100% {
+      background-position:
+        28px -20px,
+        -40px 24px,
+        52px 0,
+        20px -16px;
+    }
+  }
+
+  @keyframes backdrop-grid-drift {
+    0% {
+      background-position:
+        0 0,
+        0 0;
+    }
+    100% {
+      background-position:
+        0 0,
+        110px 0;
+    }
+  }
+</style>
