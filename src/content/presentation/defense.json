@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "title": "Defense Showcase | Web-first Presentation",
+    "description": "A stage-driven defense presentation rebuilt as an offline-ready web deck."
+  },
+  "hero": {
+    "eyebrow": "ECUST Mathematics Defense ? Web Showcase",
+    "title": "A Stage-first Web Defense",
+    "subtitle": "Instead of copying slides into a browser, this deck reorganizes the narrative into a clearer, more rhythmic, and more presentation-friendly structure.",
+    "meta": [
+      "Candidate: [Name]",
+      "Advisor: [Name]",
+      "Date: 2026.04",
+      "Keywords: model / theorem / convergence / experiments"
+    ],
+    "badges": ["Academic", "Stage-ready", "Reusable"]
+  },
+  "overview": {
+    "eyebrow": "Presentation Map",
+    "title": "Structure Before Argument",
+    "subtitle": "The whole deck moves through motivation, problem statement, theorem, proof path, experiments, and contribution so the narrative remains coherent in a live defense.",
+    "cards": [
+      {"title": "Background", "body": "Explain why the research object matters and where current methods still fall short."},
+      {"title": "Question", "body": "State the mathematical question precisely and define the scope of the work."},
+      {"title": "Theorem", "body": "Present the main result early so the audience understands the payoff."},
+      {"title": "Evidence", "body": "Use experiments and summary statements to make the result credible and reusable."}
+    ],
+    "bullets": [
+      "Each page carries one narrative objective.",
+      "The route from problem to conclusion remains traceable.",
+      "A unified visual system makes the defense easier to deliver live."
+    ]
+  },
+  "problem": {
+    "eyebrow": "Problem Framing",
+    "title": "Why This Problem Matters",
+    "subtitle": "A strong defense does not begin with formulas. It begins by making the stakes and the difficulty visible.",
+    "points": [
+      "Existing methods still have gaps in convergence, stability, or applicability.",
+      "Without a stronger analytical frame, the theory and the numerics remain disconnected.",
+      "This work aims to provide a more robust path instead of a local technical patch."
+    ],
+    "metrics": [
+      {"value": "1", "label": "core model"},
+      {"value": "3", "label": "main assumptions"},
+      {"value": "2", "label": "result levels"}
+    ]
+  },
+  "theorem": {
+    "eyebrow": "Main Result",
+    "title": "The Main Theorem",
+    "subtitle": "Organize the theory through assumptions, conclusion, and proof path so the result stays precise and readable.",
+    "theorem": "Theorem 1: Under assumptions H1-H3, the system admits a unique solution together with a stable convergence estimate and an explicit error bound.",
+    "assumptions": [
+      "H1: Initial and boundary data satisfy the required regularity.",
+      "H2: The nonlinear term satisfies a local or global Lipschitz condition.",
+      "H3: The discrete scheme remains uniformly stable with the continuous model."
+    ],
+    "takeaways": [
+      "Theoretical bounds match the experimental trend.",
+      "The result covers a broader parameter regime.",
+      "The proof pattern can transfer to adjacent models."
+    ]
+  },
+  "method": {
+    "eyebrow": "Method Path",
+    "title": "The Proof Path",
+    "subtitle": "The goal here is not to show every detail. It is to make the route toward the theorem legible.",
+    "steps": [
+      {"title": "Set the frame", "body": "Fix notation, function spaces, and error measures so later arguments share the same language."},
+      {"title": "Build estimates", "body": "Construct the key a priori estimates and suppress the unstable terms step by step."},
+      {"title": "Close the proof", "body": "Use continuity or compactness arguments to complete existence and uniqueness."},
+      {"title": "Link numerics", "body": "Connect the theoretical bound to the observed experimental behavior."}
+    ]
+  },
+  "results": {
+    "eyebrow": "Numerical Results",
+    "title": "Results That Support the Theory",
+    "subtitle": "Parameter comparisons, error decay, and trend alignment are used to verify that the method behaves as predicted.",
+    "bullets": [
+      "Key indicators show a stable convergence trend as the step size decreases.",
+      "Different parameter groups behave consistently with the theoretical analysis.",
+      "The numerical outcomes show that the method is practically usable."
+    ],
+    "sideNotes": [
+      "Parameter groups A / B / C",
+      "Error slope matches the expected order",
+      "Results support the main statement"
+    ]
+  },
+  "contributions": {
+    "eyebrow": "Contribution",
+    "title": "What This Work Contributes",
+    "subtitle": "Compress the contribution into theory, method, and presentation so the committee can form a sharp overall judgment.",
+    "cards": [
+      {"title": "Theory", "body": "The work clarifies convergence and stability where earlier accounts remained weak."},
+      {"title": "Method", "body": "It leaves behind a reusable proof route that can be adapted to related models."},
+      {"title": "Delivery", "body": "It also turns the defense itself into a stage-ready web experience."}
+    ]
+  },
+  "closing": {
+    "eyebrow": "Closing",
+    "title": "Thank you for your attention",
+    "subtitle": "ECUST Mathematics Defense ? Web-first Showcase",
+    "quote": "If the conclusion is credible, the path is clear, and the value is explicit, the defense is already standing on solid ground.",
+    "footer": ["Q&A", "Questions on the model, theorem, and experiments are welcome."]
+  }
+}

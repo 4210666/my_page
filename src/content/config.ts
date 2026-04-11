@@ -65,6 +65,92 @@ const postCollection = defineCollection({
   }),
 });
 
+const presentationCollection = defineCollection({
+  loader: glob({ pattern: ['*.json'], base: 'src/content/presentation' }),
+  schema: z.object({
+    meta: z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+    hero: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      meta: z.array(z.string()),
+      badges: z.array(z.string()),
+    }),
+    overview: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      cards: z.array(
+        z.object({
+          title: z.string(),
+          body: z.string(),
+        })
+      ),
+      bullets: z.array(z.string()),
+    }),
+    problem: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      points: z.array(z.string()),
+      metrics: z.array(
+        z.object({
+          value: z.string(),
+          label: z.string(),
+        })
+      ),
+    }),
+    theorem: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      theorem: z.string(),
+      assumptions: z.array(z.string()),
+      takeaways: z.array(z.string()),
+    }),
+    method: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      steps: z.array(
+        z.object({
+          title: z.string(),
+          body: z.string(),
+        })
+      ),
+    }),
+    results: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      bullets: z.array(z.string()),
+      sideNotes: z.array(z.string()),
+    }),
+    contributions: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      cards: z.array(
+        z.object({
+          title: z.string(),
+          body: z.string(),
+        })
+      ),
+    }),
+    closing: z.object({
+      eyebrow: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      quote: z.string(),
+      footer: z.array(z.string()),
+    }),
+  }),
+});
+
 export const collections = {
   post: postCollection,
+  presentation: presentationCollection,
 };
