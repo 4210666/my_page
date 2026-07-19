@@ -210,6 +210,15 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 }
 
 .course-block{border:0.5px solid var(--line);padding:1.5rem;margin-top:1.5rem;background:var(--bg2);}
+.semester-overview{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:0;border:0.5px solid var(--line);margin-top:1rem;background:var(--bg);}
+.semester-stat{padding:1.15rem 1rem;border-right:0.5px solid var(--line);}
+.semester-stat:last-child{border-right:none;}
+.semester-value{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:6px;}
+.semester-value em{font-size:12px;font-style:normal;font-weight:500;color:var(--accent);margin-left:4px;}
+.semester-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);}
+.semester-caption{font-size:10px;color:var(--ink2);margin-top:5px;line-height:1.5;}
+.course-group-title{display:flex;align-items:center;gap:0.8rem;margin-top:1.25rem;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);}
+.course-group-title::after{content:"";height:0.5px;background:var(--line);flex:1;}
 .course-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:1rem;border:0.5px solid var(--line);}
 .course-item{padding:1rem 0.8rem;border-right:0.5px solid var(--line);border-bottom:0.5px solid var(--line);transition:background 0.2s;}
 .course-item:hover{background:var(--bg3);}
@@ -223,7 +232,7 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 .course-bar-fill{position:absolute;left:0;top:0;bottom:0;background:var(--ink);width:0;transition:width 1.4s cubic-bezier(0.4,0,0.2,1);}
 .course-item.highlight .course-bar-fill{background:var(--accent);}
 .course-note{font-size:10px;color:var(--ink3);margin-top:1rem;padding-top:0.8rem;border-top:0.5px solid var(--line);letter-spacing:0.05em;}
-@media(max-width:700px){.course-grid{grid-template-columns:repeat(2,1fr);}.course-item:nth-child(4n){border-right:0.5px solid var(--line);}.course-item:nth-child(2n){border-right:none;}.course-item:nth-last-child(-n+4){border-bottom:0.5px solid var(--line);}.course-item:nth-last-child(-n+2){border-bottom:none;}}
+@media(max-width:700px){.semester-overview{grid-template-columns:1fr;}.semester-stat{border-right:none;border-bottom:0.5px solid var(--line);}.semester-stat:last-child{border-bottom:none;}.course-grid{grid-template-columns:repeat(2,1fr);}.course-item:nth-child(4n){border-right:0.5px solid var(--line);}.course-item:nth-child(2n){border-right:none;}.course-item:nth-last-child(-n+4){border-bottom:0.5px solid var(--line);}.course-item:nth-last-child(-n+2){border-bottom:none;}}
 </style>
 </head>
 <body>
@@ -425,8 +434,77 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
     </div>
 
     <div class="course-block">
-      <div class="research-title">— Core Courses 核心课程成绩</div>
+      <div class="research-title">— Academic Performance 学业表现</div>
+      <div class="semester-overview">
+        <div class="semester-stat">
+          <div class="semester-value">91.6<em>/ 100</em></div>
+          <div class="semester-label">学分加权均分</div>
+          <div class="semester-caption">2025–2026 学年第二学期 · 截图可见数值课程</div>
+        </div>
+        <div class="semester-stat">
+          <div class="semester-value">6<em>门</em></div>
+          <div class="semester-label">绩点 4.0 课程</div>
+          <div class="semester-caption">覆盖专业基础、专业核心与工程课程</div>
+        </div>
+        <div class="semester-stat">
+          <div class="semester-value">22.25<em>学分</em></div>
+          <div class="semester-label">本学期可见课程</div>
+          <div class="semester-caption">包含 10 门数值成绩课程及 B+、P 课程</div>
+        </div>
+      </div>
+      <div class="course-group-title">Current Semester · 本学期课程</div>
       <div class="course-grid" id="courseGrid">
+        <div class="course-item highlight">
+          <div class="course-score">99</div>
+          <div class="course-name">电工学 B</div>
+          <div class="course-meta">2 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="99"></div></div>
+        </div>
+        <div class="course-item highlight">
+          <div class="course-score">95</div>
+          <div class="course-name">物理化学</div>
+          <div class="course-meta">4 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="95"></div></div>
+        </div>
+        <div class="course-item highlight">
+          <div class="course-score">95</div>
+          <div class="course-name">天然气加工工程</div>
+          <div class="course-meta">1.5 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="95"></div></div>
+        </div>
+        <div class="course-item highlight">
+          <div class="course-score">92</div>
+          <div class="course-name">石油流变学</div>
+          <div class="course-meta">1.5 学分 · 专业选修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="92"></div></div>
+        </div>
+        <div class="course-item">
+          <div class="course-score">91</div>
+          <div class="course-name">化工制图</div>
+          <div class="course-meta">2 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="91"></div></div>
+        </div>
+        <div class="course-item">
+          <div class="course-score">89</div>
+          <div class="course-name">化工原理（上）</div>
+          <div class="course-meta">3 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="89"></div></div>
+        </div>
+        <div class="course-item">
+          <div class="course-score">89</div>
+          <div class="course-name">毛泽东思想和中国特色社会主义理论体系概论</div>
+          <div class="course-meta">2.5 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="89"></div></div>
+        </div>
+        <div class="course-item">
+          <div class="course-score">86</div>
+          <div class="course-name">石油产品及添加剂</div>
+          <div class="course-meta">1.5 学分 · 专业选修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="86"></div></div>
+        </div>
+      </div>
+      <div class="course-group-title">Foundation · 基础高分课程</div>
+      <div class="course-grid">
         <div class="course-item highlight">
           <div class="course-score">97</div>
           <div class="course-name">高等数学（上）</div>
@@ -451,56 +529,8 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
           <div class="course-meta">2 学分 · 必修</div>
           <div class="course-bar"><div class="course-bar-fill" data-width="96"></div></div>
         </div>
-        <div class="course-item highlight">
-          <div class="course-score">96</div>
-          <div class="course-name">大学物理（下）</div>
-          <div class="course-meta">3 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="96"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">95</div>
-          <div class="course-name">无机化学</div>
-          <div class="course-meta">4 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="95"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">94</div>
-          <div class="course-name">高等数学（下）</div>
-          <div class="course-meta">6 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="94"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">91</div>
-          <div class="course-name">线性代数</div>
-          <div class="course-meta">2 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="91"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">90</div>
-          <div class="course-name">化工安全导论</div>
-          <div class="course-meta">1 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="90"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">89</div>
-          <div class="course-name">Python 程序设计</div>
-          <div class="course-meta">2.5 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="89"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">88</div>
-          <div class="course-name">石油化学与组成分析</div>
-          <div class="course-meta">1 学分 · 专业选修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="88"></div></div>
-        </div>
-        <div class="course-item">
-          <div class="course-score">88</div>
-          <div class="course-name">有机化学实验</div>
-          <div class="course-meta">1 学分 · 必修</div>
-          <div class="course-bar"><div class="course-bar-fill" data-width="88"></div></div>
-        </div>
       </div>
-      <div class="course-note">※ 高等数学累计 11 学分 · 大学物理累计 6 学分 · 三大化学（无机·有机·分析）均 90 分以上</div>
+      <div class="course-note">※ 本学期加权均分按截图中 10 门数值成绩课程、共 20 学分计算；B+ 与 P 课程未参与均分换算。页面仅展示代表性课程，不替代正式成绩单。</div>
     </div>
 
   </div>
