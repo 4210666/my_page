@@ -233,9 +233,298 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 .course-item.highlight .course-bar-fill{background:var(--accent);}
 .course-note{font-size:10px;color:var(--ink3);margin-top:1rem;padding-top:0.8rem;border-top:0.5px solid var(--line);letter-spacing:0.05em;}
 @media(max-width:700px){.semester-overview{grid-template-columns:1fr;}.semester-stat{border-right:none;border-bottom:0.5px solid var(--line);}.semester-stat:last-child{border-bottom:none;}.course-grid{grid-template-columns:repeat(2,1fr);}.course-item:nth-child(4n){border-right:0.5px solid var(--line);}.course-item:nth-child(2n){border-right:none;}.course-item:nth-last-child(-n+4){border-bottom:0.5px solid var(--line);}.course-item:nth-last-child(-n+2){border-bottom:none;}}
+
+/* MOTION SYSTEM */
+body{isolation:isolate;}
+.ambient-canvas{position:fixed;inset:-12vh -10vw;z-index:0;pointer-events:none;overflow:hidden;opacity:.98;}
+.ambient-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,25,22,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,25,22,.06) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse at center,#000 8%,rgba(0,0,0,.78) 52%,transparent 90%);animation:gridDrift 26s linear infinite;will-change:background-position;}
+.ambient-orb{position:absolute;border-radius:50%;filter:blur(2px);will-change:transform;}
+.ambient-orb.a{width:42vw;height:42vw;left:-10vw;top:8vh;background:radial-gradient(circle,rgba(184,92,56,.17),rgba(184,92,56,0) 68%);animation:ambientA 18s ease-in-out infinite alternate;}
+.ambient-orb.b{width:48vw;height:48vw;right:-14vw;top:38vh;background:radial-gradient(circle,rgba(139,58,42,.13),rgba(139,58,42,0) 70%);animation:ambientB 24s ease-in-out infinite alternate;}
+.ambient-orb.c{width:34vw;height:34vw;left:34vw;bottom:-16vw;background:radial-gradient(circle,rgba(90,105,94,.13),rgba(90,105,94,0) 70%);animation:ambientC 21s ease-in-out infinite alternate;}
+@keyframes gridDrift{to{background-position:72px 72px;}}
+@keyframes ambientA{to{transform:translate3d(8vw,10vh,0) scale(1.14);}}
+@keyframes ambientB{to{transform:translate3d(-12vw,-8vh,0) scale(.9);}}
+@keyframes ambientC{to{transform:translate3d(5vw,-13vh,0) scale(1.18);}}
+.ambient-molecule{position:absolute;width:clamp(250px,27vw,420px);height:auto;overflow:visible;opacity:.47;filter:drop-shadow(0 12px 30px rgba(139,58,42,.09));will-change:transform;}
+.ambient-molecule path,.ambient-molecule line{fill:none;stroke:rgba(139,58,42,.62);stroke-width:1.25;stroke-dasharray:5 11;animation:dashFlow 14s linear infinite;}
+.ambient-molecule circle{fill:rgba(250,248,243,.9);stroke:rgba(139,58,42,.7);stroke-width:1.35;transform-box:fill-box;transform-origin:center;animation:nodePulse 4.8s ease-in-out infinite;}
+.ambient-molecule circle:nth-of-type(2n){animation-delay:-1.6s;}
+.ambient-molecule circle:nth-of-type(3n){animation-delay:-3.2s;}
+.ambient-molecule.left{left:2vw;top:18vh;animation:moleculeFloatA 16s ease-in-out infinite alternate;}
+.ambient-molecule.right{right:1vw;top:54vh;animation:moleculeFloatB 20s ease-in-out infinite alternate-reverse;}
+@keyframes dashFlow{to{stroke-dashoffset:-160;}}
+@keyframes nodePulse{0%,100%{transform:scale(.82);opacity:.46;}50%{transform:scale(1.28);opacity:1;}}
+@keyframes moleculeFloatA{to{transform:translate3d(2.4vw,5vh,0) rotate(7deg);}}
+@keyframes moleculeFloatB{to{transform:translate3d(-3vw,-6vh,0) rotate(-8deg);}}
+.ambient-signal{position:absolute;left:8vw;right:8vw;bottom:9vh;width:84vw;height:120px;overflow:visible;opacity:.3;}
+.ambient-signal .signal-base{fill:none;stroke:rgba(26,25,22,.34);stroke-width:1;}
+.ambient-signal .signal-live{fill:none;stroke:rgba(184,92,56,.82);stroke-width:1.5;stroke-dasharray:12 20;animation:signalTravel 10s linear infinite;}
+@keyframes signalTravel{to{stroke-dashoffset:-320;}}
+.ambient-particle{position:absolute;width:6px;height:6px;border:1px solid rgba(139,58,42,.58);box-shadow:0 0 14px rgba(184,92,56,.12);transform:rotate(45deg);animation:particleDrift 12s ease-in-out infinite alternate;}
+.ambient-particle.p1{left:24%;top:24%;animation-delay:-3s;}
+.ambient-particle.p2{right:29%;top:36%;animation-delay:-7s;}
+.ambient-particle.p3{left:47%;bottom:20%;animation-delay:-10s;}
+@keyframes particleDrift{0%{opacity:.2;transform:translateY(0) rotate(45deg) scale(.7);}50%{opacity:.9;}100%{opacity:.25;transform:translateY(-55px) rotate(225deg) scale(1.4);}}
+.pipeline-frame{position:absolute;inset:12vh 10vw;width:calc(100% - 20vw);height:calc(100% - 24vh);overflow:visible;opacity:.46;}
+.pipe-shell{fill:none;stroke:rgba(26,25,22,.24);stroke-width:2.2;vector-effect:non-scaling-stroke;}
+.pipe-highlight{fill:none;stroke:rgba(139,58,42,.54);stroke-width:1.15;stroke-dasharray:7 15;vector-effect:non-scaling-stroke;animation:pipelineFlow 11s linear infinite;}
+.pipe-joint{fill:rgba(250,248,243,.92);stroke:rgba(139,58,42,.55);stroke-width:1.4;vector-effect:non-scaling-stroke;}
+.pipe-joint.live{animation:pipePressure 3.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+.pipe-valve{transform-box:fill-box;transform-origin:center;animation:valveTurn 9s ease-in-out infinite;}
+.pipe-valve circle{fill:rgba(250,248,243,.94);stroke:rgba(26,25,22,.34);stroke-width:1.4;vector-effect:non-scaling-stroke;}
+.pipe-valve path{fill:none;stroke:rgba(139,58,42,.66);stroke-width:1.5;vector-effect:non-scaling-stroke;}
+.pipe-label{fill:rgba(139,58,42,.58);font-family:var(--mono);font-size:12px;letter-spacing:4px;}
+.pipe-reading{fill:rgba(26,25,22,.42);font-family:var(--mono);font-size:10px;letter-spacing:2px;}
+.pipeline-beacon{fill:var(--accent2);opacity:.75;filter:drop-shadow(0 0 5px rgba(184,92,56,.5));animation:beaconPulse 2.6s ease-in-out infinite;}
+.pipeline-beacon.alt{animation-delay:-1.3s;}
+.pid-equipment{fill:rgba(250,248,243,.58);stroke:rgba(26,25,22,.33);stroke-width:1.4;vector-effect:non-scaling-stroke;}
+.pid-equipment-detail{fill:none;stroke:rgba(139,58,42,.52);stroke-width:1.15;vector-effect:non-scaling-stroke;}
+.pid-signal{fill:none;stroke:rgba(139,58,42,.45);stroke-width:1;stroke-dasharray:3 7;vector-effect:non-scaling-stroke;animation:pidSignal 7s linear infinite;}
+.pid-instrument{fill:rgba(250,248,243,.94);stroke:rgba(139,58,42,.62);stroke-width:1.25;vector-effect:non-scaling-stroke;}
+.pid-instrument-text{fill:rgba(26,25,22,.63);font-family:var(--mono);font-size:10px;font-weight:500;text-anchor:middle;}
+.pid-tag{fill:rgba(26,25,22,.58);font-family:var(--mono);font-size:11px;letter-spacing:1.5px;}
+.pid-param{fill:rgba(139,58,42,.66);font-family:var(--mono);font-size:9px;letter-spacing:1.2px;}
+.pid-stream{fill:rgba(139,58,42,.68);}
+.pid-control-valve{fill:rgba(250,248,243,.9);stroke:rgba(139,58,42,.62);stroke-width:1.25;vector-effect:non-scaling-stroke;animation:controlValve 5.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+.pid-flow-dot{fill:var(--accent2);opacity:.84;filter:drop-shadow(0 0 4px rgba(184,92,56,.5));}
+@keyframes pipelineFlow{to{stroke-dashoffset:-220;}}
+@keyframes pidSignal{to{stroke-dashoffset:-70;}}
+@keyframes pipePressure{0%,100%{opacity:.4;transform:scale(.78);}50%{opacity:1;transform:scale(1.25);}}
+@keyframes valveTurn{0%,35%,100%{transform:rotate(0deg);}55%,80%{transform:rotate(22deg);}}
+@keyframes controlValve{0%,100%{transform:scale(.94);opacity:.68;}50%{transform:scale(1.08);opacity:1;}}
+@keyframes beaconPulse{0%,100%{opacity:.22;}50%{opacity:.95;}}
+nav,#hero,section,.ornament,footer{position:relative;z-index:1;}
+
+nav{transition:height .35s ease,box-shadow .35s ease,background .35s ease;}
+nav.scrolled{background:rgba(250,248,243,.84);box-shadow:0 12px 35px rgba(26,25,22,.06);}
+.nav-links a{position:relative;}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:1px;background:var(--accent);transition:right .35s cubic-bezier(.2,.8,.2,1);}
+.nav-links a:hover::after,.nav-links a.active::after{right:0;}
+.nav-links a.active{color:var(--accent);}
+
+.hero-inner{animation:none;}
+.masthead-top,.kicker,.headline,.hero-body,.hero-cta,.portrait,.stat-row{opacity:0;will-change:transform,opacity;}
+.page-ready .masthead-top{animation:editorialIn .7s .08s both;}
+.page-ready .kicker{animation:editorialIn .65s .2s both;}
+.page-ready .headline{animation:headlineIn .95s .28s cubic-bezier(.16,1,.3,1) both;}
+.page-ready .hero-body{animation:editorialIn .8s .48s both;}
+.page-ready .hero-cta{animation:editorialIn .75s .62s both;}
+.page-ready .portrait{animation:portraitIn 1.05s .28s cubic-bezier(.16,1,.3,1) both;}
+.page-ready .stat-row{animation:editorialIn .8s .58s both;}
+@keyframes editorialIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes headlineIn{from{opacity:0;transform:translateY(34px);clip-path:inset(0 0 100% 0);}to{opacity:1;transform:none;clip-path:inset(0);}}
+@keyframes portraitIn{from{opacity:0;transform:translateY(28px) scale(.96);clip-path:inset(8% 8% 8% 8%);}to{opacity:1;transform:none;clip-path:inset(0);}}
+.portrait::after{content:"";position:absolute;inset:-40% -75%;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.24) 50%,transparent 58%);transform:translateX(-45%) rotate(6deg);animation:portraitSweep 8s 1.6s ease-in-out infinite;}
+@keyframes portraitSweep{0%,70%{transform:translateX(-45%) rotate(6deg);}90%,100%{transform:translateX(45%) rotate(6deg);}}
+.portrait img{will-change:transform;transition:transform .2s linear;}
+
+section{opacity:1;transform:none;transition:none;}
+section .section-header{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1);}
+section.visible .section-header{opacity:1;transform:none;}
+.section-rule{transform:scaleX(0);transform-origin:left;transition:transform 1s .18s cubic-bezier(.16,1,.3,1);}
+section.visible .section-rule{transform:scaleX(1);}
+.motion-reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .75s cubic-bezier(.16,1,.3,1);transition-delay:var(--reveal-delay,0ms);}
+section.visible .motion-reveal{opacity:1;transform:none;}
+
+.motion-card{--mx:50%;--my:50%;position:relative;isolation:isolate;transition:transform .32s cubic-bezier(.2,.8,.2,1),box-shadow .32s ease,background .25s ease;transform-style:preserve-3d;}
+.motion-card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(220px circle at var(--mx) var(--my),rgba(184,92,56,.16),transparent 68%);transition:opacity .3s ease;}
+.motion-card:hover{box-shadow:0 18px 42px rgba(45,34,27,.09);}
+.motion-card:hover::after{opacity:1;}
+.acad-card.motion-card::after,.semester-stat.motion-card::after{z-index:0;}
+.acad-card.motion-card>*,.semester-stat.motion-card>*{position:relative;z-index:1;}
+
+.stat-num,.acad-big,.semester-value,.course-score{font-variant-numeric:tabular-nums;}
+.status-dot{animation:statusPulse 2.4s ease-out infinite;box-shadow:0 0 0 0 rgba(58,122,90,.28);}
+@keyframes statusPulse{60%,100%{box-shadow:0 0 0 9px rgba(58,122,90,0);}}
+.lightbox{display:flex;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;}
+.lightbox.open{display:flex;opacity:1;visibility:visible;}
+.lightbox img{transform:scale(.96);transition:transform .45s cubic-bezier(.16,1,.3,1);}
+.lightbox.open img{transform:scale(1);}
+
+@media(max-width:700px){
+  .ambient-canvas{opacity:.7;}
+  .ambient-grid{background-size:48px 48px;animation-name:gridDriftMobile;}
+  @keyframes gridDriftMobile{to{background-position:48px 48px;}}
+  .ambient-orb.a{width:95vw;height:95vw;}
+  .ambient-orb.b{width:110vw;height:110vw;}
+  .ambient-molecule{width:195px;opacity:.29;}
+  .ambient-molecule.left{left:-80px;top:25vh;}
+  .ambient-molecule.right{right:-90px;top:67vh;}
+  .ambient-signal{left:-10vw;width:120vw;opacity:.18;}
+  .pipeline-frame{inset:12vh 10vw;width:calc(100% - 20vw);height:calc(100% - 24vh);opacity:.28;}
+  .pipeline-frame .desktop-pipe,.pipeline-frame .pipe-label,.pipeline-frame .pipe-reading,.pipeline-frame .pid-detail{display:none;}
+  .pipe-shell{stroke-width:1.5;}
+  .motion-card:hover{box-shadow:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+  .masthead-top,.kicker,.headline,.hero-body,.hero-cta,.portrait,.stat-row,.motion-reveal,section .section-header{opacity:1!important;transform:none!important;clip-path:none!important;}
+}
 </style>
 </head>
 <body>
+<div class="ambient-canvas" aria-hidden="true">
+  <span class="ambient-grid"></span>
+  <span class="ambient-orb a"></span>
+  <span class="ambient-orb b"></span>
+  <span class="ambient-orb c"></span>
+  <svg class="ambient-molecule left" viewBox="0 0 360 300">
+    <path d="M38 102 112 54 191 92 267 47 326 98 292 177 211 201 138 250 66 207Z"></path>
+    <line x1="112" y1="54" x2="138" y2="250"></line>
+    <line x1="191" y1="92" x2="211" y2="201"></line>
+    <line x1="66" y1="207" x2="267" y2="47"></line>
+    <circle cx="38" cy="102" r="7"></circle>
+    <circle cx="112" cy="54" r="10"></circle>
+    <circle cx="191" cy="92" r="6"></circle>
+    <circle cx="267" cy="47" r="8"></circle>
+    <circle cx="326" cy="98" r="5"></circle>
+    <circle cx="292" cy="177" r="9"></circle>
+    <circle cx="211" cy="201" r="6"></circle>
+    <circle cx="138" cy="250" r="10"></circle>
+    <circle cx="66" cy="207" r="5"></circle>
+  </svg>
+  <svg class="ambient-molecule right" viewBox="0 0 360 300">
+    <path d="M38 102 112 54 191 92 267 47 326 98 292 177 211 201 138 250 66 207Z"></path>
+    <line x1="112" y1="54" x2="138" y2="250"></line>
+    <line x1="191" y1="92" x2="211" y2="201"></line>
+    <line x1="66" y1="207" x2="267" y2="47"></line>
+    <circle cx="38" cy="102" r="7"></circle>
+    <circle cx="112" cy="54" r="10"></circle>
+    <circle cx="191" cy="92" r="6"></circle>
+    <circle cx="267" cy="47" r="8"></circle>
+    <circle cx="326" cy="98" r="5"></circle>
+    <circle cx="292" cy="177" r="9"></circle>
+    <circle cx="211" cy="201" r="6"></circle>
+    <circle cx="138" cy="250" r="10"></circle>
+    <circle cx="66" cy="207" r="5"></circle>
+  </svg>
+  <svg class="ambient-signal" viewBox="0 0 1200 120" preserveAspectRatio="none">
+    <path class="signal-base" d="M0 74 C100 74 100 74 170 74 C220 74 225 22 270 22 C315 22 320 98 365 98 C410 98 415 50 460 50 C505 50 510 74 560 74 L1200 74"></path>
+    <path class="signal-live" d="M0 74 C100 74 100 74 170 74 C220 74 225 22 270 22 C315 22 320 98 365 98 C410 98 415 50 460 50 C505 50 510 74 560 74 L1200 74"></path>
+  </svg>
+  <i class="ambient-particle p1"></i>
+  <i class="ambient-particle p2"></i>
+  <i class="ambient-particle p3"></i>
+  <svg class="pipeline-frame" viewBox="0 0 1600 1000" preserveAspectRatio="none">
+    <path class="pipe-shell desktop-pipe" d="M36 130H260V82H520"></path>
+    <path class="pipe-highlight desktop-pipe" d="M36 130H260V82H520"></path>
+    <path class="pipe-shell desktop-pipe" d="M1564 130H1340V82H1080"></path>
+    <path class="pipe-highlight desktop-pipe" d="M1564 130H1340V82H1080"></path>
+    <path class="pipe-shell" d="M64 205V395H112V690H64V890"></path>
+    <path class="pipe-highlight" d="M64 205V395H112V690H64V890"></path>
+    <path class="pipe-shell" d="M1536 205V395H1488V690H1536V890"></path>
+    <path class="pipe-highlight" d="M1536 205V395H1488V690H1536V890"></path>
+    <path class="pipe-shell desktop-pipe" d="M205 940H530V902H690"></path>
+    <path class="pipe-highlight desktop-pipe" d="M205 940H530V902H690"></path>
+    <path class="pipe-shell desktop-pipe" d="M1395 940H1070V902H910"></path>
+    <path class="pipe-highlight desktop-pipe" d="M1395 940H1070V902H910"></path>
+
+    <circle class="pipe-joint live desktop-pipe" cx="260" cy="130" r="7"></circle>
+    <circle class="pipe-joint desktop-pipe" cx="260" cy="82" r="5"></circle>
+    <circle class="pipe-joint live desktop-pipe" cx="1340" cy="130" r="7"></circle>
+    <circle class="pipe-joint desktop-pipe" cx="1340" cy="82" r="5"></circle>
+    <circle class="pipe-joint live" cx="64" cy="395" r="7"></circle>
+    <circle class="pipe-joint" cx="112" cy="395" r="5"></circle>
+    <circle class="pipe-joint live" cx="112" cy="690" r="7"></circle>
+    <circle class="pipe-joint" cx="64" cy="690" r="5"></circle>
+    <circle class="pipe-joint live" cx="1536" cy="395" r="7"></circle>
+    <circle class="pipe-joint" cx="1488" cy="395" r="5"></circle>
+    <circle class="pipe-joint live" cx="1488" cy="690" r="7"></circle>
+    <circle class="pipe-joint" cx="1536" cy="690" r="5"></circle>
+    <circle class="pipe-joint live desktop-pipe" cx="530" cy="940" r="7"></circle>
+    <circle class="pipe-joint desktop-pipe" cx="530" cy="902" r="5"></circle>
+    <circle class="pipe-joint live desktop-pipe" cx="1070" cy="940" r="7"></circle>
+    <circle class="pipe-joint desktop-pipe" cx="1070" cy="902" r="5"></circle>
+
+    <g class="pipe-valve" transform="translate(64 520)">
+      <circle cx="0" cy="0" r="17"></circle>
+      <path d="M-12 0H12M0-12V12M-9-9 9 9M9-9-9 9"></path>
+    </g>
+    <g class="pipe-valve" transform="translate(1536 520)">
+      <circle cx="0" cy="0" r="17"></circle>
+      <path d="M-12 0H12M0-12V12M-9-9 9 9M9-9-9 9"></path>
+    </g>
+    <circle class="pipeline-beacon" cx="64" cy="250" r="4"></circle>
+    <circle class="pipeline-beacon alt" cx="1536" cy="760" r="4"></circle>
+    <circle class="pipeline-beacon desktop-pipe" cx="430" cy="82" r="4"></circle>
+    <circle class="pipeline-beacon alt desktop-pipe" cx="1170" cy="902" r="4"></circle>
+
+    <text class="pipe-label desktop-pipe" x="286" y="66">FLOW / 01</text>
+    <text class="pipe-reading desktop-pipe" x="286" y="104">P 2.40 MPa · T 298 K</text>
+    <text class="pipe-label desktop-pipe" x="1080" y="66">TRANSFER / 02</text>
+    <text class="pipe-reading desktop-pipe" x="1080" y="104">Q 18.6 m³/h · STABLE</text>
+    <text class="pipe-label desktop-pipe" x="550" y="930">PIPELINE MONITOR</text>
+    <text class="pipe-label desktop-pipe" x="930" y="930">DATA LINK ACTIVE</text>
+
+    <!-- Simplified P&ID equipment and instrument loops -->
+    <g class="pid-detail">
+      <path class="pipe-shell" d="M64 350H132M218 350H300"></path>
+      <path class="pipe-highlight" d="M64 350H132M218 350H300"></path>
+      <path class="pid-equipment" d="M150 278H200C210 278 218 291 218 305V395C218 409 210 422 200 422H150C140 422 132 409 132 395V305C132 291 140 278 150 278Z"></path>
+      <path class="pid-equipment-detail" d="M132 326H218M132 384H218M175 278V254"></path>
+      <text class="pid-tag" x="140" y="445">V-101</text>
+      <text class="pid-param" x="140" y="461">3-PHASE SEPARATOR</text>
+      <text class="pid-param" x="140" y="475">P 2.40 MPa · T 298 K</text>
+
+      <circle class="pid-instrument" cx="250" cy="286" r="22"></circle>
+      <text class="pid-instrument-text" x="250" y="283">PT</text>
+      <text class="pid-instrument-text" x="250" y="296">101</text>
+      <path class="pid-signal" d="M228 286H200V278"></path>
+
+      <path class="pipe-shell" d="M1300 350H1374M1466 350H1536"></path>
+      <path class="pipe-highlight" d="M1300 350H1374M1466 350H1536"></path>
+      <circle class="pid-equipment" cx="1420" cy="350" r="46"></circle>
+      <path class="pid-equipment-detail" d="M1386 324 1454 376M1454 324 1386 376M1377 350H1463"></path>
+      <text class="pid-tag" x="1386" y="420">E-101</text>
+      <text class="pid-param" x="1386" y="436">GAS COOLER</text>
+      <text class="pid-param" x="1386" y="450">T-OUT 308 K</text>
+
+      <circle class="pid-instrument" cx="1348" cy="274" r="22"></circle>
+      <text class="pid-instrument-text" x="1348" y="271">TIC</text>
+      <text class="pid-instrument-text" x="1348" y="284">103</text>
+      <path class="pid-signal" d="M1348 296V324H1386"></path>
+
+      <path class="pipe-shell" d="M205 902H238M322 902H530"></path>
+      <path class="pipe-highlight" d="M205 902H238M322 902H530"></path>
+      <circle class="pid-equipment" cx="280" cy="902" r="42"></circle>
+      <path class="pid-equipment-detail" d="M252 878 311 902 252 926ZM280 944V962M257 962H303"></path>
+      <text class="pid-tag" x="236" y="850">P-101</text>
+      <text class="pid-param" x="236" y="865">TRANSFER PUMP</text>
+      <text class="pid-param" x="236" y="878">Q 18.6 m³/h</text>
+
+      <circle class="pid-instrument" cx="430" cy="848" r="22"></circle>
+      <text class="pid-instrument-text" x="430" y="845">FIC</text>
+      <text class="pid-instrument-text" x="430" y="858">102</text>
+      <path class="pid-signal" d="M430 870V902"></path>
+
+      <g transform="translate(1488 610)">
+        <path class="pid-control-valve" d="M-22-15 0 0-22 15ZM22-15 0 0 22 15Z"></path>
+        <path class="pid-equipment-detail" d="M0-2V-31M-13-31H13"></path>
+      </g>
+      <text class="pid-tag" x="1408" y="600">FV-102</text>
+      <text class="pid-param" x="1387" y="620">CONTROL VALVE · 62%</text>
+      <path class="pid-signal" d="M430 826C690 760 1120 760 1488 579"></path>
+
+      <path class="pid-stream" d="M292 344 308 350 292 356Z"></path>
+      <path class="pid-stream" d="M1288 344 1272 350 1288 356Z"></path>
+      <path class="pid-stream" d="M508 896 524 902 508 908Z"></path>
+      <text class="pid-param" x="82" y="338">FEED-101 · 6&quot;-HC-CS150</text>
+      <text class="pid-param" x="1300" y="338">GAS-103 · 4&quot;-GC-CS150</text>
+
+      <circle class="pid-flow-dot" r="4">
+        <animateMotion dur="8s" repeatCount="indefinite" path="M64 350H132"></animateMotion>
+      </circle>
+      <circle class="pid-flow-dot" r="4">
+        <animateMotion dur="11s" repeatCount="indefinite" path="M322 902H530"></animateMotion>
+      </circle>
+      <circle class="pid-flow-dot" r="4">
+        <animateMotion dur="9s" repeatCount="indefinite" path="M1466 350H1536"></animateMotion>
+      </circle>
+    </g>
+  </svg>
+</div>
 
 <div class="scroll-line" id="scrollLine"></div>
 <div class="lightbox" id="lightbox"><span class="lb-close">× close</span><img id="lbImg" src="" alt=""></div>
@@ -747,17 +1036,106 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 const d = new Date();
 document.getElementById('today-date').textContent = d.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'});
 
-// Scroll bar
-window.addEventListener('scroll',()=>{
-  const p=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+requestAnimationFrame(()=>document.body.classList.add('page-ready'));
+
+// Keep scroll-linked work in a single animation frame.
+let scrollTick=false;
+const updateScrollMotion=()=>{
+  const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
+  const p=maxScroll>0?(window.scrollY/maxScroll)*100:0;
   document.getElementById('scrollLine').style.width=p+'%';
+  document.querySelector('nav').classList.toggle('scrolled',window.scrollY>24);
+  if(!reduceMotion){
+    const portrait=document.querySelector('.portrait img');
+    if(portrait&&window.scrollY<window.innerHeight*1.15){
+      portrait.style.transform=`translate3d(0,${Math.min(window.scrollY*.035,18)}px,0) scale(1.025)`;
+    }
+  }
+  scrollTick=false;
+};
+window.addEventListener('scroll',()=>{
+  if(!scrollTick){scrollTick=true;requestAnimationFrame(updateScrollMotion);}
 },{passive:true});
+updateScrollMotion();
+
+const revealSelectors=[
+  '.about-text','.timeline-item','.acad-card','.research-box','.semester-stat',
+  '.course-group-title','.course-item','.skill-card','.activity-card',
+  '.certs-intro','.cert-item','.contact-layout>div','.aside-box'
+].join(',');
+document.querySelectorAll('section').forEach(section=>{
+  section.querySelectorAll(revealSelectors).forEach((el,index)=>{
+    el.classList.add('motion-reveal');
+    el.style.setProperty('--reveal-delay',`${Math.min(index%8,7)*65}ms`);
+  });
+});
 
 // Section reveal
 const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
-},{threshold:0.07});
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -5% 0px'});
 document.querySelectorAll('section').forEach(s=>obs.observe(s));
+
+// Highlight the chapter currently in view.
+const navItems=[...document.querySelectorAll('.nav-links a')];
+const navObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navItems.forEach(link=>link.classList.toggle('active',link.getAttribute('href')===`#${e.target.id}`));
+    }
+  });
+},{rootMargin:'-25% 0px -60% 0px',threshold:0});
+document.querySelectorAll('section[id]').forEach(section=>navObs.observe(section));
+
+// Count important numbers once when they enter the viewport.
+const countObs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    const el=entry.target;
+    const textNode=[...el.childNodes].find(node=>node.nodeType===Node.TEXT_NODE&&/\d/.test(node.textContent));
+    if(!textNode){countObs.unobserve(el);return;}
+    const raw=textNode.textContent.trim();
+    const target=Number.parseFloat(raw);
+    if(!Number.isFinite(target)||reduceMotion){countObs.unobserve(el);return;}
+    const decimals=(raw.split('.')[1]||'').length;
+    const start=performance.now();
+    const duration=950;
+    const step=now=>{
+      const progress=Math.min((now-start)/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      textNode.textContent=(target*eased).toFixed(decimals);
+      if(progress<1)requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    countObs.unobserve(el);
+  });
+},{threshold:.55});
+document.querySelectorAll('.stat-num,.acad-big,.semester-value,.course-score').forEach(el=>countObs.observe(el));
+
+// Pointer-aware cards: restrained tilt plus a local editorial-red glow.
+const finePointer=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+const motionCards=document.querySelectorAll('.acad-card,.semester-stat,.course-item,.skill-card,.activity-card,.cert-item,.aside-box,.research-box');
+motionCards.forEach(card=>{
+  card.classList.add('motion-card');
+  if(!finePointer||reduceMotion)return;
+  card.addEventListener('pointermove',event=>{
+    const rect=card.getBoundingClientRect();
+    const x=event.clientX-rect.left;
+    const y=event.clientY-rect.top;
+    const rx=((y/rect.height)-.5)*-2.2;
+    const ry=((x/rect.width)-.5)*2.2;
+    card.style.setProperty('--mx',`${x}px`);
+    card.style.setProperty('--my',`${y}px`);
+    card.style.transform=`perspective(850px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+  });
+  card.addEventListener('pointerleave',()=>{card.style.transform='';});
+});
 
 // Skill bars
 const barObs=new IntersectionObserver(entries=>{
@@ -796,8 +1174,7 @@ const courseBarObs=new IntersectionObserver(entries=>{
     }
   });
 },{threshold:0.15});
-const cg=document.getElementById('courseGrid');
-if(cg)courseBarObs.observe(cg);
+document.querySelectorAll('.course-grid').forEach(grid=>courseBarObs.observe(grid));
 
 </script>
 </body>
