@@ -11,6 +11,7 @@ import CatalysisProject from '../components/projects/CatalysisProject.astro';
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<script is:inline src="https://cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" defer></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -182,6 +183,12 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;max-width:920px;margin:0 auto;}
 .footer-copy{font-size:10px;color:var(--ink3);letter-spacing:0.08em;}
 .footer-sig{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink2);}
+.visit-counter{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid var(--line);background:rgba(240,237,228,0.72);color:var(--ink3);white-space:nowrap;}
+.visit-counter::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(139,58,42,.24);animation:visitPulse 2.4s ease-out infinite;}
+.visit-label{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;}
+.visit-counter strong{min-width:2ch;font-family:var(--serif);font-size:15px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;}
+.visit-unit{font-size:8px;color:var(--ink3);}
+@keyframes visitPulse{0%{box-shadow:0 0 0 0 rgba(139,58,42,.24);}70%,100%{box-shadow:0 0 0 6px rgba(139,58,42,0);}}
 
 /* LIGHTBOX */
 .lightbox{display:none;position:fixed;inset:0;background:rgba(26,25,22,0.9);z-index:1000;align-items:center;justify-content:center;cursor:pointer;}
@@ -212,6 +219,7 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
   .container,.hero-inner{padding-left:1rem;padding-right:1rem;}
   section{padding:3rem 0;}
 }
+@media(prefers-reduced-motion:reduce){.visit-counter::before{animation:none;}}
 
 .course-block{border:0.5px solid var(--line);padding:1.5rem;margin-top:1.5rem;background:var(--bg2);}
 .semester-overview{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:0;border:0.5px solid var(--line);margin-top:1rem;background:var(--bg);}
@@ -1035,6 +1043,11 @@ section.visible .motion-reveal{opacity:1;transform:none;}
 <div class="ornament">· · · · ·</div>
 <footer>
   <span class="footer-copy">张天硕 · 华东理工大学 · 化工学院 · 油气储运工程</span>
+  <span class="visit-counter" id="busuanzi_container_site_pv" aria-label="本站累计访问人次" data-nosnippet>
+    <span class="visit-label">Visits · 累计访问</span>
+    <strong id="busuanzi_site_pv">—</strong>
+    <span class="visit-unit">次</span>
+  </span>
   <span class="footer-sig">Crafted with curiosity & coffee</span>
 </footer>
 
