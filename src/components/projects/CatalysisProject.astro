@@ -1,0 +1,630 @@
+<section id="projects" class="catalysis-project" aria-labelledby="catalysis-project-title">
+  <div class="project-container">
+    <div class="project-section-header">
+      <span class="project-section-num">03</span>
+      <h2 class="project-section-title">研究 <em>项目</em></h2>
+      <div class="project-section-rule"></div>
+    </div>
+
+    <div class="project-labels" aria-label="项目类别">
+      <span>Scientific NLP</span>
+      <span>Chemical Data Engineering</span>
+      <span>Catalysis Informatics</span>
+    </div>
+
+    <div class="project-intro">
+      <div>
+        <p class="project-kicker">Featured Research System · 2026</p>
+        <h3 id="catalysis-project-title">催化文献智能数据引擎</h3>
+        <p class="project-en">Catalysis Literature Intelligence Engine</p>
+      </div>
+      <p class="project-lead">
+        从 PDF 催化文献中提取可追溯的字段级证据和实验记录候选，帮助科研人员快速比较原料、催化剂、反应条件与性能结果。
+      </p>
+    </div>
+
+    <div class="showcase-shell">
+      <div class="showcase-meta" aria-hidden="true">
+        <span>42 SEC · 1920 × 1080</span>
+        <span>Evidence-first pipeline</span>
+      </div>
+      <div class="showcase-media">
+        <video
+          id="catalysis-showcase-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="/projects/catalyst-literature-showcase/poster.png"
+          aria-label="催化文献智能数据引擎项目演示"
+        >
+          <source src="/projects/catalyst-literature-showcase/showcase.mp4" type="video/mp4" />
+          您的浏览器不支持视频播放。
+        </video>
+        <img
+          class="showcase-poster"
+          src="/projects/catalyst-literature-showcase/poster.png"
+          alt="催化文献智能数据引擎项目演示封面"
+          loading="lazy"
+        />
+        <div class="showcase-fallback" role="status">
+          <strong>动态演示暂时无法加载</strong>
+          <span>下方仍可查看项目流程、成果与学术说明。</span>
+        </div>
+        <button class="video-toggle" type="button" aria-controls="catalysis-showcase-video" aria-pressed="false">
+          <span class="toggle-icon" aria-hidden="true">Ⅱ</span>
+          <span class="toggle-label">暂停演示</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="evidence-flow" aria-label="项目核心流程">
+      <span>PDF 文献</span><i>→</i>
+      <span>内容切分</span><i>→</i>
+      <span>字段证据检索</span><i>→</i>
+      <span>数值与对象抽取</span><i>→</i>
+      <span>化学质量校验</span><i>→</i>
+      <span>候选记录与审计输出</span>
+    </div>
+
+    <div class="capability-grid">
+      <article>
+        <span class="capability-index">01 / Evidence</span>
+        <h4>字段级证据检索</h4>
+        <p>对催化剂、反应条件和性能字段分别检索证据，保留原文与页码，不让模型脱离上下文猜测答案。</p>
+      </article>
+      <article>
+        <span class="capability-index">02 / Validation</span>
+        <h4>化学兼容性与质量校验</h4>
+        <p>利用对象关系、单位范围与催化化学规则过滤参考文献污染、裸 Y 催化剂和异常温度等高风险结果。</p>
+      </article>
+      <article>
+        <span class="capability-index">03 / Audit</span>
+        <h4>可追溯结构化输出</h4>
+        <p>构建实验记录候选，并同步输出 Excel 与 audit JSON，支持人工逐条回看证据和审计路径。</p>
+      </article>
+    </div>
+
+    <div class="project-results" aria-label="项目当前成果">
+      <div><strong>48</strong><span>份源 PDF</span></div>
+      <div><strong>37</strong><span>篇去重论文</span></div>
+      <div><strong>288</strong><span>条 v2.1 精炼候选记录</span></div>
+      <div><strong>100%</strong><span>保留证据与审计路径</span></div>
+    </div>
+
+    <div class="project-notes">
+      <div>
+        <span class="note-label">Scientific Value · 科学价值</span>
+        <p>
+          当前文献证据显示，中孔 MFI / H-ZSM-5 体系更常见于 C4-C8 产物；通向 C10-C16
+          航空燃料馏分仍受扩散、二次裂化、积炭和实验关系数据不足等限制。后续将重点比较
+          FAU、BEA、分级孔、介孔材料及金属-酸协同体系。
+        </p>
+      </div>
+      <aside>
+        <span class="note-label">Academic Note · 学术声明</span>
+        <p>
+          当前输出定位为<strong>可追溯的科研文献实验数据候选抽取与人工辅助分析系统</strong>。288
+          条为候选记录，仍需结合论文全文人工复核，不代表完全无人复核的最终数据库，也不构成对最终 SAF 工业催化剂的结论。
+        </p>
+      </aside>
+    </div>
+
+    <div class="project-actions">
+      <a class="project-action-primary" href="#catalysis-showcase-video">查看动态演示 →</a>
+      <a class="project-action-secondary" href="#contact">联系合作</a>
+      <span>Technical report · 尚未公开</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .catalysis-project {
+    position: relative;
+    padding: 5rem 0;
+    border-bottom: 0.5px solid var(--line);
+    overflow: clip;
+  }
+
+  .catalysis-project::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, transparent 0 68%, rgba(139, 58, 42, 0.035) 68% 68.1%, transparent 68.1%),
+      radial-gradient(circle at 84% 18%, rgba(184, 92, 56, 0.08), transparent 25%);
+  }
+
+  .project-container {
+    position: relative;
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+
+  .project-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.5px solid var(--line);
+  }
+
+  .project-section-num {
+    font-size: 10px;
+    color: var(--ink3);
+    letter-spacing: 0.1em;
+  }
+
+  .project-section-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+
+  .project-section-title em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .project-section-rule {
+    flex: 1;
+    height: 0.5px;
+    background: var(--line);
+  }
+
+  .project-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.1rem;
+  }
+
+  .project-labels span {
+    padding: 4px 8px;
+    border: 0.5px solid var(--line);
+    color: var(--accent);
+    background: rgba(250, 248, 243, 0.76);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .project-intro {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3rem;
+    align-items: end;
+    margin-bottom: 1.6rem;
+  }
+
+  .project-kicker {
+    margin-bottom: 0.55rem;
+    color: var(--accent);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .project-intro h3 {
+    max-width: 560px;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: clamp(30px, 4.4vw, 48px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -1.4px;
+  }
+
+  .project-en {
+    margin-top: 0.65rem;
+    color: var(--ink3);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .project-lead {
+    padding-left: 1.2rem;
+    border-left: 2px solid var(--accent);
+    color: var(--ink2);
+    font-size: 12px;
+    line-height: 1.9;
+  }
+
+  .showcase-shell {
+    margin-top: 1.5rem;
+  }
+
+  .showcase-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 0.55rem;
+    color: var(--ink3);
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .showcase-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 0.5px solid var(--line);
+    background: #11100f;
+    box-shadow: 0 22px 50px rgba(26, 25, 22, 0.12);
+  }
+
+  .showcase-media video,
+  .showcase-poster {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #11100f;
+  }
+
+  .showcase-poster {
+    display: none;
+  }
+
+  .showcase-fallback {
+    position: absolute;
+    inset: auto 1rem 1rem;
+    display: none;
+    gap: 4px;
+    padding: 0.8rem 1rem;
+    background: rgba(26, 25, 22, 0.88);
+    color: var(--bg);
+    font-size: 10px;
+  }
+
+  .showcase-fallback strong,
+  .showcase-fallback span {
+    display: block;
+  }
+
+  .video-toggle {
+    position: absolute;
+    right: 0.8rem;
+    bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 7px 11px;
+    border: 0.5px solid rgba(250, 248, 243, 0.28);
+    background: rgba(26, 25, 22, 0.82);
+    color: #faf8f3;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition:
+      background 0.2s,
+      transform 0.2s;
+  }
+
+  .video-toggle:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .toggle-icon {
+    font-size: 10px;
+  }
+
+  .evidence-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 1.4rem 0;
+    padding: 0.9rem 1rem;
+    overflow-x: auto;
+    border-top: 0.5px solid var(--line);
+    border-bottom: 0.5px solid var(--line);
+    color: var(--ink2);
+    scrollbar-width: thin;
+  }
+
+  .evidence-flow span {
+    flex: 0 0 auto;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+
+  .evidence-flow i {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 0.5px solid var(--line);
+  }
+
+  .capability-grid article {
+    padding: 1.25rem;
+    border-right: 0.5px solid var(--line);
+    transition:
+      background 0.25s,
+      transform 0.25s;
+  }
+
+  .capability-grid article:last-child {
+    border-right: 0;
+  }
+
+  .capability-grid article:hover {
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  .capability-index,
+  .note-label {
+    display: block;
+    margin-bottom: 0.55rem;
+    color: var(--accent);
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .capability-grid h4 {
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 15px;
+  }
+
+  .capability-grid p,
+  .project-notes p {
+    color: var(--ink2);
+    font-size: 11px;
+    line-height: 1.8;
+  }
+
+  .project-results {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 1.2rem;
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .project-results div {
+    padding: 1.1rem;
+    border-right: 0.5px solid rgba(250, 248, 243, 0.16);
+  }
+
+  .project-results div:last-child {
+    border-right: 0;
+  }
+
+  .project-results strong {
+    display: block;
+    margin-bottom: 5px;
+    font-family: var(--serif);
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .project-results span {
+    color: rgba(250, 248, 243, 0.68);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .project-notes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.2rem;
+  }
+
+  .project-notes > div,
+  .project-notes aside {
+    padding: 1.25rem;
+    border: 0.5px solid var(--line);
+  }
+
+  .project-notes aside {
+    background: var(--bg2);
+  }
+
+  .project-notes strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .project-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+  }
+
+  .project-actions a {
+    padding: 9px 16px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .project-action-primary {
+    border: 0.5px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .project-action-primary:hover {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .project-action-secondary {
+    border: 0.5px solid var(--ink);
+    color: var(--ink);
+  }
+
+  .project-action-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .project-actions > span {
+    margin-left: auto;
+    color: var(--ink3);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 700px) {
+    .catalysis-project {
+      padding: 3rem 0;
+    }
+
+    .project-container {
+      padding: 0 1rem;
+    }
+
+    .project-intro,
+    .project-notes {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .project-lead {
+      padding-left: 0.9rem;
+    }
+
+    .showcase-meta {
+      gap: 1rem;
+    }
+
+    .showcase-meta span:last-child {
+      text-align: right;
+    }
+
+    .capability-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .capability-grid article {
+      border-right: 0;
+      border-bottom: 0.5px solid var(--line);
+    }
+
+    .capability-grid article:last-child {
+      border-bottom: 0;
+    }
+
+    .project-results {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .project-results div:nth-child(2) {
+      border-right: 0;
+    }
+
+    .project-results div:nth-child(-n + 2) {
+      border-bottom: 0.5px solid rgba(250, 248, 243, 0.16);
+    }
+
+    .project-actions {
+      flex-wrap: wrap;
+    }
+
+    .project-actions > span {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-media video {
+      display: none;
+    }
+
+    .showcase-poster {
+      display: block;
+    }
+
+    .video-toggle {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('#catalysis-showcase-video');
+  const media = video?.closest<HTMLElement>('.showcase-media');
+  const poster = media?.querySelector<HTMLImageElement>('.showcase-poster');
+  const fallback = media?.querySelector<HTMLElement>('.showcase-fallback');
+  const toggle = media?.querySelector<HTMLButtonElement>('.video-toggle');
+  const toggleIcon = toggle?.querySelector<HTMLElement>('.toggle-icon');
+  const toggleLabel = toggle?.querySelector<HTMLElement>('.toggle-label');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const updateToggle = (playing: boolean) => {
+    if (!toggle || !toggleIcon || !toggleLabel) return;
+    toggle.setAttribute('aria-pressed', String(!playing));
+    toggleIcon.textContent = playing ? 'Ⅱ' : '▶';
+    toggleLabel.textContent = playing ? '暂停演示' : '播放演示';
+  };
+
+  if (video && !reduceMotion) {
+    const videoObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video
+            .play()
+            .then(() => updateToggle(true))
+            .catch(() => updateToggle(false));
+        } else {
+          video.pause();
+          updateToggle(false);
+        }
+      },
+      { threshold: 0.35 }
+    );
+
+    videoObserver.observe(video);
+
+    toggle?.addEventListener('click', () => {
+      if (video.paused) {
+        video
+          .play()
+          .then(() => updateToggle(true))
+          .catch(() => updateToggle(false));
+      } else {
+        video.pause();
+        updateToggle(false);
+      }
+    });
+
+    video.addEventListener('error', () => {
+      video.style.display = 'none';
+      if (poster) poster.style.display = 'block';
+      if (fallback) fallback.style.display = 'grid';
+      if (toggle) toggle.style.display = 'none';
+    });
+  } else if (video) {
+    video.pause();
+  }
+</script>
