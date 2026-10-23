@@ -28,7 +28,9 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes('/hero-preview'),
+    }),
     mdx(),
     icon({
       include: {

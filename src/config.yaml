@@ -1,39 +1,37 @@
 site:
-  name: AstroWind
-  site: 'https://astrowind.vercel.app'
+  name: 张天硕
+  site: 'https://zts666.me'
   base: '/'
   trailingSlash: false
 
-  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
+  googleSiteVerificationId: null # 在 Google Search Console 验证自己的站点后填入
 
 # Default SEO metadata
 metadata:
   title:
-    default: AstroWind
-    template: '%s — AstroWind'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+    default: 张天硕 — 华东理工大学
+    template: '%s — 张天硕'
+  description: "张天硕，华东理工大学化工学院油气储运工程本科生，专业排名第一。关注 VIE 荧光材料研究、机器学习与计算机视觉、数学建模。"
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: AstroWind
+    site_name: 张天硕 · 个人主页
     images:
-      - url: '~/assets/images/default.png'
+      - url: '~/assets/images/og-image.png'
         width: 1200
-        height: 628
+        height: 630
     type: website
   twitter:
-    handle: '@arthelokyo'
-    site: '@arthelokyo'
     cardType: summary_large_image
 
 i18n:
-  language: en
+  language: zh-CN
   textDirection: ltr
 
 apps:
   blog:
-    isEnabled: true
+    isEnabled: false # 模板示例博客，暂不启用
     postsPerPage: 6
 
     post:

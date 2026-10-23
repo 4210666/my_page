@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://zts666.me/sitemap-index.xml
