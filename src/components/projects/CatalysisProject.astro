@@ -140,7 +140,7 @@
   .project-container {
     position: relative;
     width: 100%;
-    max-width: 920px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 0 2.5rem;
   }
@@ -234,7 +234,7 @@
     padding-left: 1.2rem;
     border-left: 2px solid var(--accent);
     color: var(--ink2);
-    font-size: 12px;
+    font-size: 13.5px;
     line-height: 1.9;
   }
 
@@ -389,8 +389,8 @@
   .capability-grid p,
   .project-notes p {
     color: var(--ink2);
-    font-size: 11px;
-    line-height: 1.8;
+    font-size: 13px;
+    line-height: 1.85;
   }
 
   .project-results {
@@ -505,8 +505,17 @@
 
     .project-intro,
     .project-notes {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 1rem;
+    }
+
+    .project-intro > *,
+    .project-notes > * {
+      min-width: 0;
+    }
+
+    .project-intro h3 {
+      font-size: clamp(26px, 7vw, 36px);
     }
 
     .project-lead {
@@ -514,7 +523,8 @@
     }
 
     .showcase-meta {
-      gap: 1rem;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
     }
 
     .showcase-meta span:last-child {

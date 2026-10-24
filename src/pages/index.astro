@@ -39,9 +39,10 @@ import CatalysisProject from '../components/projects/CatalysisProject.astro';
   --accent:#8b3a2a;--accent2:#b85c38;
   --serif:'Playfair Display','Noto Serif SC',Georgia,serif;
   --mono:'IBM Plex Mono','Courier New',monospace;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
 }
-html{scroll-behavior:smooth;}
-body{font-family:var(--mono);background:var(--bg);color:var(--ink);font-size:13px;line-height:1.7;overflow-x:hidden;}
+html{scroll-behavior:smooth;overflow-x:clip;}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.8;overflow-x:clip;}
 
 /* NOISE */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.35;
@@ -52,19 +53,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,248,243,
   border-bottom:0.5px solid var(--line);padding:0 2.5rem;height:52px;display:flex;align-items:center;justify-content:space-between;}
 .nav-logo{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-0.3px;}
 .nav-links{display:flex;gap:2rem;list-style:none;}
-.nav-links a{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);text-decoration:none;transition:color 0.2s;}
+.nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);text-decoration:none;transition:color 0.2s;}
 .nav-links a:hover{color:var(--accent);}
-.nav-badge{font-size:9px;padding:2px 7px;background:var(--accent);color:var(--bg);letter-spacing:0.1em;margin-left:6px;vertical-align:middle;}
+.nav-badge{font-family:var(--mono);font-size:9px;padding:2px 7px;background:var(--accent);color:var(--bg);letter-spacing:0.1em;margin-left:6px;vertical-align:middle;}
+.nav-toggle{display:none;background:transparent;border:0.5px solid var(--line);padding:5px 10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--ink);cursor:pointer;text-transform:uppercase;}
+.mobile-menu{display:none;position:fixed;top:52px;left:0;right:0;bottom:0;background:rgba(250,248,243,0.98);backdrop-filter:blur(12px);z-index:99;padding:1.5rem 1.5rem 2rem;flex-direction:column;gap:0;overflow-y:auto;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{display:flex;align-items:baseline;gap:1rem;padding:1rem 0;border-bottom:0.5px solid var(--line);text-decoration:none;color:var(--ink);font-family:var(--serif);font-size:20px;font-weight:700;}
+.mobile-menu a span{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;font-weight:400;}
 
-/* SCROLL BAR */
-.scroll-line{position:fixed;top:52px;left:0;height:2px;background:var(--accent);width:0%;z-index:200;transition:width 0.08s linear;}
+/* SCROLL BAR (anchored at bottom of nav) */
+.scroll-line{position:absolute;bottom:-1px;left:0;height:2px;background:var(--accent);width:0%;z-index:200;transition:width 0.08s linear;pointer-events:none;}
 
 /* CONTAINER */
-.container{max-width:920px;margin:0 auto;padding:0 2.5rem;}
+.container{max-width:960px;margin:0 auto;padding:0 2.5rem;}
 
 /* ── HERO ── */
 #hero{padding-top:52px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;border-bottom:0.5px solid var(--line);}
-.hero-inner{padding:4rem 2.5rem;max-width:920px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 300px;gap:0;align-items:start;
+.hero-inner{padding:4rem 2.5rem;max-width:960px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 300px;gap:0;align-items:start;
   animation:fadeUp 0.8s ease 0.05s both;}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
@@ -77,7 +83,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,248,243,
 .kicker::before{content:'';display:block;width:20px;height:1px;background:var(--accent);}
 h1.headline{font-family:var(--serif);font-size:clamp(34px,4.5vw,54px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;color:var(--ink);margin-bottom:1.4rem;}
 h1.headline em{font-style:italic;color:var(--accent);}
-.hero-body{font-size:13px;line-height:2;color:var(--ink2);margin-bottom:1.6rem;}
+.hero-body{font-size:15px;line-height:1.95;color:var(--ink2);margin-bottom:1.6rem;}
 .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
 .btn-primary{font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:10px 22px;
   background:var(--ink);color:var(--bg);border:none;cursor:pointer;text-decoration:none;transition:background 0.2s,transform 0.15s;}
@@ -110,7 +116,7 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
-.about-text p{font-size:13px;line-height:1.95;color:var(--ink2);margin-bottom:1rem;}
+.about-text p{font-size:14.5px;line-height:1.95;color:var(--ink2);margin-bottom:1rem;}
 .pull-quote{border-left:3px solid var(--accent);padding:1rem 1.4rem;background:var(--bg2);margin:1.5rem 0;}
 .pull-quote p{font-family:var(--serif);font-style:italic;font-size:15px !important;line-height:1.65 !important;color:var(--ink) !important;margin-bottom:5px !important;}
 .pull-quote cite{font-size:10px;color:var(--ink3);letter-spacing:0.1em;display:block;}
@@ -118,9 +124,9 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 .timeline{list-style:none;}
 .timeline-item{display:grid;grid-template-columns:90px 1fr;gap:0.8rem;padding:1rem 0;border-bottom:0.5px solid var(--line);}
 .timeline-item:last-child{border-bottom:none;}
-.tl-year{font-size:10px;color:var(--accent);font-weight:500;padding-top:3px;letter-spacing:0.05em;}
-.tl-org{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:3px;}
-.tl-role{font-size:11px;color:var(--ink3);}
+.tl-year{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500;padding-top:3px;letter-spacing:0.05em;}
+.tl-org{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.tl-role{font-size:12.5px;color:var(--ink3);}
 
 /* ACADEMICS */
 .academics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:0.5px solid var(--line);}
@@ -134,39 +140,38 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 .research-box{border:0.5px solid var(--line);padding:1.5rem;margin-top:1.5rem;background:var(--bg2);}
 .research-title{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;padding-bottom:8px;border-bottom:0.5px solid var(--line);}
 .research-content{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
-.research-item-title{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.research-item-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .research-item-title em{font-style:italic;}
-.research-item-desc{font-size:12px;line-height:1.85;color:var(--ink2);}
+.research-item-desc{font-size:13.5px;line-height:1.85;color:var(--ink2);}
 
 /* SKILLS */
-.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);}
-.skill-card{padding:1.4rem;border-right:0.5px solid var(--line);border-bottom:0.5px solid var(--line);transition:background 0.2s;}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);background:rgba(250,248,243,0.75);}
+.skill-card{padding:1.4rem;border-right:0.5px solid var(--line);border-bottom:0.5px solid var(--line);transition:background 0.2s;display:flex;flex-direction:column;}
 .skill-card:hover{background:var(--bg2);}
 .skill-card:nth-child(3n){border-right:none;}
 .skill-card:nth-last-child(-n+3){border-bottom:none;}
-.skill-cat{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;}
-.skill-name{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:10px;}
-.skill-bar-wrap{margin-bottom:10px;}
-.skill-bar-label{display:flex;justify-content:space-between;font-size:9px;color:var(--ink3);margin-bottom:4px;}
-.skill-bar{height:2px;background:var(--bg3);position:relative;overflow:hidden;}
-.skill-bar-fill{position:absolute;left:0;top:0;bottom:0;background:var(--ink);width:0;transition:width 1.3s cubic-bezier(0.4,0,0.2,1);}
-.skill-bar-fill.red{background:var(--accent);}
-.skill-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
-.tag{font-size:9px;padding:3px 7px;border:0.5px solid var(--line);color:var(--ink3);letter-spacing:0.05em;transition:all 0.2s;}
+.skill-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.skill-cat{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);}
+.skill-level{font-family:var(--mono);font-size:9px;padding:2px 6px;border:0.5px solid var(--line);color:var(--ink2);background:var(--bg2);letter-spacing:0.06em;}
+.skill-level.core{border-color:rgba(139,58,42,0.35);color:var(--accent);background:rgba(139,58,42,0.06);}
+.skill-name{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.skill-evidence{font-size:12.5px;line-height:1.7;color:var(--ink2);margin-bottom:12px;flex:1;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;}
+.tag{font-family:var(--mono);font-size:10px;padding:3px 7px;border:0.5px solid var(--line);color:var(--ink3);letter-spacing:0.04em;transition:all 0.2s;}
 .tag:hover{border-color:var(--accent);color:var(--accent);}
 
 /* ACTIVITIES */
 .activities-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-.activity-card{border:0.5px solid var(--line);padding:1.3rem;}
-.ac-icon{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
-.ac-title{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
-.ac-desc{font-size:12px;line-height:1.85;color:var(--ink2);}
-.ac-badge{display:inline-block;font-size:9px;padding:2px 8px;background:var(--ink);color:var(--bg);letter-spacing:0.1em;margin-top:8px;}
+.activity-card{border:0.5px solid var(--line);padding:1.4rem;background:rgba(250,248,243,0.75);}
+.ac-icon{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.ac-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.ac-desc{font-size:13.5px;line-height:1.85;color:var(--ink2);}
+.ac-badge{font-family:var(--mono);display:inline-block;font-size:9px;padding:2px 8px;background:var(--ink);color:var(--bg);letter-spacing:0.1em;margin-top:10px;}
 .ac-badge.green{background:#3a7a5a;}
 
 /* CERTIFICATES */
-.certs-intro{font-size:12px;line-height:1.85;color:var(--ink2);margin-bottom:1.5rem;}
-.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);}
+.certs-intro{font-size:13.5px;line-height:1.85;color:var(--ink2);margin-bottom:1.5rem;}
+.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);background:rgba(250,248,243,0.75);}
 .cert-item{border-right:0.5px solid var(--line);border-bottom:0.5px solid var(--line);overflow:hidden;cursor:pointer;transition:background 0.2s;}
 .cert-item:hover{background:var(--bg2);}
 .cert-item:nth-child(3n){border-right:none;}
@@ -174,31 +179,33 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 .cert-img-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--bg3);}
 .cert-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
 .cert-item:hover .cert-img-wrap img{transform:scale(1.04);}
-.cert-caption{padding:0.8rem;border-top:0.5px solid var(--line);}
-.cert-name{font-size:11px;font-weight:500;color:var(--ink);margin-bottom:2px;}
-.cert-date{font-size:9px;color:var(--ink3);letter-spacing:0.08em;}
+.cert-caption{padding:0.85rem;border-top:0.5px solid var(--line);}
+.cert-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.cert-date{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:0.06em;}
 
 /* CONTACT */
 .contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
-.contact-intro{font-size:13px;line-height:1.95;color:var(--ink2);margin-bottom:2rem;}
+.contact-intro{font-size:14px;line-height:1.95;color:var(--ink2);margin-bottom:2rem;}
 .contact-links{display:flex;flex-direction:column;gap:0;}
-.contact-link-item{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;border-bottom:0.5px solid var(--line);text-decoration:none;color:var(--ink);transition:all 0.2s;}
+.contact-link-item{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;border-bottom:0.5px solid var(--line);text-decoration:none;color:var(--ink);transition:all 0.2s;background:transparent;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;font-family:inherit;cursor:pointer;}
 .contact-link-item:first-child{border-top:0.5px solid var(--line);}
 .contact-link-item:hover{padding-left:8px;color:var(--accent);}
+.contact-link-item.static{cursor:default;}
+.contact-link-item.static:hover{padding-left:0;color:var(--ink);}
 .cl-left{display:flex;flex-direction:column;gap:2px;}
-.cl-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);}
-.cl-val{font-size:12px;font-weight:500;}
-.cl-arrow{font-size:16px;transition:transform 0.2s;}
-.contact-link-item:hover .cl-arrow{transform:translateX(4px);}
+.cl-label{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);}
+.cl-val{font-family:var(--mono);font-size:13px;font-weight:500;}
+.cl-arrow{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--ink3);transition:transform 0.2s,color 0.2s;}
+.contact-link-item:hover .cl-arrow{transform:translateX(4px);color:var(--accent);}
 .aside-col{display:flex;flex-direction:column;gap:1.2rem;}
 .aside-box{border:0.5px solid var(--line);padding:1.3rem;background:var(--bg2);}
-.aside-title{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.8rem;padding-bottom:7px;border-bottom:0.5px solid var(--line);}
-.aside-text{font-size:12px;line-height:1.85;color:var(--ink2);}
+.aside-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.8rem;padding-bottom:7px;border-bottom:0.5px solid var(--line);}
+.aside-text{font-size:13.5px;line-height:1.85;color:var(--ink2);}
 .status-dot{width:8px;height:8px;border-radius:50%;background:#3a7a5a;display:inline-block;margin-right:6px;vertical-align:middle;}
 
 /* FOOTER */
-.ornament{text-align:center;color:var(--ink3);font-size:11px;letter-spacing:0.3em;margin:2rem auto 1rem;max-width:920px;padding:0 2.5rem;}
-footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;max-width:920px;margin:0 auto;}
+.ornament{text-align:center;color:var(--ink3);font-size:11px;letter-spacing:0.3em;margin:2rem auto 1rem;max-width:960px;padding:0 2.5rem;}
+footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;max-width:960px;margin:0 auto;}
 .footer-copy{font-size:10px;color:var(--ink3);letter-spacing:0.08em;}
 .footer-sig{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink2);}
 .visit-counter{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid var(--line);background:rgba(240,237,228,0.72);color:var(--ink3);white-space:nowrap;}
@@ -209,30 +216,48 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 @keyframes visitPulse{0%{box-shadow:0 0 0 0 rgba(139,58,42,.24);}70%,100%{box-shadow:0 0 0 6px rgba(139,58,42,0);}}
 
 /* LIGHTBOX */
-.lightbox{display:none;position:fixed;inset:0;background:rgba(26,25,22,0.9);z-index:1000;align-items:center;justify-content:center;cursor:pointer;}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(26,25,22,0.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:0.9rem;padding:2rem;}
 .lightbox.open{display:flex;}
-.lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border:0.5px solid rgba(255,255,255,0.15);}
-.lb-close{position:absolute;top:1.5rem;right:2rem;color:rgba(250,248,243,0.6);font-size:24px;cursor:pointer;font-family:var(--mono);letter-spacing:0.1em;}
+.lightbox img{max-width:84vw;max-height:78vh;object-fit:contain;border:0.5px solid rgba(255,255,255,0.18);}
+.lb-close{position:absolute;top:1.25rem;right:1.5rem;color:rgba(250,248,243,0.85);font-size:12px;cursor:pointer;font-family:var(--mono);letter-spacing:0.12em;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.22);padding:6px 12px;text-transform:uppercase;}
+.lb-close:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.22);color:rgba(250,248,243,0.9);width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--mono);font-size:16px;transition:all 0.2s;}
+.lb-nav:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+.lb-prev{left:1.5rem;}
+.lb-next{right:1.5rem;}
+.lb-caption-bar{display:flex;align-items:center;gap:0.9rem;color:rgba(250,248,243,0.9);font-size:13px;}
+.lb-counter{font-family:var(--mono);font-size:11px;color:var(--accent2);letter-spacing:0.12em;}
+
+/* COPY TOAST */
+.copy-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;padding:9px 18px;border:0.5px solid var(--accent);opacity:0;pointer-events:none;transition:opacity 0.25s,transform 0.25s;z-index:1100;}
+.copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* RESPONSIVE */
 @media(max-width:700px){
   nav{padding:0 1rem;}
   .nav-links{display:none;}
-  .hero-inner{grid-template-columns:1fr;gap:2rem;padding:2.5rem 1rem;}
-  .hero-left{border-right:none;border-bottom:0.5px solid var(--line);padding-right:0;padding-bottom:2rem;}
-  .hero-right{padding-left:0;}
+  .nav-toggle{display:inline-flex;align-items:center;gap:6px;}
+  #hero{min-height:auto;}
+  .hero-inner{grid-template-columns:1fr;gap:1.4rem;padding:1.8rem 1rem 2.2rem;}
+  .hero-left{border-right:none;border-bottom:0.5px solid var(--line);padding-right:0;padding-bottom:1.4rem;}
+  .hero-right{padding-left:0;display:grid;grid-template-columns:116px 1fr;gap:0.8rem;align-items:stretch;}
+  .portrait{margin-bottom:0;aspect-ratio:3/4;}
+  .portrait-label{font-size:8px;padding:4px 6px;}
+  .stat-item{padding:0.55rem 0.6rem;}
+  .stat-num{font-size:18px;}
   .about-grid,.contact-layout,.research-content{grid-template-columns:1fr;}
   .academics-grid{grid-template-columns:1fr 1fr;border:none;gap:0;}
   .acad-card{border:0.5px solid var(--line);margin:-0.5px;}
-  .skills-grid{grid-template-columns:1fr 1fr;}
-  .skill-card:nth-child(3n){border-right:0.5px solid var(--line);}
-  .skill-card:nth-child(2n){border-right:none;}
-  .skill-card:nth-last-child(-n+3){border-bottom:0.5px solid var(--line);}
-  .skill-card:nth-last-child(-n+2){border-bottom:none;}
+  .skills-grid{grid-template-columns:1fr;}
+  .skill-card{border-right:none !important;border-bottom:0.5px solid var(--line) !important;}
+  .skill-card:last-child{border-bottom:none !important;}
   .activities-grid{grid-template-columns:1fr;}
   .certs-grid{grid-template-columns:1fr 1fr;}
   .certs-grid .cert-item:nth-child(2n){border-right:none;}
   .certs-grid .cert-item:nth-child(3n){border-right:0.5px solid var(--line);}
+  .certs-grid .cert-item:nth-child(6n){border-right:none;}
+  .lb-prev{left:0.5rem;width:36px;height:36px;}
+  .lb-next{right:0.5rem;width:36px;height:36px;}
   footer{flex-direction:column;gap:8px;text-align:center;padding:1.5rem 1rem;}
   .container,.hero-inner{padding-left:1rem;padding-right:1rem;}
   section{padding:3rem 0;}
@@ -261,12 +286,16 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 .course-bar{height:2px;background:var(--bg3);position:relative;overflow:hidden;}
 .course-bar-fill{position:absolute;left:0;top:0;bottom:0;background:var(--ink);width:0;transition:width 1.4s cubic-bezier(0.4,0,0.2,1);}
 .course-item.highlight .course-bar-fill{background:var(--accent);}
-.course-note{font-size:10px;color:var(--ink3);margin-top:1rem;padding-top:0.8rem;border-top:0.5px solid var(--line);letter-spacing:0.05em;}
+.course-more{display:none;}
+.course-more.expanded{display:block;}
+.course-toggle-btn{margin-top:1rem;width:100%;padding:9px 14px;background:var(--bg);border:0.5px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink2);cursor:pointer;transition:all 0.2s;}
+.course-toggle-btn:hover{border-color:var(--accent);color:var(--accent);}
+.course-note{font-size:11px;color:var(--ink3);margin-top:1rem;padding-top:0.8rem;border-top:0.5px solid var(--line);letter-spacing:0.03em;}
 @media(max-width:700px){.semester-overview{grid-template-columns:1fr;}.semester-stat{border-right:none;border-bottom:0.5px solid var(--line);}.semester-stat:last-child{border-bottom:none;}.course-grid{grid-template-columns:repeat(2,1fr);}.course-item:nth-child(4n){border-right:0.5px solid var(--line);}.course-item:nth-child(2n){border-right:none;}.course-item:nth-last-child(-n+4){border-bottom:0.5px solid var(--line);}.course-item:nth-last-child(-n+2){border-bottom:none;}}
 
 /* MOTION SYSTEM */
 body{isolation:isolate;}
-.ambient-canvas{position:fixed;inset:-12vh -10vw;z-index:0;pointer-events:none;overflow:hidden;opacity:.98;}
+.ambient-canvas{position:fixed;inset:-12vh -10vw;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--ambient-op,.96);transition:opacity .25s ease;}
 .ambient-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,25,22,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,25,22,.06) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse at center,#000 8%,rgba(0,0,0,.78) 52%,transparent 90%);animation:gridDrift 26s linear infinite;will-change:background-position;}
 .ambient-orb{position:absolute;border-radius:50%;filter:blur(2px);will-change:transform;}
 .ambient-orb.a{width:42vw;height:42vw;left:-10vw;top:8vh;background:radial-gradient(circle,rgba(184,92,56,.17),rgba(184,92,56,0) 68%);animation:ambientA 18s ease-in-out infinite alternate;}
@@ -556,10 +585,19 @@ section.visible .motion-reveal{opacity:1;transform:none;}
   </svg>
 </div>
 
-<div class="scroll-line" id="scrollLine"></div>
-<div class="lightbox" id="lightbox"><span class="lb-close">× close</span><img id="lbImg" src="" alt=""></div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="证书预览">
+  <button class="lb-close" type="button" id="lbClose">× 关闭 ESC</button>
+  <button class="lb-nav lb-prev" type="button" id="lbPrev" aria-label="上一张">←</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-nav lb-next" type="button" id="lbNext" aria-label="下一张">→</button>
+  <div class="lb-caption-bar">
+    <span class="lb-counter" id="lbCounter">01 / 06</span>
+    <span id="lbTitle"></span>
+  </div>
+</div>
+<div class="copy-toast" id="copyToast" role="status" aria-live="polite"></div>
 
-<nav>
+<nav id="siteNav">
   <a class="nav-logo" href="#hero">张天硕 · 华理<span class="nav-badge">本科生</span></a>
   <ul class="nav-links">
     <li><a href="#about">简介</a></li>
@@ -570,7 +608,18 @@ section.visible .motion-reveal{opacity:1;transform:none;}
     <li><a href="#certs">证书</a></li>
     <li><a href="#contact">联系</a></li>
   </ul>
+  <button class="nav-toggle" type="button" id="navToggle" aria-expanded="false" aria-controls="mobileMenu">菜单 ☰</button>
+  <div class="scroll-line" id="scrollLine"></div>
 </nav>
+<div class="mobile-menu" id="mobileMenu" aria-label="章节导航">
+  <a href="#about"><span>01</span>关于我</a>
+  <a href="#academics"><span>02</span>学术成就</a>
+  <a href="#projects"><span>03</span>研究项目</a>
+  <a href="#skills"><span>04</span>技能图谱</a>
+  <a href="#activities"><span>05</span>校园活动</a>
+  <a href="#certs"><span>06</span>证书荣誉</a>
+  <a href="#contact"><span>07</span>联系方式</a>
+</div>
 
 <!-- ── HERO ── -->
 <div id="hero">
@@ -798,6 +847,9 @@ section.visible .motion-reveal{opacity:1;transform:none;}
           <div class="course-meta">1.5 学分 · 专业选修</div>
           <div class="course-bar"><div class="course-bar-fill" data-width="92"></div></div>
         </div>
+      </div>
+      <div class="course-more" id="courseMore">
+        <div class="course-grid" style="margin-top:-0.5px;">
         <div class="course-item">
           <div class="course-score">91</div>
           <div class="course-name">化工制图</div>
@@ -850,6 +902,8 @@ section.visible .motion-reveal{opacity:1;transform:none;}
           <div class="course-bar"><div class="course-bar-fill" data-width="96"></div></div>
         </div>
       </div>
+      </div>
+      <button type="button" class="course-toggle-btn" id="courseToggle" aria-expanded="false" aria-controls="courseMore">展开其余 8 门高分课程 ↓</button>
       <div class="course-note">※ 本学期加权均分按截图中 10 门数值成绩课程、共 20 学分计算；B+ 与 P 课程未参与均分换算。页面仅展示代表性课程，不替代正式成绩单。</div>
     </div>
 
@@ -868,58 +922,40 @@ section.visible .motion-reveal{opacity:1;transform:none;}
     </div>
     <div class="skills-grid" id="skillsGrid">
       <div class="skill-card">
-        <div class="skill-cat">专业核心</div>
+        <div class="skill-top"><span class="skill-cat">专业核心</span><span class="skill-level core">专业第一 1/91</span></div>
         <div class="skill-name">油气储运工程</div>
-        <div class="skill-bar-wrap">
-          <div class="skill-bar-label"><span>掌握程度</span><span>92%</span></div>
-          <div class="skill-bar"><div class="skill-bar-fill" data-width="92"></div></div>
-        </div>
+        <p class="skill-evidence">天然气加工 95、物理化学 95、石油流变学 92、化工制图 91，全部核心课程满绩或高分。</p>
         <div class="skill-tags"><span class="tag">管道工程</span><span class="tag">储运设备</span><span class="tag">流体力学</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-cat">编程语言</div>
+        <div class="skill-top"><span class="skill-cat">编程与数据工程</span><span class="skill-level core">科研项目主力</span></div>
         <div class="skill-name">Python</div>
-        <div class="skill-bar-wrap">
-          <div class="skill-bar-label"><span>掌握程度</span><span>82%</span></div>
-          <div class="skill-bar"><div class="skill-bar-fill red" data-width="82"></div></div>
-        </div>
-        <div class="skill-tags"><span class="tag">计算机二级</span><span class="tag">数据分析</span><span class="tag">NumPy</span></div>
+        <p class="skill-evidence">独立构建催化文献智能数据引擎（48 份 PDF → 288 条可审计记录），通过全国计算机二级。</p>
+        <div class="skill-tags"><span class="tag">科学 NLP</span><span class="tag">数据分析</span><span class="tag">NumPy / Pandas</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-cat">人工智能</div>
-        <div class="skill-name">机器学习</div>
-        <div class="skill-bar-wrap">
-          <div class="skill-bar-label"><span>掌握程度</span><span>65%</span></div>
-          <div class="skill-bar"><div class="skill-bar-fill" data-width="65"></div></div>
-        </div>
-        <div class="skill-tags"><span class="tag">Scikit-learn</span><span class="tag">神经网络</span><span class="tag">CV</span></div>
+        <div class="skill-top"><span class="skill-cat">数学能力</span><span class="skill-level core">省级二等奖</span></div>
+        <div class="skill-name">数学与建模</div>
+        <p class="skill-evidence">全国大学生数学竞赛省级二等奖；高等数学 97 分；系统备战全国大学生数学建模竞赛。</p>
+        <div class="skill-tags"><span class="tag">数学竞赛</span><span class="tag">优化算法</span><span class="tag">统计建模</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-cat">数学能力</div>
-        <div class="skill-name">数学建模</div>
-        <div class="skill-bar-wrap">
-          <div class="skill-bar-label"><span>掌握程度</span><span>80%</span></div>
-          <div class="skill-bar"><div class="skill-bar-fill red" data-width="80"></div></div>
-        </div>
-        <div class="skill-tags"><span class="tag">数学竞赛</span><span class="tag">优化算法</span><span class="tag">统计</span></div>
+        <div class="skill-top"><span class="skill-cat">化学实验</span><span class="skill-level">课题组在研</span></div>
+        <div class="skill-name">荧光材料合成</div>
+        <p class="skill-evidence">贺晓鹏教授课题组在研，入选校创新人才培养计划；有机化学 96、分析化学 96。</p>
+        <div class="skill-tags"><span class="tag">VIE 荧光</span><span class="tag">有机合成</span><span class="tag">光谱表征</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-cat">语言能力</div>
-        <div class="skill-name">英语</div>
-        <div class="skill-bar-wrap">
-          <div class="skill-bar-label"><span>掌握程度</span><span>78%</span></div>
-          <div class="skill-bar"><div class="skill-bar-fill" data-width="78"></div></div>
-        </div>
-        <div class="skill-tags"><span class="tag">四级 583</span><span class="tag">六级 540</span><span class="tag">学术阅读</span><span class="tag">论文写作</span></div>
+        <div class="skill-top"><span class="skill-cat">语言能力</span><span class="skill-level">熟练读写</span></div>
+        <div class="skill-name">学术英语</div>
+        <p class="skill-evidence">CET-4 583 分、CET-6 540 分；日常阅读英文催化与化学工程文献并完成结构化标注。</p>
+        <div class="skill-tags"><span class="tag">CET-4 583</span><span class="tag">CET-6 540</span><span class="tag">文献精读</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-cat">化学实验</div>
-        <div class="skill-name">材料合成</div>
-        <div class="skill-bar-wrap">
-          <div class="skill-bar-label"><span>掌握程度</span><span>70%</span></div>
-          <div class="skill-bar"><div class="skill-bar-fill red" data-width="70"></div></div>
-        </div>
-        <div class="skill-tags"><span class="tag">VIE荧光</span><span class="tag">有机合成</span><span class="tag">表征分析</span></div>
+        <div class="skill-top"><span class="skill-cat">人工智能</span><span class="skill-level">持续进阶</span></div>
+        <div class="skill-name">机器学习与视觉</div>
+        <p class="skill-evidence">掌握经典机器学习与大模型结构化抽取流程，探索计算机视觉与化工过程结合应用。</p>
+        <div class="skill-tags"><span class="tag">Scikit-learn</span><span class="tag">LLM 抽取</span><span class="tag">计算机视觉</span></div>
       </div>
     </div>
   </div>
@@ -1015,21 +1051,21 @@ section.visible .motion-reveal{opacity:1;transform:none;}
           还是实习就业机会，我都期待与您建立连接。通常24小时内回复。
         </p>
         <div class="contact-links">
-          <a class="contact-link-item" href="mailto:24010663@mail.ecust.edu.cn">
-            <div class="cl-left"><span class="cl-label">Email</span><span class="cl-val">24010663@mail.ecust.edu.cn</span></div>
-            <span class="cl-arrow">→</span>
-          </a>
-          <a class="contact-link-item" href="#">
-            <div class="cl-left"><span class="cl-label">微信 WeChat</span><span class="cl-val">zts0910--</span></div>
-            <span class="cl-arrow">→</span>
-          </a>
+          <button type="button" class="contact-link-item" data-copy="24010663@mail.ecust.edu.cn" data-label="邮箱地址">
+            <div class="cl-left"><span class="cl-label">Email · 点击复制</span><span class="cl-val">24010663@mail.ecust.edu.cn</span></div>
+            <span class="cl-arrow">复制 ⧉</span>
+          </button>
+          <button type="button" class="contact-link-item" data-copy="zts0910--" data-label="微信号">
+            <div class="cl-left"><span class="cl-label">微信 WeChat · 点击复制</span><span class="cl-val">zts0910--</span></div>
+            <span class="cl-arrow">复制 ⧉</span>
+          </button>
           <a class="contact-link-item" href="https://github.com/4210666" target="_blank" rel="noopener noreferrer">
             <div class="cl-left"><span class="cl-label">GitHub</span><span class="cl-val">github.com/4210666</span></div>
-            <span class="cl-arrow">→</span>
+            <span class="cl-arrow">访问 ↗</span>
           </a>
-          <a class="contact-link-item" href="#">
-            <div class="cl-left"><span class="cl-label">所在城市</span><span class="cl-val">上海 · 华东理工大学</span></div>
-            <span class="cl-arrow">→</span>
+          <a class="contact-link-item" href="https://www.ecust.edu.cn/" target="_blank" rel="noopener noreferrer">
+            <div class="cl-left"><span class="cl-label">所在城市 · 学校官网</span><span class="cl-val">上海 · 华东理工大学</span></div>
+            <span class="cl-arrow">访问 ↗</span>
           </a>
         </div>
       </div>
@@ -1079,11 +1115,16 @@ requestAnimationFrame(()=>document.body.classList.add('page-ready'));
 
 // Keep scroll-linked work in a single animation frame.
 let scrollTick=false;
+const ambientEl=document.querySelector('.ambient-canvas');
 const updateScrollMotion=()=>{
   const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
   const p=maxScroll>0?(window.scrollY/maxScroll)*100:0;
   document.getElementById('scrollLine').style.width=p+'%';
   document.querySelector('nav').classList.toggle('scrolled',window.scrollY>24);
+  if(ambientEl){
+    const fade=Math.min(window.scrollY/(window.innerHeight*0.85),1);
+    ambientEl.style.setProperty('--ambient-op',(0.96-fade*0.58).toFixed(2));
+  }
   if(!reduceMotion){
     const portrait=document.querySelector('.portrait img');
     if(portrait&&window.scrollY<window.innerHeight*1.15){
@@ -1187,21 +1228,94 @@ const barObs=new IntersectionObserver(entries=>{
 const sg=document.getElementById('skillsGrid');
 if(sg)barObs.observe(sg);
 
-// Lightbox
-const imgMap={
-  img2:'/images/certs/cert-1-d0a4f957.webp',
-  img3:'/images/certs/cert-2-2501f3da.webp',
-  img4:'/images/certs/cert-3-f8e33c6f.webp',
-  img5:'/images/certs/cert-4-d5980f0c.webp',
-  img6:'/images/certs/cert-5-e1361ca3.webp',
-  img7:'/images/certs/cert-6-97beaeed.webp'
+// Mobile navigation drawer
+const navToggle=document.getElementById('navToggle');
+const mobileMenu=document.getElementById('mobileMenu');
+const closeMobileMenu=()=>{
+  mobileMenu.classList.remove('open');
+  navToggle.setAttribute('aria-expanded','false');
+  navToggle.textContent='菜单 ☰';
 };
-window.openLb = function openLb(key){
-  document.getElementById('lbImg').src=imgMap[key];
-  document.getElementById('lightbox').classList.add('open');
-}
-document.getElementById('lightbox').addEventListener('click',()=>{
-  document.getElementById('lightbox').classList.remove('open');
+navToggle?.addEventListener('click',()=>{
+  const open=mobileMenu.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded',String(open));
+  navToggle.textContent=open?'关闭 ×':'菜单 ☰';
+});
+mobileMenu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMobileMenu));
+
+// Course fold toggle
+const courseToggle=document.getElementById('courseToggle');
+const courseMore=document.getElementById('courseMore');
+courseToggle?.addEventListener('click',()=>{
+  const open=courseMore.classList.toggle('expanded');
+  courseToggle.setAttribute('aria-expanded',String(open));
+  courseToggle.textContent=open?'收起更多课程 ↑':'展开其余 8 门高分课程 ↓';
+  if(open){
+    courseMore.querySelectorAll('.course-bar-fill').forEach(b=>{b.style.width=b.dataset.width+'%';});
+  }
+});
+
+// Copy contact info with toast
+const toastEl=document.getElementById('copyToast');
+let toastTimer;
+document.querySelectorAll('[data-copy]').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    const val=btn.getAttribute('data-copy');
+    const label=btn.getAttribute('data-label')||'内容';
+    try{await navigator.clipboard.writeText(val);}catch{}
+    toastEl.textContent=`已复制${label}：${val}`;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2200);
+  });
+});
+
+// Hide visit counter gracefully if busuanzi fails to populate
+const pvEl=document.getElementById('busuanzi_site_pv');
+const pvWrap=document.getElementById('busuanzi_container_site_pv');
+setTimeout(()=>{
+  if(pvEl&&pvWrap&&!/\d/.test(pvEl.textContent||'')){
+    pvWrap.style.display='none';
+  }
+},3500);
+
+// Lightbox with prev/next + keyboard + caption
+const certs=[
+  {key:'img2',src:'/images/certs/cert-1-d0a4f957.webp',title:'英语六级（CET-6） · 全国大学英语六级考试'},
+  {key:'img3',src:'/images/certs/cert-2-2501f3da.webp',title:'英语四级（CET-4） · 全国大学英语四级考试'},
+  {key:'img4',src:'/images/certs/cert-3-f8e33c6f.webp',title:'学业优秀奖学金二等 · 华东理工大学'},
+  {key:'img5',src:'/images/certs/cert-4-d5980f0c.webp',title:'物流仓储部部长聘书 · 华东理工大学'},
+  {key:'img6',src:'/images/certs/cert-5-e1361ca3.webp',title:'优秀学生 · 华东理工大学'},
+  {key:'img7',src:'/images/certs/cert-6-97beaeed.webp',title:'社会工作奖 B 等 · 华东理工大学'}
+];
+let lbIndex=0;
+const lbEl=document.getElementById('lightbox');
+const lbImg=document.getElementById('lbImg');
+const lbCounter=document.getElementById('lbCounter');
+const lbTitle=document.getElementById('lbTitle');
+const renderLb=()=>{
+  const item=certs[lbIndex];
+  lbImg.src=item.src;
+  lbImg.alt=item.title;
+  lbCounter.textContent=`0${lbIndex+1} / 0${certs.length}`;
+  lbTitle.textContent=item.title;
+};
+window.openLb=function openLb(key){
+  const idx=certs.findIndex(c=>c.key===key);
+  lbIndex=idx>=0?idx:0;
+  renderLb();
+  lbEl.classList.add('open');
+};
+const stepLb=dir=>{lbIndex=(lbIndex+dir+certs.length)%certs.length;renderLb();};
+document.getElementById('lbPrev').addEventListener('click',e=>{e.stopPropagation();stepLb(-1);});
+document.getElementById('lbNext').addEventListener('click',e=>{e.stopPropagation();stepLb(1);});
+document.getElementById('lbClose').addEventListener('click',()=>lbEl.classList.remove('open'));
+lbEl.addEventListener('click',e=>{if(e.target===lbEl)lbEl.classList.remove('open');});
+window.addEventListener('keydown',e=>{
+  if(!lbEl.classList.contains('open'))return;
+  if(e.key==='Escape')lbEl.classList.remove('open');
+  if(e.key==='ArrowLeft')stepLb(-1);
+  if(e.key==='ArrowRight')stepLb(1);
 });
 
 const courseBarObs=new IntersectionObserver(entries=>{
