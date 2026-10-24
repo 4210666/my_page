@@ -1,0 +1,188 @@
+---
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>催化文献智能数据引擎 — 项目详情｜张天硕</title>
+<meta name="description" content="催化文献智能数据引擎（Catalysis Literature Intelligence Engine）：面向催化转化文献的字段级证据检索、化学规则校验与可追溯结构化输出系统。">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --ink:#1a1916;--ink2:#4a4845;--ink3:#8e8b85;
+    --bg:#faf8f3;--bg2:#f0ede4;--bg3:#e7e2d5;
+    --line:rgba(26,25,22,0.14);
+    --accent:#8b3a2a;--accent2:#b85c38;
+    --serif:'Playfair Display','Noto Serif SC',Georgia,serif;
+    --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+    --mono:'IBM Plex Mono','Consolas','Courier New',monospace;
+  }
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.85;}
+  nav{position:sticky;top:0;z-index:50;background:rgba(250,248,243,0.92);backdrop-filter:blur(10px);border-bottom:0.5px solid var(--line);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);text-decoration:none;}
+  nav a:hover{color:var(--accent);}
+  .wrap{max-width:960px;margin:0 auto;padding:3.5rem 2rem 5rem;}
+  .kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem;}
+  h1{font-family:var(--serif);font-size:clamp(30px,4.5vw,48px);font-weight:900;line-height:1.12;letter-spacing:-1px;margin-bottom:0.6rem;}
+  .en{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--ink3);text-transform:uppercase;margin-bottom:1.5rem;}
+  .lead{font-size:16px;color:var(--ink2);border-left:3px solid var(--accent);padding-left:1.2rem;margin-bottom:2.2rem;}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--ink);color:var(--bg);margin-bottom:2.5rem;}
+  .stats div{padding:1.2rem;border-right:0.5px solid rgba(250,248,243,0.16);}
+  .stats div:last-child{border-right:none;}
+  .stats strong{display:block;font-family:var(--serif);font-size:30px;line-height:1;margin-bottom:4px;}
+  .stats span{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:rgba(250,248,243,0.72);}
+  .media{aspect-ratio:16/9;background:#11100f;border:0.5px solid var(--line);margin-bottom:2.8rem;overflow:hidden;}
+  .media video{width:100%;height:100%;object-fit:contain;display:block;}
+  h2{font-family:var(--serif);font-size:22px;font-weight:700;margin:2.4rem 0 1rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--line);display:flex;align-items:baseline;gap:0.8rem;}
+  h2 span{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--accent);text-transform:uppercase;}
+  p{color:var(--ink2);margin-bottom:1rem;}
+  .pipeline{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.2rem 0 2rem;}
+  .step{border:0.5px solid var(--line);padding:1.2rem;background:var(--bg2);}
+  .step small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--accent);margin-bottom:6px;text-transform:uppercase;}
+  .step h3{font-family:var(--serif);font-size:16px;margin-bottom:6px;}
+  .step p{font-size:13.5px;margin:0;}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 2rem;font-size:13px;background:var(--bg2);}
+  th,td{border:0.5px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);background:var(--bg3);}
+  td code{font-family:var(--mono);font-size:12px;color:var(--accent);}
+  .cta{margin-top:3rem;padding-top:1.5rem;border-top:0.5px solid var(--line);display:flex;gap:1rem;flex-wrap:wrap;}
+  .btn{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;border:0.5px solid var(--ink);text-decoration:none;color:var(--ink);}
+  .btn.primary{background:var(--ink);color:var(--bg);}
+  .btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+  @media(max-width:700px){.stats{grid-template-columns:1fr 1fr;}.pipeline{grid-template-columns:1fr;}table{display:block;overflow-x:auto;}}
+</style>
+</head>
+<body>
+  <nav>
+    <a href="/#projects">← 返回首页 · 研究项目</a>
+    <a href="/notes">科研笔记 →</a>
+  </nav>
+  <main class="wrap">
+    <div class="kicker">Featured Research System · 2026</div>
+    <h1>催化文献智能数据引擎</h1>
+    <div class="en">Catalysis Literature Intelligence Engine · Evidence-First Extraction Pipeline</div>
+    <p class="lead">
+      针对催化转化制可持续航空燃料（SAF）等领域的 PDF 文献，构建「字段级证据检索 + 化学兼容性规则校验 + 可追溯审计输出」的全流程系统，解决大模型直接抽取时易产生的幻觉、张冠李戴与参考文献污染问题。
+    </p>
+
+    <div class="stats">
+      <div><strong>48</strong><span>份源 PDF 文献</span></div>
+      <div><strong>37</strong><span>篇去重核心论文</span></div>
+      <div><strong>288</strong><span>条 v2.1 精炼候选记录</span></div>
+      <div><strong>100%</strong><span>保留原文证据与页码</span></div>
+    </div>
+
+    <div class="media">
+      <video controls preload="metadata" poster="/projects/catalyst-literature-showcase/poster.png">
+        <source src="/projects/catalyst-literature-showcase/showcase.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <h2><span>01 / Problem</span> 为什么不能直接让大模型读整篇 PDF？</h2>
+    <p>
+      在催化论文中，同一篇文献往往同时包含背景综述（引用他人的催化剂与产率）、正文实验组、对照实验组以及补充材料表格。若直接将全文塞给语言模型要求输出表格，极易出现三类高风险错误：
+    </p>
+    <div class="pipeline">
+      <div class="step">
+        <small>Risk A · 文献污染</small>
+        <h3>把引言综述当成本文实验</h3>
+        <p>模型常将 Introduction 中引用的他人文献数据误抽取为当前论文的实验结果。</p>
+      </div>
+      <div class="step">
+        <small>Risk B · 对象错配</small>
+        <h3>催化剂与反应条件张冠李戴</h3>
+        <p>多组催化剂对比时，温度、空速（WHSV）、压力与产物选择性容易跨行错位组合。</p>
+      </div>
+      <div class="step">
+        <small>Risk C · 无法复核</small>
+        <h3>缺少页码与原文锚点</h3>
+        <p>没有原文句子与页码，科研人员仍需重读整篇 PDF 才能确认数字真伪。</p>
+      </div>
+    </div>
+
+    <h2><span>02 / Architecture</span> 六阶段证据优先流水线</h2>
+    <div class="pipeline">
+      <div class="step">
+        <small>Stage 01</small>
+        <h3>PDF 解析与版面切分</h3>
+        <p>按章节与段落切分正文、实验部分与图表标题，标记页码并隔离 References 与纯综述段落。</p>
+      </div>
+      <div class="step">
+        <small>Stage 02</small>
+        <h3>字段级证据检索</h3>
+        <p>分别针对原料、催化剂、温度/压力/空速、转化率与馏分选择性检索候选证据片段。</p>
+      </div>
+      <div class="step">
+        <small>Stage 03</small>
+        <h3>受控结构化抽取</h3>
+        <p>仅允许在绑定证据片段内抽取数值与单位，禁止脱离上下文补全缺失值。</p>
+      </div>
+      <div class="step">
+        <small>Stage 04</small>
+        <h3>化学兼容性与物理范围校验</h3>
+        <p>基于反应体系规则过滤裸 Y 催化剂误标、异常反应温度及不合理碳数分布。</p>
+      </div>
+      <div class="step">
+        <small>Stage 05</small>
+        <h3>去重与版本精炼（v2.1）</h3>
+        <p>对 48 份源文档按标题与 DOI 去重为 37 篇独立论文，合并重复条目，保留 288 条高质量候选。</p>
+      </div>
+      <div class="step">
+        <small>Stage 06</small>
+        <h3>双格式可追溯导出</h3>
+        <p>同步生成科研人员友好的 Excel 对比表与包含完整证据链的 <code>audit.json</code>。</p>
+      </div>
+    </div>
+
+    <h2><span>03 / Schema</span> 单条记录的结构化字段与审计字段</h2>
+    <table>
+      <thead>
+        <tr><th>字段类别</th><th>核心字段示例</th><th>校验与追溯机制</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>反应体系与原料</strong></td>
+          <td><code>feedstock</code>, <code>reaction_type</code>, <code>target_fraction</code></td>
+          <td>限定本文实验对象，排除背景引用句子</td>
+        </tr>
+        <tr>
+          <td><strong>催化剂信息</strong></td>
+          <td><code>catalyst_name</code>, <code>zeolite_framework</code> (MFI / FAU / BEA), <code>metal_loading</code></td>
+          <td>框架类型词表归一；拦截未指明改性的泛化名称</td>
+        </tr>
+        <tr>
+          <td><strong>反应条件</strong></td>
+          <td><code>temperature_C</code>, <code>pressure_MPa</code>, <code>WHSV_h-1</code>, <code>H2_to_feed</code></td>
+          <td>单位自动换算与物理区间检查</td>
+        </tr>
+        <tr>
+          <td><strong>催化性能</strong></td>
+          <td><code>conversion_%</code>, <code>C10_C16_selectivity_%</code>, <code>yield_%</code></td>
+          <td>标注数值来源是正文段落、表格还是图注</td>
+        </tr>
+        <tr>
+          <td><strong>审计证据链</strong></td>
+          <td><code>source_pdf</code>, <code>page_no</code>, <code>evidence_quote</code>, <code>rule_flags</code></td>
+          <td>100% 绑定原文句子与页码，支持一键回看复核</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2><span>04 / Findings</span> 初步文献规律与学术声明</h2>
+    <p>
+      基于当前 37 篇去重文献的证据汇总可以看到：传统中孔 <strong>MFI / H-ZSM-5</strong> 体系在催化裂化与齐聚中更易富集 <strong>C4–C8</strong> 汽油馏分；若以 <strong>C10–C16 航空煤油（SAF）馏分</strong>为目标，往往受微孔扩散受限、二次裂化与积炭失活制约。后续对比重点集中在 <strong>FAU、BEA、分级孔/介孔分子筛及金属-酸双功能协同体系</strong>。
+    </p>
+    <p>
+      <strong>学术声明</strong>：本系统定位于「可追溯的科研文献实验数据候选抽取与人工辅助分析工具」。288 条记录均为带证据的候选条目，服务于快速筛选与横向比较，最终建库与机理论证仍需结合论文全文人工复核。
+    </p>
+
+    <div class="cta">
+      <a class="btn primary" href="/#contact">联系交流项目细节 →</a>
+      <a class="btn" href="/notes">阅读开发与科研笔记</a>
+      <a class="btn" href="/">返回个人主页</a>
+    </div>
+  </main>
+</body>
+</html>

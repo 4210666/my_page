@@ -1,0 +1,97 @@
+---
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科研与学习笔记 — 张天硕｜华东理工大学</title>
+<meta name="description" content="张天硕的科研与学习笔记：记录催化文献智能数据引擎开发、VIE 荧光诱导发光材料实验与油气储运×AI 交叉思考。">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --ink:#1a1916;--ink2:#4a4845;--ink3:#8e8b85;
+    --bg:#faf8f3;--bg2:#f0ede4;--bg3:#e7e2d5;
+    --line:rgba(26,25,22,0.14);
+    --accent:#8b3a2a;
+    --serif:'Playfair Display','Noto Serif SC',Georgia,serif;
+    --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+    --mono:'IBM Plex Mono','Consolas','Courier New',monospace;
+  }
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.85;}
+  nav{position:sticky;top:0;z-index:50;background:rgba(250,248,243,0.92);backdrop-filter:blur(10px);border-bottom:0.5px solid var(--line);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between;}
+  nav a{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);text-decoration:none;}
+  nav a:hover{color:var(--accent);}
+  .wrap{max-width:860px;margin:0 auto;padding:3.5rem 2rem 5rem;}
+  .kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;}
+  h1{font-family:var(--serif);font-size:clamp(30px,4vw,44px);font-weight:900;letter-spacing:-0.8px;margin-bottom:0.8rem;}
+  .intro{color:var(--ink2);margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1.5px solid var(--ink);}
+  article{padding:2rem 0;border-bottom:0.5px solid var(--line);}
+  .meta{display:flex;flex-wrap:wrap;gap:0.8rem;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase;margin-bottom:0.6rem;}
+  .tag{padding:2px 8px;border:0.5px solid var(--line);color:var(--accent);background:var(--bg2);}
+  h2{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);margin-bottom:0.7rem;}
+  p{color:var(--ink2);margin-bottom:0.9rem;}
+  ul{padding-left:1.2rem;margin-bottom:1rem;color:var(--ink2);}
+  li{margin-bottom:0.35rem;}
+  .more{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+  <nav>
+    <a href="/">← 返回个人主页 zts666.me</a>
+    <a href="/projects/catalysis">催化文献引擎详情 →</a>
+  </nav>
+  <main class="wrap">
+    <div class="kicker">Research &amp; Engineering Notes</div>
+    <h1>科研与学习笔记</h1>
+    <p class="intro">记录在华东理工大学学习期间关于科学文献 NLP、VIE 荧光材料实验以及油气储运工程与人工智能交叉探索的阶段性思考。</p>
+
+    <article id="note-catalysis">
+      <div class="meta">
+        <span>2026-07</span>
+        <span class="tag">Scientific NLP</span>
+        <span class="tag">Catalysis Informatics</span>
+      </div>
+      <h2>01｜为什么从催化文献里抽数据，必须坚持「证据优先」？</h2>
+      <p>
+        在做催化文献智能数据引擎时，我最初尝试过直接让大模型从整篇 PDF 生成 Markdown 表格。很快发现这种方式在科研场景下不可用：模型会把引言里引用别人的催化剂产率算到本文头上，或者在多组温度、空速对比时发生跨行错位。
+      </p>
+      <ul>
+        <li><strong>先检索证据，再抽取数值</strong>：每个实验字段必须先绑定页码和原文句子，没有原文锚点宁可留空，也不让模型猜。</li>
+        <li><strong>用化学常识做后置护栏</strong>：通过沸石骨架分类（MFI / FAU / BEA）、温度压力合理区间与参考文献段落隔离，拦截高风险噪声。</li>
+        <li><strong>人机协同而非替代人工</strong>：最终输出的 288 条 v2.1 记录同时生成 Excel 与 <code>audit.json</code>，方便逐条回看原文复核。</li>
+      </ul>
+      <a class="more" href="/projects/catalysis">查看项目完整架构与字段设计 →</a>
+    </article>
+
+    <article id="note-vie">
+      <div class="meta">
+        <span>2026-05</span>
+        <span class="tag">VIE Fluorescence</span>
+        <span class="tag">Materials Chemistry</span>
+      </div>
+      <h2>02｜VIE（振动诱导发光）荧光材料：从分子构象到多色发光调控</h2>
+      <p>
+        进入贺晓鹏教授课题组并入选校创新人才培养计划后，我开始接触振动诱导发光（Vibration-Induced Emission, VIE）体系。这类分子（以二氢二苯并吩嗪衍生物为代表）在激发态下会发生由弯曲构象向平面化构象的振动弛豫，从而在同一分子内产生蓝光与红光双发射。
+      </p>
+      <ul>
+        <li><strong>构象自由度决定发光颜色</strong>：在溶液、聚集态或不同黏度/温度微环境中，分子平面化受阻程度不同，发射光谱随之连续移动。</li>
+        <li><strong>实验训练体会</strong>：从合成路线设计、柱层析分离纯化到紫外-可见吸收与荧光发射光谱测试，严谨的实验记录与表征分析是一切后续数据建模的前提。</li>
+      </ul>
+    </article>
+
+    <article id="note-crossover">
+      <div class="meta">
+        <span>2026-03</span>
+        <span class="tag">Petroleum Engineering × AI</span>
+        <span class="tag">Math Modeling</span>
+      </div>
+      <h2>03｜当油气管道遇上神经网络：工科生为什么要学数据科学？</h2>
+      <p>
+        油气储运工程研究的是多相流、管道输送、流变学与过程控制（如首页背景 P&amp;ID 图中的分离器、换热器与调节阀回路）；而机器学习与数学建模提供的是从高维监测数据与海量文献中提炼规律的工具。把物理机理作为约束、把数据算法作为放大器，是我希望持续深耕的方向。
+      </p>
+    </article>
+  </main>
+</body>
+</html>

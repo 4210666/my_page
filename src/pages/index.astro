@@ -15,6 +15,18 @@ import CatalysisProject from '../components/projects/CatalysisProject.astro';
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#faf8f3">
+<script is:inline>
+try{
+  var t=localStorage.getItem('theme');
+  if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  document.documentElement.dataset.theme=t;
+  var l=localStorage.getItem('lang');
+  if(l)document.documentElement.dataset.lang=l;
+  if(!sessionStorage.getItem('introSeen')&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!location.hash){
+    document.documentElement.classList.add('intro-on');
+  }
+}catch(e){}
+</script>
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="张天硕 · 个人主页">
 <meta property="og:locale" content="zh_CN">
@@ -40,7 +52,21 @@ import CatalysisProject from '../components/projects/CatalysisProject.astro';
   --serif:'Playfair Display','Noto Serif SC',Georgia,serif;
   --mono:'IBM Plex Mono','Courier New',monospace;
   --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+  --card:rgba(250,248,243,0.75);--card2:rgba(240,237,228,0.72);
+  --nav-bg:rgba(250,248,243,0.92);--nav-bg2:rgba(250,248,243,.84);--menu-bg:rgba(250,248,243,0.98);
 }
+html[data-theme="dark"]{
+  --ink:#ece7dc;--ink2:#bdb7aa;--ink3:#8a857a;
+  --bg:#141210;--bg2:#1d1a16;--bg3:#27231d;
+  --line:rgba(236,231,220,0.15);
+  --accent:#e0886a;--accent2:#f0a583;
+  --card:rgba(24,21,18,0.78);--card2:rgba(29,26,22,0.72);
+  --nav-bg:rgba(20,18,16,0.9);--nav-bg2:rgba(20,18,16,.82);--menu-bg:rgba(20,18,16,0.98);
+  color-scheme:dark;
+}
+html[data-theme="dark"] .ambient-canvas{filter:invert(1) hue-rotate(180deg) brightness(.72);}
+html[data-theme="dark"] .portrait img,html[data-theme="dark"] .cert-img-wrap img{filter:brightness(.92);}
+body{transition:background .35s ease,color .35s ease;}
 html{scroll-behavior:smooth;overflow-x:clip;}
 body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.8;overflow-x:clip;}
 
@@ -49,15 +75,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,248,243,0.92);backdrop-filter:blur(10px);
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(10px);
   border-bottom:0.5px solid var(--line);padding:0 2.5rem;height:52px;display:flex;align-items:center;justify-content:space-between;}
-.nav-logo{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-0.3px;}
+.nav-logo{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-0.3px;flex-shrink:0;white-space:nowrap;}
 .nav-links{display:flex;gap:2rem;list-style:none;}
 .nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);text-decoration:none;transition:color 0.2s;}
 .nav-links a:hover{color:var(--accent);}
 .nav-badge{font-family:var(--mono);font-size:9px;padding:2px 7px;background:var(--accent);color:var(--bg);letter-spacing:0.1em;margin-left:6px;vertical-align:middle;}
 .nav-toggle{display:none;background:transparent;border:0.5px solid var(--line);padding:5px 10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--ink);cursor:pointer;text-transform:uppercase;}
-.mobile-menu{display:none;position:fixed;top:52px;left:0;right:0;bottom:0;background:rgba(250,248,243,0.98);backdrop-filter:blur(12px);z-index:99;padding:1.5rem 1.5rem 2rem;flex-direction:column;gap:0;overflow-y:auto;}
+.mobile-menu{display:none;position:fixed;top:52px;left:0;right:0;bottom:0;background:var(--menu-bg);backdrop-filter:blur(12px);z-index:99;padding:1.5rem 1.5rem 2rem;flex-direction:column;gap:0;overflow-y:auto;}
 .mobile-menu.open{display:flex;}
 .mobile-menu a{display:flex;align-items:baseline;gap:1rem;padding:1rem 0;border-bottom:0.5px solid var(--line);text-decoration:none;color:var(--ink);font-family:var(--serif);font-size:20px;font-weight:700;}
 .mobile-menu a span{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;font-weight:400;}
@@ -129,7 +155,7 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 .tl-role{font-size:12.5px;color:var(--ink3);}
 
 /* ACADEMICS */
-.academics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:0.5px solid var(--line);}
+.academics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:0.5px solid var(--line);background:var(--card);}
 .acad-card{padding:1.3rem;border-right:0.5px solid var(--line);text-align:center;}
 .acad-card:last-child{border-right:none;}
 .acad-big{font-family:var(--serif);font-size:32px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:5px;}
@@ -145,7 +171,7 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 .research-item-desc{font-size:13.5px;line-height:1.85;color:var(--ink2);}
 
 /* SKILLS */
-.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);background:rgba(250,248,243,0.75);}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);background:var(--card);}
 .skill-card{padding:1.4rem;border-right:0.5px solid var(--line);border-bottom:0.5px solid var(--line);transition:background 0.2s;display:flex;flex-direction:column;}
 .skill-card:hover{background:var(--bg2);}
 .skill-card:nth-child(3n){border-right:none;}
@@ -162,7 +188,7 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 
 /* ACTIVITIES */
 .activities-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-.activity-card{border:0.5px solid var(--line);padding:1.4rem;background:rgba(250,248,243,0.75);}
+.activity-card{border:0.5px solid var(--line);padding:1.4rem;background:var(--card);}
 .ac-icon{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .ac-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .ac-desc{font-size:13.5px;line-height:1.85;color:var(--ink2);}
@@ -171,7 +197,7 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 
 /* CERTIFICATES */
 .certs-intro{font-size:13.5px;line-height:1.85;color:var(--ink2);margin-bottom:1.5rem;}
-.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);background:rgba(250,248,243,0.75);}
+.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid var(--line);background:var(--card);}
 .cert-item{border-right:0.5px solid var(--line);border-bottom:0.5px solid var(--line);overflow:hidden;cursor:pointer;transition:background 0.2s;}
 .cert-item:hover{background:var(--bg2);}
 .cert-item:nth-child(3n){border-right:none;}
@@ -208,7 +234,7 @@ h2.section-title em{font-style:italic;color:var(--accent);}
 footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;max-width:960px;margin:0 auto;}
 .footer-copy{font-size:10px;color:var(--ink3);letter-spacing:0.08em;}
 .footer-sig{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink2);}
-.visit-counter{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid var(--line);background:rgba(240,237,228,0.72);color:var(--ink3);white-space:nowrap;}
+.visit-counter{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid var(--line);background:var(--card2);color:var(--ink3);white-space:nowrap;}
 .visit-counter::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(139,58,42,.24);animation:visitPulse 2.4s ease-out infinite;}
 .visit-label{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;}
 .visit-counter strong{min-width:2ch;font-family:var(--serif);font-size:15px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;}
@@ -356,7 +382,7 @@ body{isolation:isolate;}
 nav,#hero,section,.ornament,footer{position:relative;z-index:1;}
 
 nav{transition:height .35s ease,box-shadow .35s ease,background .35s ease;}
-nav.scrolled{background:rgba(250,248,243,.84);box-shadow:0 12px 35px rgba(26,25,22,.06);}
+nav.scrolled{background:var(--nav-bg2);box-shadow:0 12px 35px rgba(26,25,22,.06);}
 .nav-links a{position:relative;}
 .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:1px;background:var(--accent);transition:right .35s cubic-bezier(.2,.8,.2,1);}
 .nav-links a:hover::after,.nav-links a.active::after{right:0;}
@@ -420,6 +446,120 @@ section.visible .motion-reveal{opacity:1;transform:none;}
   html{scroll-behavior:auto;}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
   .masthead-top,.kicker,.headline,.hero-body,.hero-cta,.portrait,.stat-row,.motion-reveal,section .section-header{opacity:1!important;transform:none!important;clip-path:none!important;}
+}
+
+/* ═════ EXTENSIONS ═════ */
+.nav-tools{display:flex;align-items:center;gap:8px;margin-left:auto;margin-right:1.2rem;}
+.tool-btn{background:transparent;border:0.5px solid var(--line);color:var(--ink2);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;min-width:34px;height:28px;padding:0 8px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;}
+.tool-btn:hover{border-color:var(--accent);color:var(--accent);}
+@media(max-width:960px){.nav-links{gap:1rem;}}
+@media(max-width:700px){.nav-tools{margin-right:.5rem;}}
+
+/* Intro overlay */
+.intro{display:none;}
+html.intro-on .intro{display:flex;position:fixed;inset:0;z-index:10000;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;cursor:pointer;animation:introOut .7s 1.9s ease forwards;}
+html.intro-on body{overflow:hidden;}
+.intro-line{position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);animation:introLine 1s .1s cubic-bezier(.16,1,.3,1) forwards;opacity:.55;}
+.intro-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 14px rgba(184,92,56,.55);left:var(--x);top:var(--y);opacity:0;animation:introDot .95s var(--d) cubic-bezier(.65,0,.25,1) forwards;}
+.intro-name{position:relative;font-family:var(--serif);font-size:clamp(44px,9vw,92px);font-weight:900;color:var(--ink);letter-spacing:.5em;opacity:0;animation:introName 1s .85s cubic-bezier(.16,1,.3,1) forwards;}
+.intro-sub{position:relative;margin-top:.8rem;font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--accent);text-transform:uppercase;opacity:0;animation:introSub .8s 1.25s ease forwards;}
+@keyframes introLine{to{transform:scaleX(1);}}
+@keyframes introDot{0%{opacity:0;}20%{opacity:1;}100%{left:50%;top:50%;opacity:0;transform:scale(.3);}}
+@keyframes introName{from{opacity:0;letter-spacing:.5em;filter:blur(8px);}to{opacity:1;letter-spacing:.04em;filter:blur(0);}}
+@keyframes introSub{from{opacity:0;transform:translateY(8px);}to{opacity:.9;transform:none;}}
+@keyframes introOut{to{opacity:0;visibility:hidden;}}
+
+/* Journey timeline */
+.journey{margin-top:3.5rem;padding-top:1.6rem;border-top:0.5px solid var(--line);}
+.journey-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.4rem;}
+.journey-list{list-style:none;position:relative;margin-left:6px;padding-left:2rem;}
+.journey-list::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:var(--line);}
+.journey-list::after{content:"";position:absolute;left:0;top:6px;width:1px;height:var(--jp,0%);background:var(--accent);transition:height .3s linear;max-height:calc(100% - 12px);}
+.journey-item{position:relative;display:grid;grid-template-columns:120px 1fr;gap:1.2rem;padding:0 0 1.7rem;}
+.journey-item:last-child{padding-bottom:0;}
+.journey-item::before{content:"";position:absolute;left:calc(-2rem - 4px);top:7px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--ink3);transition:all .4s;}
+.journey-item.on::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px rgba(139,58,42,.14);}
+.j-time{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.04em;padding-top:2px;}
+.j-body strong{display:block;font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:3px;}
+.j-body p{font-size:13.5px;line-height:1.8;color:var(--ink2);}
+@media(max-width:700px){.journey-item{grid-template-columns:1fr;gap:.2rem;}}
+
+/* Gauges */
+.gauge{display:block;margin:0 auto 8px;width:92px;height:52px;overflow:visible;}
+.gauge .g-track,.gauge .g-arc{fill:none;stroke-width:4;stroke-linecap:round;}
+.gauge .g-track{stroke:var(--line);}
+.gauge .g-arc{stroke:var(--accent);stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1);}
+.gauge .g-tick{stroke:var(--ink3);stroke-width:1;opacity:.5;}
+.medal{display:block;text-align:center;font-size:16px;letter-spacing:6px;color:var(--accent);height:52px;line-height:44px;}
+
+/* Fluorescence (VIE) hover glow */
+.vie-glow{position:relative;overflow:hidden;}
+.vie-glow::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s ease;z-index:0;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),rgba(60,235,190,.26),rgba(60,235,190,.09) 45%,transparent 72%);}
+.vie-glow:hover::before{opacity:1;}
+.vie-glow .research-item-title em,.vie-glow .skill-name{transition:color .3s,text-shadow .3s;}
+.vie-glow:hover .research-item-title em,.vie-glow:hover .skill-name{color:#12b898;text-shadow:0 0 14px rgba(40,235,190,.6);}
+
+/* Folder-style certificate wall */
+.cert-img-wrap{position:relative;}
+.cert-img-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:26%;background:var(--bg2);border-top:1px solid var(--line);
+  clip-path:polygon(0 22%,24% 22%,30% 0,100% 0,100% 100%,0 100%);transition:transform .45s cubic-bezier(.16,1,.3,1);z-index:2;}
+.cert-img-wrap img{transition:transform .45s cubic-bezier(.16,1,.3,1);}
+.cert-item:hover .cert-img-wrap::after{transform:translateY(105%);}
+.cert-item:hover .cert-img-wrap img{transform:translateY(-3%) scale(1.04);}
+@media(hover:none){.cert-img-wrap::after{display:none;}}
+
+/* Contact additions */
+.contact-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.4rem;}
+.quick-mail{margin-top:1.2rem;border:0.5px solid var(--line);background:var(--card);}
+.quick-mail summary{cursor:pointer;padding:.85rem 1rem;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink2);list-style:none;}
+.quick-mail summary::-webkit-details-marker{display:none;}
+.quick-mail summary::after{content:" +";color:var(--accent);}
+.quick-mail[open] summary::after{content:" −";}
+.quick-mail form{padding:0 1rem 1rem;display:grid;gap:.7rem;}
+.quick-mail label{display:grid;gap:4px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;}
+.quick-mail input,.quick-mail select,.quick-mail textarea{font:inherit;font-family:var(--sans);font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--bg);border:0.5px solid var(--line);padding:8px 10px;width:100%;}
+.quick-mail textarea{min-height:90px;resize:vertical;}
+.quick-mail input:focus,.quick-mail select:focus,.quick-mail textarea:focus{outline:1px solid var(--accent);border-color:var(--accent);}
+.quick-mail .hint{font-size:11px;color:var(--ink3);letter-spacing:0;text-transform:none;}
+.qr-row{display:flex;gap:1rem;align-items:center;}
+.qr-row img{width:96px;height:96px;background:#fff;padding:5px;border:0.5px solid var(--line);flex:none;}
+.qr-row p{font-size:13px;color:var(--ink2);margin-bottom:6px;}
+.qr-row a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;}
+
+/* Scene-aware ambient background */
+.ambient-molecule,.pipeline-frame,.ambient-signal{transition:opacity .9s ease;}
+body[data-scene="lab"] .ambient-molecule{opacity:.78;}
+body[data-scene="lab"] .pipeline-frame{opacity:.16;}
+body[data-scene="data"] .ambient-signal{opacity:.75;}
+body[data-scene="data"] .ambient-molecule{opacity:.18;}
+body[data-scene="data"] .pipeline-frame{opacity:.2;}
+body[data-scene="pipe"] .ambient-molecule{opacity:.26;}
+@media(max-width:700px){
+  body[data-scene="lab"] .ambient-molecule{opacity:.4;}
+  body[data-scene="data"] .ambient-signal{opacity:.4;}
+}
+
+/* Language swap helper */
+html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spacing:.06em;}
+
+/* Print = clean one-document résumé-like view */
+@media print{
+  .ambient-canvas,nav,.mobile-menu,.scroll-line,.intro,.lightbox,.copy-toast,.hero-cta,.course-toggle-btn,.quick-mail,.contact-actions,.qr-box,.nav-tools,body::before{display:none!important;}
+  body{background:#fff;color:#000;font-size:11pt;}
+  html[data-theme="dark"]{--ink:#1a1916;--ink2:#4a4845;--ink3:#7a7874;--bg:#fff;--bg2:#f4f2ec;--bg3:#eae6da;--line:rgba(26,25,22,.2);--accent:#8b3a2a;}
+  section,.catalysis-project{opacity:1!important;transform:none!important;padding:1.2rem 0!important;break-inside:avoid-page;}
+  .motion-reveal,.section-header,.masthead-top,.kicker,.headline,.hero-body,.portrait,.stat-row{opacity:1!important;transform:none!important;clip-path:none!important;animation:none!important;}
+  .course-more{display:block!important;}
+  #hero{min-height:auto;padding-top:0;}
+  a{color:inherit;text-decoration:none;}
+  .showcase-media video{display:none;}
+  .showcase-poster{display:block!important;}
+  .cert-img-wrap::after{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  html.intro-on .intro{display:none;}
+  .gauge .g-arc{transition:none;}
 }
 </style>
 </head>
@@ -585,6 +725,17 @@ section.visible .motion-reveal{opacity:1;transform:none;}
   </svg>
 </div>
 
+<div class="intro" id="intro" aria-hidden="true">
+  <span class="intro-line"></span>
+  <i class="intro-dot" style="--x:6%;--y:30%;--d:.15s"></i>
+  <i class="intro-dot" style="--x:94%;--y:68%;--d:.25s"></i>
+  <i class="intro-dot" style="--x:14%;--y:80%;--d:.35s"></i>
+  <i class="intro-dot" style="--x:88%;--y:22%;--d:.45s"></i>
+  <i class="intro-dot" style="--x:50%;--y:6%;--d:.55s"></i>
+  <i class="intro-dot" style="--x:50%;--y:94%;--d:.65s"></i>
+  <div class="intro-name">张天硕</div>
+  <div class="intro-sub">Petroleum · Pipeline · Intelligence</div>
+</div>
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="证书预览">
   <button class="lb-close" type="button" id="lbClose">× 关闭 ESC</button>
   <button class="lb-nav lb-prev" type="button" id="lbPrev" aria-label="上一张">←</button>
@@ -607,7 +758,12 @@ section.visible .motion-reveal{opacity:1;transform:none;}
     <li><a href="#activities">活动</a></li>
     <li><a href="#certs">证书</a></li>
     <li><a href="#contact">联系</a></li>
+    <li><a href="/notes">笔记</a></li>
   </ul>
+  <div class="nav-tools">
+    <button class="tool-btn" type="button" id="langToggle" aria-label="切换语言 / Switch language">EN</button>
+    <button class="tool-btn" type="button" id="themeToggle" aria-label="切换深浅色主题">☾</button>
+  </div>
   <button class="nav-toggle" type="button" id="navToggle" aria-expanded="false" aria-controls="mobileMenu">菜单 ☰</button>
   <div class="scroll-line" id="scrollLine"></div>
 </nav>
@@ -619,6 +775,7 @@ section.visible .motion-reveal{opacity:1;transform:none;}
   <a href="#activities"><span>05</span>校园活动</a>
   <a href="#certs"><span>06</span>证书荣誉</a>
   <a href="#contact"><span>07</span>联系方式</a>
+  <a href="/notes"><span>→</span>学习笔记</a>
 </div>
 
 <!-- ── HERO ── -->
@@ -644,6 +801,7 @@ section.visible .motion-reveal{opacity:1;transform:none;}
       <div class="hero-cta">
         <a href="#academics" class="btn-primary">查看学术成果 →</a>
         <a href="#contact" class="btn-ghost">联系我</a>
+        <a href="/zhangtianshuo-resume.pdf" class="btn-ghost" download>下载简历 PDF ↓</a>
       </div>
     </div>
     <div class="hero-right">
@@ -746,6 +904,18 @@ section.visible .motion-reveal{opacity:1;transform:none;}
         </ul>
       </div>
     </div>
+
+    <div class="journey" id="journey">
+      <div class="journey-title">— Journey 成长轨迹</div>
+      <ol class="journey-list">
+        <li class="journey-item"><span class="j-time">2024.09</span><div class="j-body"><strong>入学华东理工大学</strong><p>进入石油加工系油气储运工程专业，开启本科学习。</p></div></li>
+        <li class="journey-item"><span class="j-time">2024–2025 学年</span><div class="j-body"><strong>学业与荣誉并进</strong><p>获学业优秀奖学金二等、“优秀学生”称号与社会工作奖 B 等。</p></div></li>
+        <li class="journey-item"><span class="j-time">2025.06</span><div class="j-body"><strong>受聘担任部长</strong><p>受聘担任学生组织物流仓储部部长，聘期一年。</p></div></li>
+        <li class="journey-item"><span class="j-time">2025–2026 学年</span><div class="j-body"><strong>向科研与 AI 方向延伸</strong><p>参与贺晓鹏课题组的 VIE 荧光材料研究；修读人工智能导论、机器视觉算法实训等课程。</p></div></li>
+        <li class="journey-item"><span class="j-time">2026</span><div class="j-body"><strong>催化文献智能数据引擎</strong><p>构建可追溯的催化文献数据提取系统，处理 48 份 PDF，产出 288 条候选记录。</p></div></li>
+        <li class="journey-item"><span class="j-time">现在</span><div class="j-body"><strong>备战建模竞赛，寻找科研与实习机会</strong><p>准备全国大学生数学建模竞赛，同时继续深化化工与人工智能的交叉探索。</p></div></li>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -759,27 +929,31 @@ section.visible .motion-reveal{opacity:1;transform:none;}
     </div>
     <div class="academics-grid">
       <div class="acad-card">
+        <svg class="gauge" viewBox="0 0 100 56" aria-hidden="true" data-fill="99"><path class="g-track" d="M10 50 A40 40 0 0 1 90 50" pathLength="100"/><path class="g-arc" d="M10 50 A40 40 0 0 1 90 50" pathLength="100"/></svg>
         <div class="acad-big">1<span>/91</span></div>
         <div class="acad-label">专业排名</div>
         <div class="acad-sub">专业第一</div>
       </div>
       <div class="acad-card">
+        <svg class="gauge" viewBox="0 0 100 56" aria-hidden="true" data-fill="90.4"><path class="g-track" d="M10 50 A40 40 0 0 1 90 50" pathLength="100"/><path class="g-arc" d="M10 50 A40 40 0 0 1 90 50" pathLength="100"/></svg>
         <div class="acad-big">90.4</div>
         <div class="acad-label">综合素质评价分</div>
         <div class="acad-sub">分流后成绩专业 #1</div>
       </div>
       <div class="acad-card">
+        <svg class="gauge" viewBox="0 0 100 56" aria-hidden="true" data-fill="82"><path class="g-track" d="M10 50 A40 40 0 0 1 90 50" pathLength="100"/><path class="g-arc" d="M10 50 A40 40 0 0 1 90 50" pathLength="100"/></svg>
         <div class="acad-big">583<span>/540</span></div>
         <div class="acad-label">英语四六级成绩</div>
         <div class="acad-sub">四级 583 · 六级 540</div>
       </div>
       <div class="acad-card">
+        <span class="medal" aria-hidden="true">★★</span>
         <div class="acad-big">省<span>级</span></div>
         <div class="acad-label">全国大学生数学竞赛</div>
         <div class="acad-sub">二等奖</div>
       </div>
     </div>
-    <div class="research-box">
+    <div class="research-box vie-glow">
       <div class="research-title">— Research Projects 科研项目</div>
       <div class="research-content">
         <div>
@@ -875,7 +1049,7 @@ section.visible .motion-reveal{opacity:1;transform:none;}
           <div class="course-bar"><div class="course-bar-fill" data-width="86"></div></div>
         </div>
       </div>
-      <div class="course-group-title">Foundation · 基础高分课程</div>
+      <div class="course-group-title">Foundation · 基础高分课程（2024–2026 学年）</div>
       <div class="course-grid">
         <div class="course-item highlight">
           <div class="course-score">97</div>
@@ -901,10 +1075,34 @@ section.visible .motion-reveal{opacity:1;transform:none;}
           <div class="course-meta">2 学分 · 必修</div>
           <div class="course-bar"><div class="course-bar-fill" data-width="96"></div></div>
         </div>
+        <div class="course-item highlight">
+          <div class="course-score">100</div>
+          <div class="course-name">AI 与数字经济</div>
+          <div class="course-meta">1 学分 · 选修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="100"></div></div>
+        </div>
+        <div class="course-item highlight">
+          <div class="course-score">96</div>
+          <div class="course-name">大学物理（下）</div>
+          <div class="course-meta">3 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="96"></div></div>
+        </div>
+        <div class="course-item highlight">
+          <div class="course-score">95</div>
+          <div class="course-name">无机化学</div>
+          <div class="course-meta">4 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="95"></div></div>
+        </div>
+        <div class="course-item highlight">
+          <div class="course-score">94</div>
+          <div class="course-name">高等数学（下）</div>
+          <div class="course-meta">6 学分 · 必修</div>
+          <div class="course-bar"><div class="course-bar-fill" data-width="94"></div></div>
+        </div>
       </div>
       </div>
-      <button type="button" class="course-toggle-btn" id="courseToggle" aria-expanded="false" aria-controls="courseMore">展开其余 8 门高分课程 ↓</button>
-      <div class="course-note">※ 本学期加权均分按截图中 10 门数值成绩课程、共 20 学分计算；B+ 与 P 课程未参与均分换算。页面仅展示代表性课程，不替代正式成绩单。</div>
+      <button type="button" class="course-toggle-btn" id="courseToggle" aria-expanded="false" aria-controls="courseMore">展开其余 12 门课程 ↓</button>
+      <div class="course-note">※ 全部课程（2024.09–2026.07，成绩单制表日 2026-07-11）：初修平均分 89.08，平均学分绩点 3.672。<br>※ 本学期加权均分按截图中 10 门数值成绩课程、共 20 学分计算；B+ 与 P 课程未参与均分换算。页面仅展示代表性课程，不替代正式成绩单。</div>
     </div>
 
   </div>
@@ -939,7 +1137,7 @@ section.visible .motion-reveal{opacity:1;transform:none;}
         <p class="skill-evidence">全国大学生数学竞赛省级二等奖；高等数学 97 分；系统备战全国大学生数学建模竞赛。</p>
         <div class="skill-tags"><span class="tag">数学竞赛</span><span class="tag">优化算法</span><span class="tag">统计建模</span></div>
       </div>
-      <div class="skill-card">
+      <div class="skill-card vie-glow">
         <div class="skill-top"><span class="skill-cat">化学实验</span><span class="skill-level">课题组在研</span></div>
         <div class="skill-name">荧光材料合成</div>
         <p class="skill-evidence">贺晓鹏教授课题组在研，入选校创新人才培养计划；有机化学 96、分析化学 96。</p>
@@ -1068,6 +1266,26 @@ section.visible .motion-reveal{opacity:1;transform:none;}
             <span class="cl-arrow">访问 ↗</span>
           </a>
         </div>
+        <div class="contact-actions">
+          <a class="btn-primary" href="/zhangtianshuo-resume.pdf" download>下载简历 PDF ↓</a>
+          <a class="btn-ghost" href="/resume" target="_blank" rel="noopener">在线简历</a>
+        </div>
+        <details class="quick-mail">
+          <summary>快速留言（将打开邮件客户端发送）</summary>
+          <form id="quickMail">
+            <label>您的身份
+              <select name="role"><option>导师 / 老师</option><option>同学</option><option>企业 / 招聘</option><option>其他</option></select>
+            </label>
+            <label>称呼
+              <input name="who" type="text" maxlength="40" placeholder="如：王老师 / 某某公司 HR" />
+            </label>
+            <label>留言
+              <textarea name="msg" maxlength="800" placeholder="想和我聊些什么？" required></textarea>
+            </label>
+            <button class="btn-primary" type="submit">生成邮件 →</button>
+            <span class="hint">点击后会在您的邮件客户端中预填内容，确认后发出。</span>
+          </form>
+        </details>
       </div>
       <div class="aside-col">
         <div class="aside-box">
@@ -1081,6 +1299,16 @@ section.visible .motion-reveal{opacity:1;transform:none;}
             机器学习 / 计算机视觉（自学方向）<br>
             数学建模（备赛中）
           </p>
+        </div>
+        <div class="aside-box qr-box">
+          <div class="aside-title">— 扫码名片</div>
+          <div class="qr-row">
+            <img src="/qr-zts666.svg" width="96" height="96" alt="zts666.me 二维码" loading="lazy">
+            <div>
+              <p>扫码打开 zts666.me</p>
+              <a href="/card-zhangtianshuo.png" download>保存名片图 ↓</a>
+            </div>
+          </div>
         </div>
         <div class="aside-box">
           <div class="aside-title">— 语言能力</div>
@@ -1111,7 +1339,38 @@ const d = new Date();
 document.getElementById('today-date').textContent = d.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'});
 
 const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-requestAnimationFrame(()=>document.body.classList.add('page-ready'));
+const introOn=document.documentElement.classList.contains('intro-on');
+const finishIntro=()=>{
+  document.documentElement.classList.remove('intro-on');
+  try{sessionStorage.setItem('introSeen','1');}catch(e){}
+  document.body.classList.add('page-ready');
+};
+if(introOn){
+  const introEl=document.getElementById('intro');
+  let done=false;
+  const end=()=>{if(done)return;done=true;finishIntro();};
+  setTimeout(end,2300);
+  introEl?.addEventListener('click',end);
+  window.addEventListener('keydown',end,{once:true});
+}else{
+  requestAnimationFrame(()=>document.body.classList.add('page-ready'));
+}
+
+// Theme toggle
+const themeBtn=document.getElementById('themeToggle');
+const metaTheme=document.querySelector('meta[name="theme-color"]');
+const paintTheme=()=>{
+  const dark=document.documentElement.dataset.theme==='dark';
+  if(themeBtn)themeBtn.textContent=dark?'☀':'☾';
+  if(metaTheme)metaTheme.setAttribute('content',dark?'#141210':'#faf8f3');
+};
+paintTheme();
+themeBtn?.addEventListener('click',()=>{
+  const next=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=next;
+  try{localStorage.setItem('theme',next);}catch(e){}
+  paintTheme();
+});
 
 // Keep scroll-linked work in a single animation frame.
 let scrollTick=false;
@@ -1167,6 +1426,8 @@ const navObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
       navItems.forEach(link=>link.classList.toggle('active',link.getAttribute('href')===`#${e.target.id}`));
+      const sceneMap={about:'pipe',academics:'lab',skills:'lab',certs:'lab',projects:'data',activities:'pipe',contact:'pipe'};
+      document.body.dataset.scene=sceneMap[e.target.id]||'pipe';
     }
   });
 },{rootMargin:'-25% 0px -60% 0px',threshold:0});
@@ -1200,6 +1461,42 @@ document.querySelectorAll('.stat-num,.acad-big,.semester-value,.course-score').f
 // Pointer-aware cards: restrained tilt plus a local editorial-red glow.
 const finePointer=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 const motionCards=document.querySelectorAll('.acad-card,.semester-stat,.course-item,.skill-card,.activity-card,.cert-item,.aside-box,.research-box');
+const jItems=[...document.querySelectorAll('.journey-item')];
+const journeyList=document.querySelector('.journey-list');
+const updateJourney=()=>{
+  if(!journeyList)return;
+  const rect=journeyList.getBoundingClientRect();
+  const mid=window.innerHeight*0.62;
+  const progress=Math.min(Math.max((mid-rect.top)/rect.height,0),1);
+  journeyList.style.setProperty('--jp',(progress*100).toFixed(1)+'%');
+  jItems.forEach(it=>{const r=it.getBoundingClientRect();it.classList.toggle('on',r.top<mid);});
+};
+window.addEventListener('scroll',updateJourney,{passive:true});
+updateJourney();
+
+// Gauges
+const gaugeObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('.gauge').forEach(g=>{
+      const fill=parseFloat(g.dataset.fill||'0');
+      g.querySelector('.g-arc').style.strokeDashoffset=String(100-fill);
+    });
+    gaugeObs.unobserve(e.target);
+  });
+},{threshold:.3});
+const acadGrid=document.querySelector('.academics-grid');
+if(acadGrid)gaugeObs.observe(acadGrid);
+
+// Quick mail -> mailto
+document.getElementById('quickMail')?.addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const f=ev.target;
+  const role=f.role.value,who=f.who.value.trim(),msg=f.msg.value.trim();
+  const subject=encodeURIComponent('来自个人主页的留言'+(who?'｜'+who:''));
+  const body=encodeURIComponent('身份：'+role+'\n称呼：'+(who||'—')+'\n\n'+msg+'\n\n— 来自 zts666.me');
+  location.href='mailto:24010663@mail.ecust.edu.cn?subject='+subject+'&body='+body;
+});
 motionCards.forEach(card=>{
   card.classList.add('motion-card');
   if(!finePointer||reduceMotion)return;
@@ -1249,7 +1546,7 @@ const courseMore=document.getElementById('courseMore');
 courseToggle?.addEventListener('click',()=>{
   const open=courseMore.classList.toggle('expanded');
   courseToggle.setAttribute('aria-expanded',String(open));
-  courseToggle.textContent=open?'收起更多课程 ↑':'展开其余 8 门高分课程 ↓';
+  courseToggle.textContent=open?'收起更多课程 ↑':'展开其余 12 门课程 ↓';
   if(open){
     courseMore.querySelectorAll('.course-bar-fill').forEach(b=>{b.style.width=b.dataset.width+'%';});
   }
@@ -1327,6 +1624,61 @@ const courseBarObs=new IntersectionObserver(entries=>{
   });
 },{threshold:0.15});
 document.querySelectorAll('.course-grid').forEach(grid=>courseBarObs.observe(grid));
+
+// Bilingual toggle (ZH / EN)
+const i18nNodes=[
+  ['.nav-logo','张天硕 · 华理<span class="nav-badge">本科生</span>','T. Zhang · ECUST<span class="nav-badge">B.Eng.</span>',true],
+  ['.nav-links li:nth-child(1) a','简介','About'],
+  ['.nav-links li:nth-child(2) a','学术','Academics'],
+  ['.nav-links li:nth-child(3) a','项目','Projects'],
+  ['.nav-links li:nth-child(4) a','技能','Skills'],
+  ['.nav-links li:nth-child(5) a','活动','Activities'],
+  ['.nav-links li:nth-child(6) a','证书','Honors'],
+  ['.nav-links li:nth-child(7) a','联系','Contact'],
+  ['.nav-links li:nth-child(8) a','笔记','Notes'],
+  ['.mag-title','张天硕 · 个人档案','Tianshuo Zhang · Portfolio'],
+  ['h1.headline','化工学院的<br><em>跨界探索者</em>','An <em>Interdisciplinary</em><br>Explorer at ECUST',true],
+  ['.hero-body','华东理工大学化工学院油气储运专业本科生，专业排名第一（1/91），致力于将扎实的工科底蕴与新兴的人工智能技术融合贯通。科研路上，我在实验室探索荧光材料的秘密；学习之余，我在代码里寻找另一种优雅。','Undergraduate in Oil & Gas Storage and Transportation Engineering at East China University of Science and Technology, ranked 1st / 91. Bridging rigorous chemical & pipeline engineering with AI — synthesizing VIE fluorescent materials in the lab and building evidence-first scientific NLP pipelines in code.'],
+  ['.hero-cta a:nth-child(1)','查看学术成果 →','Academic Record →'],
+  ['.hero-cta a:nth-child(2)','联系我','Contact Me'],
+  ['.hero-cta a:nth-child(3)','下载简历 PDF ↓','Résumé PDF ↓'],
+  ['.portrait-label','<span>华东理工大学</span><span>化工学院</span>','<span>ECUST · Shanghai</span><span>Chem. Eng.</span>',true],
+  ['.stat-item:nth-child(1) .stat-label','专业排名','Major Rank'],
+  ['.stat-item:nth-child(2) .stat-label','综合素质分','Comp. Score'],
+  ['.stat-item:nth-child(3) .stat-label','志愿时长','Volunteering'],
+  ['.stat-item:nth-child(4) .stat-label','四级/六级','CET-4 / CET-6'],
+  ['#about .section-title','关于 <em>我</em>','About <em>Me</em>',true],
+  ['#academics .section-title','学术 <em>成就</em>','Academic <em>Record</em>',true],
+  ['#projects .project-section-title','研究 <em>项目</em>','Research <em>Project</em>',true],
+  ['#catalysis-project-title','催化文献智能数据引擎','Catalysis Literature Intelligence Engine'],
+  ['#projects .project-lead','从 PDF 催化文献中提取可追溯的字段级证据和实验记录候选，帮助科研人员快速比较原料、催化剂、反应条件与性能结果。','Extracting traceable, field-level evidence and candidate experimental records from catalysis PDFs to help researchers compare feedstocks, catalysts, conditions, and yields.'],
+  ['#skills .section-title','技能 <em>图谱</em>','Technical <em>Skills</em>',true],
+  ['#activities .section-title','校园 <em>活动</em>','Campus <em>Leadership</em>',true],
+  ['#certs .section-title','证书 <em>荣誉</em>','Honors &amp; <em>Certificates</em>',true],
+  ['#contact .section-title','联系 <em>方式</em>','Get in <em>Touch</em>',true],
+  ['.contact-intro','欢迎导师、同学或企业朋友联系我，无论是科研合作、学习交流，还是实习就业机会，我都期待与您建立连接。通常24小时内回复。','Whether you are a professor, fellow student, or recruiter interested in research collaboration or internship opportunities, feel free to reach out. I typically reply within 24 hours.'],
+  ['.footer-copy','张天硕 · 华东理工大学 · 化工学院 · 油气储运工程','Tianshuo Zhang · ECUST · Oil & Gas Storage and Transportation Engineering']
+];
+const langBtn=document.getElementById('langToggle');
+const applyLang=(lang)=>{
+  const isEn=lang==='en';
+  document.documentElement.dataset.lang=lang;
+  if(langBtn)langBtn.textContent=isEn?'中':'EN';
+  const dEl=document.getElementById('today-date');
+  if(dEl)dEl.textContent=d.toLocaleDateString(isEn?'en-US':'zh-CN',{year:'numeric',month:'long',day:'numeric'});
+  i18nNodes.forEach(([sel,zh,en,html])=>{
+    const el=document.querySelector(sel);
+    if(!el)return;
+    if(html)el.innerHTML=isEn?en:zh;
+    else el.textContent=isEn?en:zh;
+  });
+};
+if(document.documentElement.dataset.lang==='en')applyLang('en');
+langBtn?.addEventListener('click',()=>{
+  const next=document.documentElement.dataset.lang==='en'?'zh':'en';
+  try{localStorage.setItem('lang',next);}catch(e){}
+  applyLang(next);
+});
 
 </script>
 </body>
