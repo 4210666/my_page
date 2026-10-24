@@ -594,9 +594,10 @@
 
   const updateToggle = (playing: boolean) => {
     if (!toggle || !toggleIcon || !toggleLabel) return;
+    const isEn = document.documentElement.dataset.lang === 'en';
     toggle.setAttribute('aria-pressed', String(!playing));
     toggleIcon.textContent = playing ? 'Ⅱ' : '▶';
-    toggleLabel.textContent = playing ? '暂停演示' : '播放演示';
+    toggleLabel.textContent = playing ? (isEn ? 'Pause' : '暂停演示') : (isEn ? 'Play' : '播放演示');
   };
 
   if (video && !reduceMotion) {

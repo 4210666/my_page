@@ -1528,25 +1528,39 @@ if(sg)barObs.observe(sg);
 // Mobile navigation drawer
 const navToggle=document.getElementById('navToggle');
 const mobileMenu=document.getElementById('mobileMenu');
+const paintNavToggle=()=>{
+  if(!navToggle||!mobileMenu)return;
+  const open=mobileMenu.classList.contains('open');
+  const isEn=document.documentElement.dataset.lang==='en';
+  navToggle.textContent=open?(isEn?'Close ×':'关闭 ×'):(isEn?'Menu ☰':'菜单 ☰');
+};
 const closeMobileMenu=()=>{
   mobileMenu.classList.remove('open');
   navToggle.setAttribute('aria-expanded','false');
-  navToggle.textContent='菜单 ☰';
+  paintNavToggle();
 };
 navToggle?.addEventListener('click',()=>{
   const open=mobileMenu.classList.toggle('open');
   navToggle.setAttribute('aria-expanded',String(open));
-  navToggle.textContent=open?'关闭 ×':'菜单 ☰';
+  paintNavToggle();
 });
 mobileMenu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMobileMenu));
 
 // Course fold toggle
 const courseToggle=document.getElementById('courseToggle');
 const courseMore=document.getElementById('courseMore');
+const paintCourseToggle=()=>{
+  if(!courseToggle||!courseMore)return;
+  const open=courseMore.classList.contains('expanded');
+  const isEn=document.documentElement.dataset.lang==='en';
+  courseToggle.textContent=open
+    ?(isEn?'Collapse 12 More Courses ↑':'收起更多课程 ↑')
+    :(isEn?'Show 12 More Courses ↓':'展开其余 12 门课程 ↓');
+};
 courseToggle?.addEventListener('click',()=>{
   const open=courseMore.classList.toggle('expanded');
   courseToggle.setAttribute('aria-expanded',String(open));
-  courseToggle.textContent=open?'收起更多课程 ↑':'展开其余 12 门课程 ↓';
+  paintCourseToggle();
   if(open){
     courseMore.querySelectorAll('.course-bar-fill').forEach(b=>{b.style.width=b.dataset.width+'%';});
   }
@@ -1558,9 +1572,11 @@ let toastTimer;
 document.querySelectorAll('[data-copy]').forEach(btn=>{
   btn.addEventListener('click',async()=>{
     const val=btn.getAttribute('data-copy');
+    const isEn=document.documentElement.dataset.lang==='en';
     const label=btn.getAttribute('data-label')||'内容';
+    const labelEn=label==='邮箱地址'?'Email':'WeChat ID';
     try{await navigator.clipboard.writeText(val);}catch{}
-    toastEl.textContent=`已复制${label}：${val}`;
+    toastEl.textContent=isEn?`Copied ${labelEn}: ${val}`:`已复制${label}：${val}`;
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2200);
@@ -1578,12 +1594,12 @@ setTimeout(()=>{
 
 // Lightbox with prev/next + keyboard + caption
 const certs=[
-  {key:'img2',src:'/images/certs/cert-1-d0a4f957.webp',title:'英语六级（CET-6） · 全国大学英语六级考试'},
-  {key:'img3',src:'/images/certs/cert-2-2501f3da.webp',title:'英语四级（CET-4） · 全国大学英语四级考试'},
-  {key:'img4',src:'/images/certs/cert-3-f8e33c6f.webp',title:'学业优秀奖学金二等 · 华东理工大学'},
-  {key:'img5',src:'/images/certs/cert-4-d5980f0c.webp',title:'物流仓储部部长聘书 · 华东理工大学'},
-  {key:'img6',src:'/images/certs/cert-5-e1361ca3.webp',title:'优秀学生 · 华东理工大学'},
-  {key:'img7',src:'/images/certs/cert-6-97beaeed.webp',title:'社会工作奖 B 等 · 华东理工大学'}
+  {key:'img2',src:'/images/certs/cert-1-d0a4f957.webp',title:'英语六级（CET-6） · 全国大学英语六级考试',titleEn:'CET-6 (540) · National College English Test'},
+  {key:'img3',src:'/images/certs/cert-2-2501f3da.webp',title:'英语四级（CET-4） · 全国大学英语四级考试',titleEn:'CET-4 (583) · National College English Test'},
+  {key:'img4',src:'/images/certs/cert-3-f8e33c6f.webp',title:'学业优秀奖学金二等 · 华东理工大学',titleEn:'Academic Excellence Scholarship (2nd Class) · ECUST'},
+  {key:'img5',src:'/images/certs/cert-4-d5980f0c.webp',title:'物流仓储部部长聘书 · 华东理工大学',titleEn:'Minister of Logistics & Warehousing · ECUST'},
+  {key:'img6',src:'/images/certs/cert-5-e1361ca3.webp',title:'优秀学生 · 华东理工大学',titleEn:'Outstanding Student · ECUST'},
+  {key:'img7',src:'/images/certs/cert-6-97beaeed.webp',title:'社会工作奖 B 等 · 华东理工大学',titleEn:'Social Work Scholarship (Class B) · ECUST'}
 ];
 let lbIndex=0;
 const lbEl=document.getElementById('lightbox');
@@ -1592,10 +1608,12 @@ const lbCounter=document.getElementById('lbCounter');
 const lbTitle=document.getElementById('lbTitle');
 const renderLb=()=>{
   const item=certs[lbIndex];
+  const isEn=document.documentElement.dataset.lang==='en';
+  const t=isEn?item.titleEn:item.title;
   lbImg.src=item.src;
-  lbImg.alt=item.title;
+  lbImg.alt=t;
   lbCounter.textContent=`0${lbIndex+1} / 0${certs.length}`;
-  lbTitle.textContent=item.title;
+  lbTitle.textContent=t;
 };
 window.openLb=function openLb(key){
   const idx=certs.findIndex(c=>c.key===key);
@@ -1627,6 +1645,7 @@ document.querySelectorAll('.course-grid').forEach(grid=>courseBarObs.observe(gri
 
 // Bilingual toggle (ZH / EN)
 const i18nNodes=[
+  // Nav & Mobile Menu
   ['.nav-logo','张天硕 · 华理<span class="nav-badge">本科生</span>','T. Zhang · ECUST<span class="nav-badge">B.Eng.</span>',true],
   ['.nav-links li:nth-child(1) a','简介','About'],
   ['.nav-links li:nth-child(2) a','学术','Academics'],
@@ -1636,6 +1655,17 @@ const i18nNodes=[
   ['.nav-links li:nth-child(6) a','证书','Honors'],
   ['.nav-links li:nth-child(7) a','联系','Contact'],
   ['.nav-links li:nth-child(8) a','笔记','Notes'],
+  ['#mobileMenu a:nth-child(1)','<span>01</span>关于我','<span>01</span>About Me',true],
+  ['#mobileMenu a:nth-child(2)','<span>02</span>学术成就','<span>02</span>Academics',true],
+  ['#mobileMenu a:nth-child(3)','<span>03</span>研究项目','<span>03</span>Projects',true],
+  ['#mobileMenu a:nth-child(4)','<span>04</span>技能图谱','<span>04</span>Skills',true],
+  ['#mobileMenu a:nth-child(5)','<span>05</span>校园活动','<span>05</span>Activities',true],
+  ['#mobileMenu a:nth-child(6)','<span>06</span>证书荣誉','<span>06</span>Honors',true],
+  ['#mobileMenu a:nth-child(7)','<span>07</span>联系方式','<span>07</span>Contact',true],
+  ['#mobileMenu a:nth-child(8)','<span>→</span>学习笔记','<span>→</span>Study Notes',true],
+  ['#lbClose','× 关闭 ESC','× Close ESC'],
+
+  // Hero
   ['.mag-title','张天硕 · 个人档案','Tianshuo Zhang · Portfolio'],
   ['h1.headline','化工学院的<br><em>跨界探索者</em>','An <em>Interdisciplinary</em><br>Explorer at ECUST',true],
   ['.hero-body','华东理工大学化工学院油气储运专业本科生，专业排名第一（1/91），致力于将扎实的工科底蕴与新兴的人工智能技术融合贯通。科研路上，我在实验室探索荧光材料的秘密；学习之余，我在代码里寻找另一种优雅。','Undergraduate in Oil & Gas Storage and Transportation Engineering at East China University of Science and Technology, ranked 1st / 91. Bridging rigorous chemical & pipeline engineering with AI — synthesizing VIE fluorescent materials in the lab and building evidence-first scientific NLP pipelines in code.'],
@@ -1647,22 +1677,254 @@ const i18nNodes=[
   ['.stat-item:nth-child(2) .stat-label','综合素质分','Comp. Score'],
   ['.stat-item:nth-child(3) .stat-label','志愿时长','Volunteering'],
   ['.stat-item:nth-child(4) .stat-label','四级/六级','CET-4 / CET-6'],
+
+  // 01 About & Journey
   ['#about .section-title','关于 <em>我</em>','About <em>Me</em>',true],
+  ['.about-text > p:nth-of-type(1)','我就读于华东理工大学化工学院油气储运工程专业，学习成绩优异，品德优良。专业综合排名第一（1/91），并获综合素质评价分90.4分。学习之余，我通过了班级入党积极分子推优，始终以更高的标准要求自己。','I am an undergraduate majoring in Oil & Gas Storage and Transportation Engineering at the School of Chemical Engineering, East China University of Science and Technology (ECUST), ranked 1st out of 91 in my major with a 90.4 comprehensive evaluation score.'],
+  ['.about-text > p:nth-of-type(2)','在科研方向，我加入了贺晓鹏导师课题组，从事 VIE 荧光诱导发光材料的合成与性能改进研究，并入选学校创新人才培养计划，开始系统性地参与科研工作。','In research, I joined Prof. Xiaopeng He’s group to work on the synthesis and performance optimization of Vibration-Induced Emission (VIE) fluorescent materials, selected into ECUST’s Innovative Talent Training Program.'],
+  ['.pull-quote p','"既要扎根专业，也要仰望星空——在油气管道与神经网络之间，我寻找属于自己的交汇点。"','"Rooted in engineering, looking toward the stars — between oil & gas pipelines and neural networks, I seek my own intersection."'],
+  ['.pull-quote cite','— 个人学习感悟','— Personal Reflection'],
+  ['.about-text > p:nth-of-type(3)','课外，我积极投身学生工作与志愿服务，累计志愿时长近200小时，也正在学习机器学习与计算机视觉，备战全国大学生数学建模竞赛。','Beyond academics, I actively serve in student leadership and community volunteering (200+ hours), while studying machine learning and computer vision and preparing for the National Undergraduate Mathematical Contest in Modeling (CUMCM).'],
+  ['.timeline-item:nth-child(1) .tl-year','在读中','Present'],
+  ['.timeline-item:nth-child(1) .tl-org','华东理工大学 化工学院','ECUST · School of Chemical Engineering'],
+  ['.timeline-item:nth-child(1) .tl-role','油气储运工程 · 本科生 · 专业第一','Oil & Gas Storage and Transportation · B.Eng. · Rank 1/91'],
+  ['.timeline-item:nth-child(2) .tl-year','科研','Research'],
+  ['.timeline-item:nth-child(2) .tl-org','贺晓鹏导师课题组','Prof. Xiaopeng He Research Group'],
+  ['.timeline-item:nth-child(2) .tl-role','VIE荧光诱导发光合成与改进 · 创新人才培养计划','VIE Fluorescent Material Synthesis · Innovative Talent Program'],
+  ['.timeline-item:nth-child(3) .tl-year','学生工作','Leadership'],
+  ['.timeline-item:nth-child(3) .tl-org','班级班长 · 勤工助学干事','Class President · Work-Study Officer'],
+  ['.timeline-item:nth-child(3) .tl-role','团委社团工作部财务部负责人','Head of Finance, Youth League Club Affairs Dept.'],
+  ['.timeline-item:nth-child(4) .tl-year','竞赛','Awards'],
+  ['.timeline-item:nth-child(4) .tl-org','全国大学生数学竞赛','National College Mathematics Competition'],
+  ['.timeline-item:nth-child(4) .tl-role','省级二等奖 · 备战数学建模竞赛','Provincial Second Prize · Preparing for CUMCM'],
+  ['.timeline-item:nth-child(5) .tl-year','入党','Honors'],
+  ['.timeline-item:nth-child(5) .tl-org','入党积极分子推优通过','CPC Activist Nominee'],
+  ['.timeline-item:nth-child(5) .tl-role','经班级推选，品德优良','Endorsed by class vote for outstanding character & service'],
+  ['.journey-title','— Journey 成长轨迹','— Journey & Milestones'],
+  ['.journey-item:nth-child(1) .j-body strong','入学华东理工大学','Matriculated at ECUST'],
+  ['.journey-item:nth-child(1) .j-body p','进入石油加工系油气储运工程专业，开启本科学习。','Entered the Dept. of Petroleum Processing, majoring in Oil & Gas Storage and Transportation Engineering.'],
+  ['.journey-item:nth-child(2) .j-time','2024–2025 学年','2024–2025 AY'],
+  ['.journey-item:nth-child(2) .j-body strong','学业与荣誉并进','Academic Excellence & Honors'],
+  ['.journey-item:nth-child(2) .j-body p','获学业优秀奖学金二等、“优秀学生”称号与社会工作奖 B 等。','Awarded Academic Excellence Scholarship (2nd Class), Outstanding Student, and Social Work Award (Class B).'],
+  ['.journey-item:nth-child(3) .j-body strong','受聘担任部长','Appointed Department Head'],
+  ['.journey-item:nth-child(3) .j-body p','受聘担任学生组织物流仓储部部长，聘期一年。','Appointed Head of the Logistics & Warehousing Department in the student organization for a one-year term.'],
+  ['.journey-item:nth-child(4) .j-time','2025–2026 学年','2025–2026 AY'],
+  ['.journey-item:nth-child(4) .j-body strong','向科研与 AI 方向延伸','Expanding into Research & AI'],
+  ['.journey-item:nth-child(4) .j-body p','参与贺晓鹏课题组的 VIE 荧光材料研究；修读人工智能导论、机器视觉算法实训等课程。','Joined Prof. He’s lab on VIE fluorescent materials; completed coursework in Intro to AI and Machine Vision.'],
+  ['.journey-item:nth-child(5) .j-body strong','催化文献智能数据引擎','Catalysis Literature Intelligence Engine'],
+  ['.journey-item:nth-child(5) .j-body p','构建可追溯的催化文献数据提取系统，处理 48 份 PDF，产出 288 条候选记录。','Built a traceable PDF extraction pipeline across 48 catalysis papers, yielding 288 auditable candidate records.'],
+  ['.journey-item:nth-child(6) .j-time','现在','Present'],
+  ['.journey-item:nth-child(6) .j-body strong','备战建模竞赛，寻找科研与实习机会','Modeling Contest & New Opportunities'],
+  ['.journey-item:nth-child(6) .j-body p','准备全国大学生数学建模竞赛，同时继续深化化工与人工智能的交叉探索。','Preparing for CUMCM while seeking research collaborations and internships in chemical engineering & AI.'],
+
+  // 02 Academics & Courses
   ['#academics .section-title','学术 <em>成就</em>','Academic <em>Record</em>',true],
+  ['.academics-grid .acad-card:nth-child(1) .acad-label','专业排名','Major Rank'],
+  ['.academics-grid .acad-card:nth-child(1) .acad-sub','专业第一','1st in Major'],
+  ['.academics-grid .acad-card:nth-child(2) .acad-label','综合素质评价分','Comprehensive Score'],
+  ['.academics-grid .acad-card:nth-child(2) .acad-sub','分流后成绩专业 #1','Ranked #1 Post-Track'],
+  ['.academics-grid .acad-card:nth-child(3) .acad-label','英语四六级成绩','English Proficiency'],
+  ['.academics-grid .acad-card:nth-child(3) .acad-sub','四级 583 · 六级 540','CET-4 583 · CET-6 540'],
+  ['.academics-grid .acad-card:nth-child(4) .acad-big','省<span>级</span>','Prov<span>.</span>',true],
+  ['.academics-grid .acad-card:nth-child(4) .acad-label','全国大学生数学竞赛','National Math Competition'],
+  ['.academics-grid .acad-card:nth-child(4) .acad-sub','二等奖','Second Prize'],
+  ['.research-box > .research-title','— Research Projects 科研项目','— Research Focus'],
+  ['.research-content > div:nth-child(1) .research-item-title','<em>VIE 荧光诱导发光</em>材料研究','<em>VIE Fluorescent</em> Materials Research',true],
+  ['.research-content > div:nth-child(1) .research-item-desc','在贺晓鹏导师指导下，参与 VIE（Vibration-Induced Emission）荧光材料的合成路线设计与性能改进实验，探索聚集诱导发光的机理与应用。入选华东理工大学创新人才培养计划，系统性开展科研训练。','Advised by Prof. Xiaopeng He, designing synthetic routes and optimizing photophysical properties of Vibration-Induced Emission (VIE) fluorophores under ECUST’s Innovative Talent Training Program.'],
+  ['.research-content > div:nth-child(2) .research-item-title','机器学习与<em>计算机视觉</em>探索','Machine Learning &amp; <em>Computer Vision</em>',true],
+  ['.research-content > div:nth-child(2) .research-item-desc','自主学习机器学习、深度学习及计算机视觉相关知识，掌握 Python 及常用数据科学工具链，正积极备战全国大学生数学建模竞赛，探索 AI 技术与工程领域的交叉融合可能性。','Self-studying machine learning, deep learning, and computer vision with Python and scientific data toolchains; preparing for CUMCM and exploring AI applications in chemical & pipeline engineering.'],
+  ['.course-block > .research-title','— Academic Performance 学业表现','— Academic Performance'],
+  ['.semester-stat:nth-child(1) .semester-label','学分加权均分','Credit-Weighted Avg.'],
+  ['.semester-stat:nth-child(1) .semester-caption','2025–2026 学年第二学期 · 截图可见数值课程','2025–2026 Spring Semester · Numerical-grade courses'],
+  ['.semester-stat:nth-child(2) .semester-value em','门',' courses'],
+  ['.semester-stat:nth-child(2) .semester-label','绩点 4.0 课程','4.0 GPA Courses'],
+  ['.semester-stat:nth-child(2) .semester-caption','覆盖专业基础、专业核心与工程课程','Spanning core chemical, petroleum & engineering courses'],
+  ['.semester-stat:nth-child(3) .semester-value em','学分',' credits'],
+  ['.semester-stat:nth-child(3) .semester-label','本学期可见课程','Semester Credits'],
+  ['.semester-stat:nth-child(3) .semester-caption','包含 10 门数值成绩课程及 B+、P 课程','Includes 10 numerical-grade courses plus B+ & Pass courses'],
+  ['.course-block > .course-group-title','Current Semester · 本学期课程','Current Semester · 2025–2026 Spring'],
+  ['#courseGrid .course-item:nth-child(1) .course-name','电工学 B','Electrotechnics B'],
+  ['#courseGrid .course-item:nth-child(1) .course-meta','2 学分 · 必修','2 Credits · Core'],
+  ['#courseGrid .course-item:nth-child(2) .course-name','物理化学','Physical Chemistry'],
+  ['#courseGrid .course-item:nth-child(2) .course-meta','4 学分 · 必修','4 Credits · Core'],
+  ['#courseGrid .course-item:nth-child(3) .course-name','天然气加工工程','Natural Gas Processing'],
+  ['#courseGrid .course-item:nth-child(3) .course-meta','1.5 学分 · 必修','1.5 Credits · Core'],
+  ['#courseGrid .course-item:nth-child(4) .course-name','石油流变学','Petroleum Rheology'],
+  ['#courseGrid .course-item:nth-child(4) .course-meta','1.5 学分 · 专业选修','1.5 Credits · Major Elective'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(1) .course-name','化工制图','Chemical Engineering Drawing'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(1) .course-meta','2 学分 · 必修','2 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(2) .course-name','化工原理（上）','Principles of Chemical Engineering I'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(2) .course-meta','3 学分 · 必修','3 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(3) .course-name','毛泽东思想和中国特色社会主义理论体系概论','Intro to Mao Zedong Thought & Socialist Theory'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(3) .course-meta','2.5 学分 · 必修','2.5 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(4) .course-name','石油产品及添加剂','Petroleum Products & Additives'],
+  ['#courseMore > .course-grid:nth-of-type(1) .course-item:nth-child(4) .course-meta','1.5 学分 · 专业选修','1.5 Credits · Major Elective'],
+  ['#courseMore > .course-group-title','Foundation · 基础高分课程（2024–2026 学年）','Foundation · High-Score Courses (2024–2026)'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(1) .course-name','高等数学（上）','Advanced Mathematics I'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(1) .course-meta','5 学分 · 必修','5 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(2) .course-name','大学物理（上）','University Physics I'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(2) .course-meta','3 学分 · 必修','3 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(3) .course-name','有机化学','Organic Chemistry'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(3) .course-meta','4 学分 · 必修','4 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(4) .course-name','分析化学','Analytical Chemistry'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(4) .course-meta','2 学分 · 必修','2 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(5) .course-name','AI 与数字经济','AI & Digital Economy'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(5) .course-meta','1 学分 · 选修','1 Credit · Elective'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(6) .course-name','大学物理（下）','University Physics II'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(6) .course-meta','3 学分 · 必修','3 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(7) .course-name','无机化学','Inorganic Chemistry'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(7) .course-meta','4 学分 · 必修','4 Credits · Core'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(8) .course-name','高等数学（下）','Advanced Mathematics II'],
+  ['#courseMore > .course-grid:nth-of-type(2) .course-item:nth-child(8) .course-meta','6 学分 · 必修','6 Credits · Core'],
+  ['.course-note','※ 全部课程（2024.09–2026.07，成绩单制表日 2026-07-11）：初修平均分 89.08，平均学分绩点 3.672。<br>※ 本学期加权均分按截图中 10 门数值成绩课程、共 20 学分计算；B+ 与 P 课程未参与均分换算。页面仅展示代表性课程，不替代正式成绩单。','※ Full Transcript (2024.09–2026.07, issued 2026-07-11): First-attempt average 89.08 / 100, cumulative GPA 3.672 / 4.0.<br>※ Spring 2026 weighted average is computed across 10 numerical-grade courses (20 credits); B+ and Pass courses are excluded. Representative courses shown for reference.',true],
+
+  // 03 Catalysis Project
   ['#projects .project-section-title','研究 <em>项目</em>','Research <em>Project</em>',true],
   ['#catalysis-project-title','催化文献智能数据引擎','Catalysis Literature Intelligence Engine'],
   ['#projects .project-lead','从 PDF 催化文献中提取可追溯的字段级证据和实验记录候选，帮助科研人员快速比较原料、催化剂、反应条件与性能结果。','Extracting traceable, field-level evidence and candidate experimental records from catalysis PDFs to help researchers compare feedstocks, catalysts, conditions, and yields.'],
+  ['#projects .showcase-fallback strong','动态演示暂时无法加载','Interactive demo unavailable'],
+  ['#projects .showcase-fallback span','下方仍可查看项目流程、成果与学术说明。','See the pipeline architecture, metrics, and academic notes below.'],
+  ['#projects .evidence-flow span:nth-of-type(1)','PDF 文献','PDF Corpus'],
+  ['#projects .evidence-flow span:nth-of-type(2)','内容切分','Chunking'],
+  ['#projects .evidence-flow span:nth-of-type(3)','字段证据检索','Field Evidence Retrieval'],
+  ['#projects .evidence-flow span:nth-of-type(4)','数值与对象抽取','Entity & Value Extraction'],
+  ['#projects .evidence-flow span:nth-of-type(5)','化学质量校验','Chemical Validation'],
+  ['#projects .evidence-flow span:nth-of-type(6)','候选记录与审计输出','Candidate Records & Audit'],
+  ['#projects .capability-grid article:nth-child(1) h4','字段级证据检索','Field-Level Evidence Retrieval'],
+  ['#projects .capability-grid article:nth-child(1) p','对催化剂、反应条件和性能字段分别检索证据，保留原文与页码，不让模型脱离上下文猜测答案。','Retrieves targeted evidence snippets with exact quotes and page numbers for catalysts, conditions, and yields, preventing ungrounded LLM hallucination.'],
+  ['#projects .capability-grid article:nth-child(2) h4','化学兼容性与质量校验','Chemical Compatibility & Validation'],
+  ['#projects .capability-grid article:nth-child(2) p','利用对象关系、单位范围与催化化学规则过滤参考文献污染、裸 Y 催化剂和异常温度等高风险结果。','Applies entity-relation constraints, unit bounds, and domain rules to filter reference contamination, bare-Y zeolite ambiguity, and out-of-range temperatures.'],
+  ['#projects .capability-grid article:nth-child(3) h4','可追溯结构化输出','Traceable Structured Output'],
+  ['#projects .capability-grid article:nth-child(3) p','构建实验记录候选，并同步输出 Excel 与 audit JSON，支持人工逐条回看证据和审计路径。','Builds candidate experimental records and exports both Excel workbooks and audit JSONs for line-by-line human verification.'],
+  ['#projects .project-results div:nth-child(1) span','份源 PDF','Source PDFs'],
+  ['#projects .project-results div:nth-child(2) span','篇去重论文','Deduplicated Papers'],
+  ['#projects .project-results div:nth-child(3) span','条 v2.1 精炼候选记录','v2.1 Refined Candidate Records'],
+  ['#projects .project-results div:nth-child(4) span','保留证据与审计路径','Evidence & Audit Traceability'],
+  ['#projects .project-notes > div .note-label','Scientific Value · 科学价值','Scientific Value'],
+  ['#projects .project-notes > div p','当前文献证据显示，中孔 MFI / H-ZSM-5 体系更常见于 C4-C8 产物；通向 C10-C16 航空燃料馏分仍受扩散、二次裂化、积炭和实验关系数据不足等限制。后续将重点比较 FAU、BEA、分级孔、介孔材料及金属-酸协同体系。','Literature evidence shows medium-pore MFI / H-ZSM-5 systems predominantly yield C4–C8 products, while C10–C16 jet-fuel range selectivity remains constrained by diffusion, secondary cracking, and coking. Next steps compare FAU, BEA, hierarchical/mesoporous zeolites, and metal–acid bifunctional systems.'],
+  ['#projects .project-notes > aside .note-label','Academic Note · 学术声明','Academic Note'],
+  ['#projects .project-notes > aside p','当前输出定位为<strong>可追溯的科研文献实验数据候选抽取与人工辅助分析系统</strong>。288 条为候选记录，仍需结合论文全文人工复核，不代表完全无人复核的最终数据库，也不构成对最终 SAF 工业催化剂的结论。','Positioned as a <strong>traceable candidate extraction and human-assisted literature analysis system</strong>. The 288 records are candidates requiring full-text review rather than an unverified final database or definitive industrial SAF catalyst claim.',true],
+  ['#projects .project-actions a:nth-of-type(1)','项目详情页 →','Case Study →'],
+  ['#projects .project-actions a:nth-of-type(2)','查看动态演示','Watch Demo'],
+  ['#projects .project-actions a:nth-of-type(3)','联系合作','Collaborate'],
+  ['#projects .project-actions > span','Technical report · 尚未公开','Technical report · In preparation'],
+
+  // 04 Skills
   ['#skills .section-title','技能 <em>图谱</em>','Technical <em>Skills</em>',true],
+  ['#skillsGrid .skill-card:nth-child(1) .skill-cat','专业核心','Core Engineering'],
+  ['#skillsGrid .skill-card:nth-child(1) .skill-level','专业第一 1/91','Rank 1 / 91'],
+  ['#skillsGrid .skill-card:nth-child(1) .skill-name','油气储运工程','Oil & Gas Storage and Transportation'],
+  ['#skillsGrid .skill-card:nth-child(1) .skill-evidence','天然气加工 95、物理化学 95、石油流变学 92、化工制图 91，全部核心课程满绩或高分。','Natural Gas Processing 95, Physical Chemistry 95, Petroleum Rheology 92, Chem. Eng. Drawing 91 — 4.0 GPA across core major courses.'],
+  ['#skillsGrid .skill-card:nth-child(1) .tag:nth-child(1)','管道工程','Pipeline Eng.'],
+  ['#skillsGrid .skill-card:nth-child(1) .tag:nth-child(2)','储运设备','Storage Systems'],
+  ['#skillsGrid .skill-card:nth-child(1) .tag:nth-child(3)','流体力学','Fluid Mechanics'],
+  ['#skillsGrid .skill-card:nth-child(2) .skill-cat','编程与数据工程','Programming & Data Eng.'],
+  ['#skillsGrid .skill-card:nth-child(2) .skill-level','科研项目主力','Research Pipeline'],
+  ['#skillsGrid .skill-card:nth-child(2) .skill-name','Python','Python'],
+  ['#skillsGrid .skill-card:nth-child(2) .skill-evidence','独立构建催化文献智能数据引擎（48 份 PDF → 288 条可审计记录），通过全国计算机二级。','Built the Catalysis Literature Intelligence Engine (48 PDFs → 288 auditable records); NCRE Level 2 certified.'],
+  ['#skillsGrid .skill-card:nth-child(2) .tag:nth-child(1)','科学 NLP','Scientific NLP'],
+  ['#skillsGrid .skill-card:nth-child(2) .tag:nth-child(2)','数据分析','Data Analysis'],
+  ['#skillsGrid .skill-card:nth-child(2) .tag:nth-child(3)','NumPy / Pandas','NumPy / Pandas'],
+  ['#skillsGrid .skill-card:nth-child(3) .skill-cat','数学能力','Mathematics'],
+  ['#skillsGrid .skill-card:nth-child(3) .skill-level','省级二等奖','Provincial 2nd Prize'],
+  ['#skillsGrid .skill-card:nth-child(3) .skill-name','数学与建模','Mathematics & Modeling'],
+  ['#skillsGrid .skill-card:nth-child(3) .skill-evidence','全国大学生数学竞赛省级二等奖；高等数学 97 分；系统备战全国大学生数学建模竞赛。','Provincial 2nd Prize in National College Math Competition; Advanced Mathematics 97/100; preparing for CUMCM.'],
+  ['#skillsGrid .skill-card:nth-child(3) .tag:nth-child(1)','数学竞赛','Math Olympiad'],
+  ['#skillsGrid .skill-card:nth-child(3) .tag:nth-child(2)','优化算法','Optimization'],
+  ['#skillsGrid .skill-card:nth-child(3) .tag:nth-child(3)','统计建模','Statistical Modeling'],
+  ['#skillsGrid .skill-card:nth-child(4) .skill-cat','化学实验','Wet-Lab Chemistry'],
+  ['#skillsGrid .skill-card:nth-child(4) .skill-level','课题组在研','Undergrad Researcher'],
+  ['#skillsGrid .skill-card:nth-child(4) .skill-name','荧光材料合成','Fluorescent Material Synthesis'],
+  ['#skillsGrid .skill-card:nth-child(4) .skill-evidence','贺晓鹏教授课题组在研，入选校创新人才培养计划；有机化学 96、分析化学 96。','Undergraduate researcher in Prof. Xiaopeng He’s group (ECUST Innovative Talent Program); Organic Chem 96, Analytical Chem 96.'],
+  ['#skillsGrid .skill-card:nth-child(4) .tag:nth-child(1)','VIE 荧光','VIE Fluorophores'],
+  ['#skillsGrid .skill-card:nth-child(4) .tag:nth-child(2)','有机合成','Organic Synthesis'],
+  ['#skillsGrid .skill-card:nth-child(4) .tag:nth-child(3)','光谱表征','Spectroscopy'],
+  ['#skillsGrid .skill-card:nth-child(5) .skill-cat','语言能力','Languages'],
+  ['#skillsGrid .skill-card:nth-child(5) .skill-level','熟练读写','Proficient'],
+  ['#skillsGrid .skill-card:nth-child(5) .skill-name','学术英语','Academic English'],
+  ['#skillsGrid .skill-card:nth-child(5) .skill-evidence','CET-4 583 分、CET-6 540 分；日常阅读英文催化与化学工程文献并完成结构化标注。','CET-4 583, CET-6 540; daily close reading and schema annotation of English catalysis and chemical engineering literature.'],
+  ['#skillsGrid .skill-card:nth-child(5) .tag:nth-child(3)','文献精读','Literature Review'],
+  ['#skillsGrid .skill-card:nth-child(6) .skill-cat','人工智能','Artificial Intelligence'],
+  ['#skillsGrid .skill-card:nth-child(6) .skill-level','持续进阶','Advancing'],
+  ['#skillsGrid .skill-card:nth-child(6) .skill-name','机器学习与视觉','Machine Learning & Vision'],
+  ['#skillsGrid .skill-card:nth-child(6) .skill-evidence','掌握经典机器学习与大模型结构化抽取流程，探索计算机视觉与化工过程结合应用。','Experienced in classical ML and LLM structured extraction workflows; exploring computer vision for chemical processes.'],
+  ['#skillsGrid .skill-card:nth-child(6) .tag:nth-child(2)','LLM 抽取','LLM Extraction'],
+  ['#skillsGrid .skill-card:nth-child(6) .tag:nth-child(3)','计算机视觉','Computer Vision'],
+
+  // 05 Activities
   ['#activities .section-title','校园 <em>活动</em>','Campus <em>Leadership</em>',true],
+  ['.activities-grid .activity-card:nth-child(1) .ac-icon','— Leadership 学生工作','— Class Leadership'],
+  ['.activities-grid .activity-card:nth-child(1) .ac-title','班级班长','Class President'],
+  ['.activities-grid .activity-card:nth-child(1) .ac-desc','担任班级班长，协调同学关系，组织班级活动，获同学和老师一致好评。同时担任勤工助学干事，积极服务同学。','Serving as Class President and Work-Study Officer, coordinating academic and class affairs with strong recognition from faculty and peers.'],
+  ['.activities-grid .activity-card:nth-child(1) .ac-badge','班委核心','Core Leader'],
+  ['.activities-grid .activity-card:nth-child(2) .ac-icon','— Organization 团委工作','— Youth League'],
+  ['.activities-grid .activity-card:nth-child(2) .ac-title','团委社团工作部财务负责人','Head of Finance · Club Affairs Dept.'],
+  ['.activities-grid .activity-card:nth-child(2) .ac-desc','负责团委社团工作部的财务管理，统筹部门资金使用，保障各类活动顺利开展，积累了组织管理与财务协调经验。','Managed departmental budgeting and reimbursements for university club activities, ensuring smooth financial operations across campus events.'],
+  ['.activities-grid .activity-card:nth-child(2) .ac-badge','管理职务','Management'],
+  ['.activities-grid .activity-card:nth-child(3) .ac-icon','— Volunteer 志愿服务','— Volunteering'],
+  ['.activities-grid .activity-card:nth-child(3) .ac-title','累计志愿时长近 200 小时','200+ Hours of Community Service'],
+  ['.activities-grid .activity-card:nth-child(3) .ac-desc','积极参与各类志愿活动和公益活动，累计志愿服务时长近200小时，践行奉献精神，回馈社会。','Actively participated in campus and community public-service initiatives, accumulating nearly 200 verified volunteer hours.'],
+  ['.activities-grid .activity-card:nth-child(3) .ac-badge','公益先锋','Public Service'],
+  ['.activities-grid .activity-card:nth-child(4) .ac-icon','— Competition 竞赛','— Competition'],
+  ['.activities-grid .activity-card:nth-child(4) .ac-title','全国大学生数学竞赛 · 省级二等奖','National College Math Competition · 2nd Prize'],
+  ['.activities-grid .activity-card:nth-child(4) .ac-desc','参加全国大学生数学竞赛并荣获省级二等奖，充分展现扎实的数学功底。目前正全力备战全国大学生数学建模竞赛。','Won the Provincial Second Prize in the National College Mathematics Competition and currently preparing for the CUMCM modeling contest.'],
+  ['.activities-grid .activity-card:nth-child(4) .ac-badge','省级获奖','Provincial Award'],
+
+  // 06 Certificates
   ['#certs .section-title','证书 <em>荣誉</em>','Honors &amp; <em>Certificates</em>',true],
+  ['.certs-intro','以下为本人获得的部分证书与荣誉，包含英语等级证书、奖学金及学生工作认定，点击可放大查看。','Selected certificates and honors including English proficiency, academic scholarships, and leadership appointments. Click any card to inspect.'],
+  ['.certs-grid .cert-item:nth-child(1) .cert-name','英语六级（CET-6）','College English Test Band 6 (CET-6)'],
+  ['.certs-grid .cert-item:nth-child(1) .cert-date','全国大学英语六级考试','Score: 540 · National CET Committee'],
+  ['.certs-grid .cert-item:nth-child(2) .cert-name','英语四级（CET-4）','College English Test Band 4 (CET-4)'],
+  ['.certs-grid .cert-item:nth-child(2) .cert-date','全国大学英语四级考试','Score: 583 · National CET Committee'],
+  ['.certs-grid .cert-item:nth-child(3) .cert-name','学业优秀奖学金二等','Academic Excellence Scholarship (2nd Class)'],
+  ['.certs-grid .cert-item:nth-child(3) .cert-date','华东理工大学','East China University of Science and Technology'],
+  ['.certs-grid .cert-item:nth-child(4) .cert-name','物流仓储部部长聘书','Minister of Logistics & Warehousing'],
+  ['.certs-grid .cert-item:nth-child(4) .cert-date','华东理工大学 · 学生组织','ECUST Student Organization Appointment'],
+  ['.certs-grid .cert-item:nth-child(5) .cert-name','优秀学生','Outstanding Student Honor'],
+  ['.certs-grid .cert-item:nth-child(5) .cert-date','华东理工大学','East China University of Science and Technology'],
+  ['.certs-grid .cert-item:nth-child(6) .cert-name','社会工作奖 B 等','Social Work Scholarship (Class B)'],
+  ['.certs-grid .cert-item:nth-child(6) .cert-date','华东理工大学','East China University of Science and Technology'],
+
+  // 07 Contact & Footer
   ['#contact .section-title','联系 <em>方式</em>','Get in <em>Touch</em>',true],
   ['.contact-intro','欢迎导师、同学或企业朋友联系我，无论是科研合作、学习交流，还是实习就业机会，我都期待与您建立连接。通常24小时内回复。','Whether you are a professor, fellow student, or recruiter interested in research collaboration or internship opportunities, feel free to reach out. I typically reply within 24 hours.'],
-  ['.footer-copy','张天硕 · 华东理工大学 · 化工学院 · 油气储运工程','Tianshuo Zhang · ECUST · Oil & Gas Storage and Transportation Engineering']
+  ['.contact-links .contact-link-item:nth-child(1) .cl-label','Email · 点击复制','Email · Click to copy'],
+  ['.contact-links .contact-link-item:nth-child(1) .cl-arrow','复制 ⧉','Copy ⧉'],
+  ['.contact-links .contact-link-item:nth-child(2) .cl-label','微信 WeChat · 点击复制','WeChat · Click to copy'],
+  ['.contact-links .contact-link-item:nth-child(2) .cl-arrow','复制 ⧉','Copy ⧉'],
+  ['.contact-links .contact-link-item:nth-child(3) .cl-arrow','访问 ↗','Visit ↗'],
+  ['.contact-links .contact-link-item:nth-child(4) .cl-label','所在城市 · 学校官网','Location · University Website'],
+  ['.contact-links .contact-link-item:nth-child(4) .cl-val','上海 · 华东理工大学','Shanghai · ECUST'],
+  ['.contact-links .contact-link-item:nth-child(4) .cl-arrow','访问 ↗','Visit ↗'],
+  ['.contact-actions a:nth-child(1)','下载简历 PDF ↓','Download Résumé PDF ↓'],
+  ['.contact-actions a:nth-child(2)','在线简历','Web Résumé'],
+  ['.quick-mail summary','快速留言（将打开邮件客户端发送）','Quick Message (opens your email client)'],
+  ['#quickMail select[name="role"] option:nth-child(1)','导师 / 老师','Professor / Advisor'],
+  ['#quickMail select[name="role"] option:nth-child(2)','同学','Fellow Student'],
+  ['#quickMail select[name="role"] option:nth-child(3)','企业 / 招聘','Recruiter / Industry'],
+  ['#quickMail select[name="role"] option:nth-child(4)','其他','Other'],
+  ['#quickMail button[type="submit"]','生成邮件 →','Compose Email →'],
+  ['#quickMail .hint','点击后会在您的邮件客户端中预填内容，确认后发出。','Pre-fills an email in your mail client for you to review and send.'],
+  ['.aside-col .aside-box:nth-child(1) .aside-title','— 当前状态','— Current Status'],
+  ['.aside-col .aside-box:nth-child(1) .aside-text','<span class="status-dot"></span>正在积极寻找科研合作 / 实习机会','<span class="status-dot"></span>Open to research collaborations &amp; internships',true],
+  ['.aside-col .aside-box:nth-child(2) .aside-title','— 专业方向','— Focus Areas'],
+  ['.aside-col .aside-box:nth-child(2) .aside-text','油气储运工程（主修）<br>机器学习 / 计算机视觉（自学方向）<br>数学建模（备赛中）','Oil &amp; Gas Storage and Transportation (Major)<br>Machine Learning &amp; Computer Vision<br>Mathematical Modeling (CUMCM)',true],
+  ['.aside-col .aside-box:nth-child(3) .aside-title','— 扫码名片','— QR Business Card'],
+  ['.aside-col .aside-box:nth-child(3) .qr-row p','扫码打开 zts666.me','Scan to open zts666.me'],
+  ['.aside-col .aside-box:nth-child(3) .qr-row a','保存名片图 ↓','Save Card PNG ↓'],
+  ['.aside-col .aside-box:nth-child(4) .aside-title','— 语言能力','— Languages'],
+  ['.aside-col .aside-box:nth-child(4) .aside-text > div:nth-child(1) > span:nth-child(1)','中文（普通话）','Chinese (Mandarin)'],
+  ['.aside-col .aside-box:nth-child(4) .aside-text > div:nth-child(1) > span:nth-child(2)','母语','Native'],
+  ['.footer-copy','张天硕 · 华东理工大学 · 化工学院 · 油气储运工程','Tianshuo Zhang · ECUST · Oil & Gas Storage and Transportation Engineering'],
+  ['.visit-label','Visits · 累计访问','Total Visits'],
+  ['.visit-unit','次','views']
 ];
 const langBtn=document.getElementById('langToggle');
 const applyLang=(lang)=>{
   const isEn=lang==='en';
   document.documentElement.dataset.lang=lang;
+  document.documentElement.lang=isEn?'en':'zh-CN';
   if(langBtn)langBtn.textContent=isEn?'中':'EN';
   const dEl=document.getElementById('today-date');
   if(dEl)dEl.textContent=d.toLocaleDateString(isEn?'en-US':'zh-CN',{year:'numeric',month:'long',day:'numeric'});
@@ -1672,6 +1934,30 @@ const applyLang=(lang)=>{
     if(html)el.innerHTML=isEn?en:zh;
     else el.textContent=isEn?en:zh;
   });
+  // Form label text nodes & placeholders
+  const qm=document.getElementById('quickMail');
+  if(qm){
+    const labels=qm.querySelectorAll('label');
+    const lblText=isEn?['Your Role\n','Your Name\n','Message\n']:['您的身份\n','称呼\n','留言\n'];
+    labels.forEach((lbl,i)=>{
+      const tn=[...lbl.childNodes].find(n=>n.nodeType===Node.TEXT_NODE);
+      if(tn&&lblText[i])tn.textContent=lblText[i];
+    });
+    const whoIn=qm.querySelector('input[name="who"]');
+    if(whoIn)whoIn.placeholder=isEn?'e.g., Prof. Wang / Acme HR':'如：王老师 / 某某公司 HR';
+    const msgIn=qm.querySelector('textarea[name="msg"]');
+    if(msgIn)msgIn.placeholder=isEn?'How can we collaborate?':'想和我聊些什么？';
+  }
+  // Video toggle button in CatalysisProject
+  const vToggle=document.querySelector('#projects .video-toggle');
+  const vLabel=vToggle?.querySelector('.toggle-label');
+  if(vToggle&&vLabel){
+    const paused=vToggle.getAttribute('aria-pressed')==='true';
+    vLabel.textContent=paused?(isEn?'Play':'播放演示'):(isEn?'Pause':'暂停演示');
+  }
+  paintNavToggle();
+  paintCourseToggle();
+  if(lbEl?.classList.contains('open'))renderLb();
 };
 if(document.documentElement.dataset.lang==='en')applyLang('en');
 langBtn?.addEventListener('click',()=>{
