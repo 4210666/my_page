@@ -10,6 +10,7 @@ import CatalysisProject from '../components/projects/CatalysisProject.astro';
 <title>张天硕 — 华东理工大学</title>
 <meta name="description" content="张天硕，华东理工大学化工学院油气储运工程本科生，专业排名第一（1/91）。关注 VIE 荧光材料研究、机器学习与计算机视觉、数学建模。">
 <meta name="author" content="张天硕">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://zts666.me/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
@@ -242,9 +243,12 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 @keyframes visitPulse{0%{box-shadow:0 0 0 0 rgba(139,58,42,.24);}70%,100%{box-shadow:0 0 0 6px rgba(139,58,42,0);}}
 
 /* LIGHTBOX */
-.lightbox{display:none;position:fixed;inset:0;background:rgba(26,25,22,0.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:0.9rem;padding:2rem;}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(26,25,22,0.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:0.9rem;padding:2rem;user-select:none;}
 .lightbox.open{display:flex;}
-.lightbox img{max-width:84vw;max-height:78vh;object-fit:contain;border:0.5px solid rgba(255,255,255,0.18);}
+.lb-stage{position:relative;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;}
+.lightbox img{max-width:84vw;max-height:78vh;object-fit:contain;border:0.5px solid rgba(255,255,255,0.18);-webkit-user-drag:none;user-select:none;pointer-events:none;}
+.lb-watermark{position:absolute;inset:0;pointer-events:none;z-index:2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='150'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' transform='rotate(-22 130 75)' fill='rgba(26,25,22,0.13)' font-family='monospace' font-size='11' letter-spacing='2'%3ETIANSHUO ZHANG %C2%B7 zts666.me%3C/text%3E%3C/svg%3E");background-repeat:repeat;}
+.portrait img,.cert-img-wrap img{-webkit-user-drag:none;user-select:none;}
 .lb-close{position:absolute;top:1.25rem;right:1.5rem;color:rgba(250,248,243,0.85);font-size:12px;cursor:pointer;font-family:var(--mono);letter-spacing:0.12em;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.22);padding:6px 12px;text-transform:uppercase;}
 .lb-close:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
 .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.22);color:rgba(250,248,243,0.9);width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--mono);font-size:16px;transition:all 0.2s;}
@@ -867,7 +871,10 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="证书预览">
   <button class="lb-close" type="button" id="lbClose">× 关闭 ESC</button>
   <button class="lb-nav lb-prev" type="button" id="lbPrev" aria-label="上一张">←</button>
-  <img id="lbImg" src="" alt="">
+  <div class="lb-stage">
+    <img id="lbImg" src="" alt="" draggable="false">
+    <div class="lb-watermark" aria-hidden="true"></div>
+  </div>
   <button class="lb-nav lb-next" type="button" id="lbNext" aria-label="下一张">→</button>
   <div class="lb-caption-bar">
     <span class="lb-counter" id="lbCounter">01 / 06</span>
@@ -1377,12 +1384,12 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
           还是实习就业机会，我都期待与您建立连接。通常24小时内回复。
         </p>
         <div class="contact-links">
-          <button type="button" class="contact-link-item" data-copy="24010663@mail.ecust.edu.cn" data-label="邮箱地址">
-            <div class="cl-left"><span class="cl-label">Email · 点击复制</span><span class="cl-val">24010663@mail.ecust.edu.cn</span></div>
+          <button type="button" class="contact-link-item" data-b64="MjQwMTA2NjNAbWFpbC5lY3VzdC5lZHUuY24=" data-copy="" data-label="邮箱地址">
+            <div class="cl-left"><span class="cl-label">Email · 点击复制</span><span class="cl-val" data-b64-text="MjQwMTA2NjNAbWFpbC5lY3VzdC5lZHUuY24=">24010663 [at] mail.ecust.edu.cn</span></div>
             <span class="cl-arrow">复制 ⧉</span>
           </button>
-          <button type="button" class="contact-link-item" data-copy="zts0910--" data-label="微信号">
-            <div class="cl-left"><span class="cl-label">微信 WeChat · 点击复制</span><span class="cl-val">zts0910--</span></div>
+          <button type="button" class="contact-link-item" data-b64="enRzMDkxMC0t" data-copy="" data-label="微信号">
+            <div class="cl-left"><span class="cl-label">微信 WeChat · 点击复制</span><span class="cl-val" data-b64-text="enRzMDkxMC0t">zts0910 [—]</span></div>
             <span class="cl-arrow">复制 ⧉</span>
           </button>
           <a class="contact-link-item" href="https://github.com/4210666" target="_blank" rel="noopener noreferrer">
@@ -1634,14 +1641,29 @@ const gaugeObs=new IntersectionObserver(entries=>{
 const acadGrid=document.querySelector('.academics-grid');
 if(acadGrid)gaugeObs.observe(acadGrid);
 
+// Decode obfuscated contact info (anti-scraping) & protect portrait/cert assets
+const decB64=s=>{try{return atob(s);}catch{return '';}};
+document.querySelectorAll('[data-b64]').forEach(el=>{
+  const v=decB64(el.getAttribute('data-b64')||'');
+  if(v)el.setAttribute('data-copy',v);
+});
+document.querySelectorAll('[data-b64-text]').forEach(el=>{
+  const v=decB64(el.getAttribute('data-b64-text')||'');
+  if(v)el.textContent=v;
+});
+document.querySelectorAll('.portrait,.cert-img-wrap,#lightbox').forEach(el=>{
+  el.addEventListener('contextmenu',e=>e.preventDefault());
+});
+
 // Quick mail -> mailto
 document.getElementById('quickMail')?.addEventListener('submit',ev=>{
   ev.preventDefault();
   const f=ev.target;
   const role=f.role.value,who=f.who.value.trim(),msg=f.msg.value.trim();
+  const to=decB64('MjQwMTA2NjNAbWFpbC5lY3VzdC5lZHUuY24=');
   const subject=encodeURIComponent('来自个人主页的留言'+(who?'｜'+who:''));
   const body=encodeURIComponent('身份：'+role+'\n称呼：'+(who||'—')+'\n\n'+msg+'\n\n— 来自 zts666.me');
-  location.href='mailto:24010663@mail.ecust.edu.cn?subject='+subject+'&body='+body;
+  location.href='mailto:'+to+'?subject='+subject+'&body='+body;
 });
 motionCards.forEach(card=>{
   card.classList.add('motion-card');

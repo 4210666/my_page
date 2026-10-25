@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>张天硕 — 个人简历｜华东理工大学 · 油气储运工程</title>
 <meta name="description" content="张天硕个人简历：华东理工大学石油加工系油气储运工程专业第一（1/91），研究方向涵盖 VIE 荧光材料与催化文献智能数据引擎。">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -68,13 +69,13 @@
         <h1>张天硕</h1>
         <div class="sub">华东理工大学 · 化工学院（石油加工系）· 油气储运工程 · 本科生（专业排名 1 / 91）</div>
         <div class="meta">
-          <span>Email: 24010663@mail.ecust.edu.cn</span>
-          <span>WeChat: zts0910--</span>
+          <span data-b64-prefix="Email: " data-b64="MjQwMTA2NjNAbWFpbC5lY3VzdC5lZHUuY24=">Email: 24010663 [at] mail.ecust.edu.cn</span>
+          <span data-b64-prefix="WeChat: " data-b64="enRzMDkxMC0t">WeChat: zts0910 [—]</span>
           <span>GitHub: github.com/4210666</span>
           <span>Web: https://zts666.me</span>
         </div>
       </div>
-      <div class="photo"><img src="/images/profile-id-photo.png" alt="张天硕证件照"></div>
+      <div class="photo" oncontextmenu="return false"><img src="/images/profile-id-photo.png" alt="张天硕证件照" draggable="false" style="-webkit-user-drag:none;user-select:none;"></div>
     </header>
 
     <section>
@@ -157,5 +158,14 @@
       </ul>
     </section>
   </main>
+  <script is:inline>
+    document.querySelectorAll('[data-b64]').forEach(el=>{
+      try{
+        const v=atob(el.getAttribute('data-b64')||'');
+        const p=el.getAttribute('data-b64-prefix')||'';
+        if(v)el.textContent=p+v;
+      }catch{}
+    });
+  </script>
 </body>
 </html>

@@ -10,11 +10,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
+*.log
 
 # environment variables
 .env
 .env.production
+
+# local scratch & raw documents
+outputs/
+tempdist*/
+*.xls
+*.xlsx
 
 # macOS-specific files
 .DS_Store
