@@ -262,6 +262,16 @@ footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justif
 .copy-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;padding:9px 18px;border:0.5px solid var(--accent);opacity:0;pointer-events:none;transition:opacity 0.25s,transform 0.25s;z-index:1100;}
 .copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* BACK TO TOP */
+.back-top{position:fixed;right:2rem;bottom:2rem;z-index:95;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;background:var(--nav-bg);backdrop-filter:blur(10px);border:0.5px solid var(--line);color:var(--ink2);font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity 0.3s ease,transform 0.3s cubic-bezier(0.16,1,0.3,1),visibility 0.3s,border-color 0.2s,color 0.2s,background 0.2s;box-shadow:0 8px 24px rgba(26,25,22,0.07);overflow:hidden;}
+.back-top.visible{opacity:1;visibility:visible;transform:translateY(0);}
+.back-top:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.back-top .bt-arrow{font-size:11px;line-height:1;transition:transform 0.2s ease;}
+.back-top:hover .bt-arrow{transform:translateY(-2px);}
+.back-top::after{content:'';position:absolute;left:0;bottom:0;height:1.5px;width:var(--bt-p,0%);background:var(--accent);transition:width 0.1s linear;}
+@media(max-width:700px){.back-top{right:1rem;bottom:1.25rem;padding:7px 11px;font-size:9.5px;}}
+@media print{.back-top{display:none!important;}}
+
 /* RESPONSIVE */
 @media(max-width:700px){
   nav{padding:0 1rem;}
@@ -882,6 +892,10 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
   </div>
 </div>
 <div class="copy-toast" id="copyToast" role="status" aria-live="polite"></div>
+<button class="back-top" id="backTop" type="button" aria-label="回到顶部 / Back to top">
+  <span class="bt-arrow" aria-hidden="true">↑</span>
+  <span>TOP</span>
+</button>
 
 <nav id="siteNav">
   <a class="nav-logo" href="#hero">张天硕 · 华理<span class="nav-badge">本科生</span></a>
@@ -1528,11 +1542,19 @@ themeBtn?.addEventListener('click',()=>{
 // Keep scroll-linked work in a single animation frame.
 let scrollTick=false;
 const ambientEl=document.querySelector('.ambient-canvas');
+const backTopBtn=document.getElementById('backTop');
+backTopBtn?.addEventListener('click',()=>{
+  window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'});
+});
 const updateScrollMotion=()=>{
   const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
   const p=maxScroll>0?(window.scrollY/maxScroll)*100:0;
   document.getElementById('scrollLine').style.width=p+'%';
   document.querySelector('nav').classList.toggle('scrolled',window.scrollY>24);
+  if(backTopBtn){
+    backTopBtn.classList.toggle('visible',window.scrollY>window.innerHeight*0.65);
+    backTopBtn.style.setProperty('--bt-p',p.toFixed(1)+'%');
+  }
   if(ambientEl){
     const fade=Math.min(window.scrollY/(window.innerHeight*0.85),1);
     ambientEl.style.setProperty('--ambient-op',(0.96-fade*0.58).toFixed(2));
