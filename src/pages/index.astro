@@ -578,6 +578,70 @@ html.intro-closing .intro-grid,html.intro-closing .intro-axis,html.intro-closing
 /* Gauges */
 .gauge{display:block;margin:0 auto 8px;width:92px;height:52px;overflow:visible;}
 .gauge .g-track,.gauge .g-arc{fill:none;stroke-width:4;stroke-linecap:round;}
+
+/* 1. Editorial Marquee Ticker (Hero Footer) */
+.hero-ticker{max-width:960px;margin:0 auto;width:100%;border-top:0.5px solid var(--line);display:flex;align-items:center;overflow:hidden;height:38px;background:var(--card2);}
+.ticker-badge{flex:none;display:inline-flex;align-items:center;gap:7px;padding:0 1rem;height:100%;border-right:0.5px solid var(--line);font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);background:var(--bg2);font-weight:500;}
+.ticker-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:beaconPulse 2s ease-in-out infinite;}
+.ticker-viewport{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);}
+.ticker-track{display:inline-flex;align-items:center;gap:2.2rem;white-space:nowrap;padding-left:1.5rem;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--ink2);text-transform:uppercase;animation:tickerRoll 34s linear infinite;}
+.hero-ticker:hover .ticker-track{animation-play-state:paused;}
+.ticker-track span b{color:var(--accent);font-weight:500;margin-right:4px;}
+.ticker-sep{color:var(--ink3);opacity:.55;}
+@keyframes tickerRoll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* 2. P&ID Vertical Pipeline Telemetry Rail (Desktop Right Edge) */
+.pipe-rail{position:fixed;right:1.15rem;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:14px;padding:10px 6px;pointer-events:auto;}
+.pipe-rail::before{content:'';position:absolute;right:12px;top:16px;bottom:16px;width:1px;background:var(--line);z-index:0;}
+.pipe-rail::after{content:'';position:absolute;right:12px;top:16px;width:1.5px;height:var(--rail-p,0%);max-height:calc(100% - 32px);background:linear-gradient(180deg,var(--accent),#26b893);z-index:0;transition:height .2s linear;}
+.rail-node{position:relative;z-index:1;display:flex;align-items:center;justify-content:flex-end;gap:8px;text-decoration:none;cursor:pointer;}
+.rail-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);background:var(--nav-bg);backdrop-filter:blur(8px);border:0.5px solid var(--line);padding:2px 7px;opacity:0;transform:translateX(6px);transition:opacity .25s ease,transform .25s ease,border-color .2s,color .2s;pointer-events:none;white-space:nowrap;}
+.rail-dot{width:13px;height:13px;border-radius:50%;background:var(--bg);border:1px solid var(--ink3);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:7px;color:var(--ink3);transition:all .25s ease;}
+.rail-node:hover .rail-tag,.rail-node.active .rail-tag{opacity:1;transform:translateX(0);}
+.rail-node.active .rail-tag{border-color:var(--accent);color:var(--accent);}
+.rail-node.passed .rail-dot{border-color:var(--accent);color:var(--accent);}
+.rail-node.active .rail-dot{background:var(--accent);border-color:var(--accent);color:var(--bg);box-shadow:0 0 0 4px rgba(139,58,42,0.16);}
+@media(max-width:1180px){.pipe-rail{display:none;}}
+@media print{.pipe-rail,.hero-ticker{display:none!important;}}
+
+/* 3. Interactive VIE Dual-Emission Spectrum Tuner */
+.vie-tuner{margin-top:1.35rem;padding-top:1.25rem;border-top:0.5px dashed var(--line);position:relative;z-index:1;}
+.vie-tuner-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.vie-tuner-title{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink2);display:flex;align-items:center;gap:8px;}
+.vie-cuvette{width:14px;height:14px;border-radius:50%;background:var(--vie-color,#3cebbe);box-shadow:0 0 14px var(--vie-color,#3cebbe),0 0 26px var(--vie-color,#3cebbe);display:inline-block;transition:background .15s,box-shadow .15s;}
+.vie-readout{font-family:var(--mono);font-size:10.5px;color:var(--ink3);letter-spacing:0.08em;}
+.vie-readout strong{color:var(--ink);font-weight:500;}
+.vie-stage{display:grid;grid-template-columns:1fr 220px;gap:1.2rem;align-items:center;}
+.vie-spec-svg{width:100%;height:126px;display:block;background:var(--bg);border:0.5px solid var(--line);padding:6px 10px;}
+.vie-controls{display:flex;flex-direction:column;gap:.65rem;}
+.vie-slider-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase;}
+.vie-slider{width:100%;accent-color:var(--accent);cursor:pointer;height:4px;}
+.vie-presets{display:flex;gap:5px;flex-wrap:wrap;}
+.vie-preset{flex:1;padding:4px 6px;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;background:var(--bg);border:0.5px solid var(--line);color:var(--ink2);cursor:pointer;transition:all .2s;text-align:center;}
+.vie-preset:hover,.vie-preset.active{border-color:var(--accent);color:var(--accent);}
+.vie-state-caption{font-size:11.5px;color:var(--ink3);line-height:1.5;}
+@media(max-width:760px){.vie-stage{grid-template-columns:1fr;}}
+
+/* 4. Six-Axis Interdisciplinary Radar & Synergy Map */
+.skills-synergy{display:grid;grid-template-columns:300px 1fr;gap:2rem;align-items:center;padding:1.4rem 1.6rem;border:0.5px solid var(--line);border-bottom:none;background:var(--card2);}
+.radar-wrap{display:flex;align-items:center;justify-content:center;}
+.radar-svg{width:100%;max-width:280px;height:auto;overflow:visible;}
+.radar-grid-poly{fill:none;stroke:var(--line);stroke-width:0.8;}
+.radar-axis{stroke:var(--line);stroke-width:0.8;stroke-dasharray:2 3;transition:stroke .25s,stroke-width .25s;}
+.radar-axis.active{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:none;}
+.radar-area{fill:rgba(184,92,56,0.16);stroke:var(--accent);stroke-width:1.6;transition:all .35s ease;}
+.radar-node{fill:var(--bg);stroke:var(--accent);stroke-width:1.8;cursor:pointer;transition:r .25s ease,fill .25s ease,filter .25s ease;}
+.radar-node.active{fill:var(--accent);r:6;filter:drop-shadow(0 0 8px rgba(184,92,56,0.65));}
+.radar-label{font-family:var(--mono);font-size:8.5px;fill:var(--ink2);letter-spacing:0.06em;cursor:pointer;transition:fill .2s,font-weight .2s;}
+.radar-label.active{fill:var(--accent);font-weight:600;}
+.synergy-info{display:flex;flex-direction:column;gap:.65rem;}
+.synergy-kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);}
+.synergy-heading{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);}
+.synergy-desc{font-size:13.5px;color:var(--ink2);line-height:1.8;}
+.synergy-active-bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem .9rem;background:var(--bg);border:0.5px solid var(--line);font-family:var(--mono);font-size:11px;}
+.synergy-active-bar strong{color:var(--accent);font-weight:500;}
+.skill-card.radar-focus{border-color:var(--accent)!important;box-shadow:inset 0 0 0 1px var(--accent),0 14px 32px rgba(139,58,42,0.1);}
+@media(max-width:760px){.skills-synergy{grid-template-columns:1fr;padding:1.2rem;gap:1rem;}}
 .gauge .g-track{stroke:var(--line);}
 .gauge .g-arc{stroke:var(--accent);stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1);}
 .gauge .g-tick{stroke:var(--ink3);stroke-width:1;opacity:.5;}
@@ -901,6 +965,15 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
   <span class="bt-arrow" aria-hidden="true">↑</span>
   <span>TOP</span>
 </button>
+<aside class="pipe-rail" id="pipeRail" aria-label="P&ID 章节导航轨">
+  <a class="rail-node active" href="#about" data-sec="about"><span class="rail-tag">01 · ABOUT · RANK 1/91</span><span class="rail-dot">01</span></a>
+  <a class="rail-node" href="#academics" data-sec="academics"><span class="rail-tag">02 · ACAD · GPA 3.672</span><span class="rail-dot">02</span></a>
+  <a class="rail-node" href="#projects" data-sec="projects"><span class="rail-tag">03 · ENGINE · 288 REC</span><span class="rail-dot">03</span></a>
+  <a class="rail-node" href="#skills" data-sec="skills"><span class="rail-tag">04 · SKILLS · 6 AXES</span><span class="rail-dot">04</span></a>
+  <a class="rail-node" href="#activities" data-sec="activities"><span class="rail-tag">05 · CAMPUS · 200h+</span><span class="rail-dot">05</span></a>
+  <a class="rail-node" href="#certs" data-sec="certs"><span class="rail-tag">06 · HONORS · 06 CERTS</span><span class="rail-dot">06</span></a>
+  <a class="rail-node" href="#contact" data-sec="contact"><span class="rail-tag">07 · CONTACT · ECUST</span><span class="rail-dot">07</span></a>
+</aside>
 
 <nav id="siteNav">
   <a class="nav-logo" href="#hero">张天硕 · 华理<span class="nav-badge">本科生</span></a>
@@ -983,6 +1056,27 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
           <div class="stat-num">583<span>/540</span></div>
           <div class="stat-label">四级/六级</div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-ticker" aria-label="核心学术指标流光带">
+    <div class="ticker-badge"><span class="ticker-dot"></span><span id="tickerBadgeText">实时档案 · TELEMETRY</span></div>
+    <div class="ticker-viewport">
+      <div class="ticker-track">
+        <span><b>RANK</b>01 / 91 (OIL &amp; GAS STORAGE &amp; TRANSPORTATION)</span><i class="ticker-sep">◆</i>
+        <span><b>CUM. GPA</b>3.672 / 4.0 (AVG 89.08)</span><i class="ticker-sep">◆</i>
+        <span><b>SPRING 2026</b>91.6 WEIGHTED AVG</span><i class="ticker-sep">◆</i>
+        <span><b>WET-LAB</b>VIE FLUORESCENCE SYNTHESIS (PROF. X. HE GROUP)</span><i class="ticker-sep">◆</i>
+        <span><b>SCI-AI</b>CATALYSIS ENGINE: 48 PDFs → 288 AUDITABLE RECORDS</span><i class="ticker-sep">◆</i>
+        <span><b>MATH</b>NATIONAL MATH COMPETITION 2ND PRIZE</span><i class="ticker-sep">◆</i>
+        <span><b>SERVICE</b>200+ VERIFIED VOLUNTEER HOURS</span><i class="ticker-sep">◆</i>
+        <span><b>RANK</b>01 / 91 (OIL &amp; GAS STORAGE &amp; TRANSPORTATION)</span><i class="ticker-sep">◆</i>
+        <span><b>CUM. GPA</b>3.672 / 4.0 (AVG 89.08)</span><i class="ticker-sep">◆</i>
+        <span><b>SPRING 2026</b>91.6 WEIGHTED AVG</span><i class="ticker-sep">◆</i>
+        <span><b>WET-LAB</b>VIE FLUORESCENCE SYNTHESIS (PROF. X. HE GROUP)</span><i class="ticker-sep">◆</i>
+        <span><b>SCI-AI</b>CATALYSIS ENGINE: 48 PDFs → 288 AUDITABLE RECORDS</span><i class="ticker-sep">◆</i>
+        <span><b>MATH</b>NATIONAL MATH COMPETITION 2ND PRIZE</span><i class="ticker-sep">◆</i>
+        <span><b>SERVICE</b>200+ VERIFIED VOLUNTEER HOURS</span>
       </div>
     </div>
   </div>
@@ -1125,6 +1219,55 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
             掌握 Python 及常用数据科学工具链，
             正积极备战全国大学生数学建模竞赛，
             探索 AI 技术与工程领域的交叉融合可能性。
+          </div>
+        </div>
+      </div>
+
+      <div class="vie-tuner" id="vieTuner">
+        <div class="vie-tuner-head">
+          <div class="vie-tuner-title">
+            <span class="vie-cuvette" id="vieCuvette"></span>
+            <span id="vieTunerTitle">VIE 双发射荧光光谱交互调谐 · Dual-Emission Conformation Tuner</span>
+          </div>
+          <div class="vie-readout">
+            <span id="vieStateLabel">平面化程度</span> <strong id="viePctVal">52%</strong> · <span>I₆₁₀ / I₄₅₀ = <strong id="vieRatioVal">1.08</strong></span>
+          </div>
+        </div>
+        <div class="vie-stage">
+          <svg class="vie-spec-svg" viewBox="0 0 520 120" fill="none" aria-label="VIE 荧光双发射光谱曲线">
+            <defs>
+              <linearGradient id="vieGradBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3cebbe" stop-opacity="0.52"/>
+                <stop offset="100%" stop-color="#3cebbe" stop-opacity="0.0"/>
+              </linearGradient>
+              <linearGradient id="vieGradRed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e06d48" stop-opacity="0.52"/>
+                <stop offset="100%" stop-color="#e06d48" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+            <line x1="30" y1="98" x2="500" y2="98" stroke="rgba(154,152,148,0.35)" stroke-width="0.8"/>
+            <line x1="145" y1="14" x2="145" y2="98" stroke="rgba(60,235,190,0.35)" stroke-width="0.7" stroke-dasharray="2 3"/>
+            <line x1="355" y1="14" x2="355" y2="98" stroke="rgba(224,109,72,0.35)" stroke-width="0.7" stroke-dasharray="2 3"/>
+            <path id="vieAreaBlue" fill="url(#vieGradBlue)" d=""/>
+            <path id="vieAreaRed" fill="url(#vieGradRed)" d=""/>
+            <path id="vieCurveBlue" stroke="#22c7a3" stroke-width="2" fill="none" d=""/>
+            <path id="vieCurveRed" stroke="#d85c38" stroke-width="2" fill="none" d=""/>
+            <text x="145" y="112" text-anchor="middle" fill="#22c7a3" font-family="monospace" font-size="9">450 nm (Bent)</text>
+            <text x="250" y="112" text-anchor="middle" fill="rgba(154,152,148,0.7)" font-family="monospace" font-size="8.5">530 nm</text>
+            <text x="355" y="112" text-anchor="middle" fill="#d85c38" font-family="monospace" font-size="9">610 nm (Planar)</text>
+          </svg>
+          <div class="vie-controls">
+            <div class="vie-slider-label">
+              <span id="vieLeftLbl">受限/低温 (450nm)</span>
+              <span id="vieRightLbl">平面化/高温 (610nm)</span>
+            </div>
+            <input class="vie-slider" id="vieSlider" type="range" min="0" max="100" value="52" aria-label="VIE 分子构象平面化滑块">
+            <div class="vie-presets">
+              <button type="button" class="vie-preset" data-vie="15">Bent · 蓝光</button>
+              <button type="button" class="vie-preset active" data-vie="52">White · 双发射</button>
+              <button type="button" class="vie-preset" data-vie="88">Planar · 红橙</button>
+            </div>
+            <div class="vie-state-caption" id="vieCaption">拖动滑块模拟温度/微环境黏度变化下，二氢二苯并吩嗪分子由弯曲态（450 nm）向平面化态（610 nm）的连续多色荧光响应。</div>
           </div>
         </div>
       </div>
@@ -1271,6 +1414,50 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
       <span class="section-num">04</span>
       <h2 class="section-title">技能 <em>图谱</em></h2>
       <div class="section-rule"></div>
+    </div>
+    <div class="skills-synergy motion-reveal" id="skillsSynergy">
+      <div class="radar-wrap">
+        <svg class="radar-svg" viewBox="0 0 300 250" aria-label="六维交叉学科能力星图">
+          <!-- Concentric Hexagon Grid (center 150,125, R=86) -->
+          <polygon class="radar-grid-poly" points="150,39 224.5,82 224.5,168 150,211 75.5,168 75.5,82"/>
+          <polygon class="radar-grid-poly" points="150,67.7 199.6,96.3 199.6,153.7 150,182.3 100.4,153.7 100.4,96.3"/>
+          <polygon class="radar-grid-poly" points="150,96.3 174.8,110.7 174.8,139.3 150,153.7 125.2,139.3 125.2,110.7"/>
+          <!-- 6 Axes -->
+          <line class="radar-axis active" data-axis="0" x1="150" y1="125" x2="150" y2="39"/>
+          <line class="radar-axis" data-axis="1" x1="150" y1="125" x2="224.5" y2="82"/>
+          <line class="radar-axis" data-axis="2" x1="150" y1="125" x2="224.5" y2="168"/>
+          <line class="radar-axis" data-axis="3" x1="150" y1="125" x2="150" y2="211"/>
+          <line class="radar-axis" data-axis="4" x1="150" y1="125" x2="75.5" y2="168"/>
+          <line class="radar-axis" data-axis="5" x1="150" y1="125" x2="75.5" y2="82"/>
+          <!-- Filled Polygon (scores: 98%, 92%, 94%, 88%, 90%, 86%) -->
+          <polygon class="radar-area" points="150,40.7 218.5,85.4 220,165.4 150,200.7 82.9,163.7 85.9,88"/>
+          <!-- 6 Vertex Nodes -->
+          <circle class="radar-node active" data-node="0" cx="150" cy="40.7" r="4.2"/>
+          <circle class="radar-node" data-node="1" cx="218.5" cy="85.4" r="4.2"/>
+          <circle class="radar-node" data-node="2" cx="220" cy="165.4" r="4.2"/>
+          <circle class="radar-node" data-node="3" cx="150" cy="200.7" r="4.2"/>
+          <circle class="radar-node" data-node="4" cx="82.9" cy="163.7" r="4.2"/>
+          <circle class="radar-node" data-node="5" cx="85.9" cy="88" r="4.2"/>
+          <!-- 6 Labels -->
+          <text class="radar-label active" data-lbl="0" x="150" y="25" text-anchor="middle">01 油气储运</text>
+          <text class="radar-label" data-lbl="1" x="234" y="83" text-anchor="start">02 Python/NLP</text>
+          <text class="radar-label" data-lbl="2" x="234" y="173" text-anchor="start">03 数学建模</text>
+          <text class="radar-label" data-lbl="3" x="150" y="232" text-anchor="middle">04 VIE 荧光</text>
+          <text class="radar-label" data-lbl="4" x="66" y="173" text-anchor="end">05 学术英语</text>
+          <text class="radar-label" data-lbl="5" x="66" y="83" text-anchor="end">06 机器学习</text>
+        </svg>
+      </div>
+      <div class="synergy-info">
+        <div class="synergy-kicker" id="synKicker">Tri-Domain Competency Topology · 学科交叉拓扑</div>
+        <div class="synergy-heading" id="synHeading">油气工程底蕴 × 湿法荧光化学 × 科学人工智能</div>
+        <p class="synergy-desc" id="synDesc">
+          将油气储运核心工程课程（专业排名 1/91）的物理机理思维、贺晓鹏教授课题组 VIE 分子合成的实验训练，与 Python 科学文献抽取及数学建模算法结合，形成可落地的跨界闭环。悬停下方任意技能卡或左侧星图顶点可查看对应实证指标。
+        </p>
+        <div class="synergy-active-bar">
+          <span id="synActiveName">当前聚焦：01 · 油气储运工程（专业核心）</span>
+          <strong id="synActiveMetric">RANK 01 / 91 · 99 / 95 / 95 高分矩阵</strong>
+        </div>
+      </div>
     </div>
     <div class="skills-grid" id="skillsGrid">
       <div class="skill-card">
@@ -1548,6 +1735,8 @@ themeBtn?.addEventListener('click',()=>{
 let scrollTick=false;
 const ambientEl=document.querySelector('.ambient-canvas');
 const backTopBtn=document.getElementById('backTop');
+const pipeRail=document.getElementById('pipeRail');
+const railNodes=[...document.querySelectorAll('.rail-node')];
 backTopBtn?.addEventListener('click',()=>{
   window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'});
 });
@@ -1559,6 +1748,9 @@ const updateScrollMotion=()=>{
   if(backTopBtn){
     backTopBtn.classList.toggle('visible',window.scrollY>window.innerHeight*0.65);
     backTopBtn.style.setProperty('--bt-p',p.toFixed(1)+'%');
+  }
+  if(pipeRail){
+    pipeRail.style.setProperty('--rail-p',p.toFixed(1)+'%');
   }
   if(ambientEl){
     const fade=Math.min(window.scrollY/(window.innerHeight*0.85),1);
@@ -1602,12 +1794,19 @@ document.querySelectorAll('section').forEach(s=>obs.observe(s));
 
 // Highlight the chapter currently in view.
 const navItems=[...document.querySelectorAll('.nav-links a')];
+const secOrder=['about','academics','projects','skills','activities','certs','contact'];
 const navObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
-      navItems.forEach(link=>link.classList.toggle('active',link.getAttribute('href')===`#${e.target.id}`));
+      const id=e.target.id;
+      navItems.forEach(link=>link.classList.toggle('active',link.getAttribute('href')===`#${id}`));
+      const activeIdx=secOrder.indexOf(id);
+      railNodes.forEach((rn,idx)=>{
+        rn.classList.toggle('active',rn.dataset.sec===id);
+        rn.classList.toggle('passed',activeIdx>=0&&idx<=activeIdx);
+      });
       const sceneMap={about:'pipe',academics:'lab',skills:'lab',certs:'lab',projects:'data',activities:'pipe',contact:'pipe'};
-      document.body.dataset.scene=sceneMap[e.target.id]||'pipe';
+      document.body.dataset.scene=sceneMap[id]||'pipe';
     }
   });
 },{rootMargin:'-25% 0px -60% 0px',threshold:0});
@@ -2003,6 +2202,26 @@ const i18nNodes=[
   ['#projects .project-actions a:nth-of-type(2)','查看动态演示','Watch Demo'],
   ['#projects .project-actions a:nth-of-type(3)','联系合作','Collaborate'],
   ['#projects .project-actions > span','Technical report · 尚未公开','Technical report · In preparation'],
+  ['#projects .xray-badge','Interactive X-Ray · 证据透视台','Interactive X-Ray · Evidence Inspector'],
+  ['#projects .xray-sub','点击切换真实抽取样本，悬停字段查看 PDF 原文锚点映射','Switch catalyst samples & hover fields to inspect PDF quote anchors'],
+  ['#tickerBadgeText','实时档案 · TELEMETRY','LIVE TELEMETRY'],
+  ['#vieTunerTitle','VIE 双发射荧光光谱交互调谐 · Dual-Emission Conformation Tuner','VIE Dual-Emission Conformation & Spectrum Tuner'],
+  ['#vieStateLabel','平面化程度','Planarization'],
+  ['#vieLeftLbl','受限/低温 (450nm)','Constrained / Bent (450nm)'],
+  ['#vieRightLbl','平面化/高温 (610nm)','Planarized / Warm (610nm)'],
+  ['.vie-presets .vie-preset:nth-child(1)','Bent · 蓝光','Bent · 450nm Blue'],
+  ['.vie-presets .vie-preset:nth-child(2)','White · 双发射','Balanced · White'],
+  ['.vie-presets .vie-preset:nth-child(3)','Planar · 红橙','Planar · 610nm Red'],
+  ['#vieCaption','拖动滑块模拟温度/微环境黏度变化下，二氢二苯并吩嗪分子由弯曲态（450 nm）向平面化态（610 nm）的连续多色荧光响应。','Drag the slider to simulate how temperature/viscosity tunes dihydrodibenzo[a,c]phenazine from bent (450 nm blue) to planar (610 nm red-orange) dual emission.'],
+  ['#synKicker','Tri-Domain Competency Topology · 学科交叉拓扑','Tri-Domain Competency Topology'],
+  ['#synHeading','油气工程底蕴 × 湿法荧光化学 × 科学人工智能','Pipeline Engineering × Wet-Lab Chemistry × Scientific AI'],
+  ['#synDesc','将油气储运核心工程课程（专业排名 1/91）的物理机理思维、贺晓鹏教授课题组 VIE 分子合成的实验训练，与 Python 科学文献抽取及数学建模算法结合，形成可落地的跨界闭环。悬停下方任意技能卡或左侧星图顶点可查看对应实证指标。','Bridging physical-mechanism thinking from Oil & Gas Storage and Transportation (Rank 1/91) and wet-lab VIE fluorophore synthesis (Prof. X. He Group) with Python scientific NLP and mathematical modeling. Hover any skill card or radar vertex to inspect evidence.'],
+  ['.radar-label[data-lbl="0"]','01 油气储运','01 Pipeline Eng.'],
+  ['.radar-label[data-lbl="1"]','02 Python/NLP','02 Python/NLP'],
+  ['.radar-label[data-lbl="2"]','03 数学建模','03 Math Modeling'],
+  ['.radar-label[data-lbl="3"]','04 VIE 荧光','04 VIE Chem'],
+  ['.radar-label[data-lbl="4"]','05 学术英语','05 Acad. English'],
+  ['.radar-label[data-lbl="5"]','06 机器学习','06 ML & Vision'],
 
   // 04 Skills
   ['#skills .section-title','技能 <em>图谱</em>','Technical <em>Skills</em>',true],
@@ -2152,8 +2371,106 @@ const applyLang=(lang)=>{
   }
   paintNavToggle();
   paintCourseToggle();
+  paintRadarInfo(curRadarIdx);
+  if(window.__refreshXrayLang)window.__refreshXrayLang();
   if(lbEl?.classList.contains('open'))renderLb();
 };
+
+// Interactive VIE Dual-Emission Spectrum Tuner
+const vieSlider=document.getElementById('vieSlider');
+const vieCurveBlue=document.getElementById('vieCurveBlue');
+const vieCurveRed=document.getElementById('vieCurveRed');
+const vieAreaBlue=document.getElementById('vieAreaBlue');
+const vieAreaRed=document.getElementById('vieAreaRed');
+const viePctVal=document.getElementById('viePctVal');
+const vieRatioVal=document.getElementById('vieRatioVal');
+const vieTunerEl=document.getElementById('vieTuner');
+const viePresets=[...document.querySelectorAll('.vie-preset')];
+
+const buildGaussianPath=(mu,sigma,amp)=>{
+  const pts=[];
+  for(let x=30;x<=500;x+=8){
+    const g=Math.exp(-0.5*Math.pow((x-mu)/sigma,2));
+    const y=98-amp*g;
+    pts.push(`${x},${y.toFixed(1)}`);
+  }
+  const line='M'+pts.join(' L');
+  const area=line+' L500,98 L30,98 Z';
+  return {line,area};
+};
+
+const updateVieSpectrum=(val)=>{
+  const p=Math.min(Math.max(Number(val)/100,0),1);
+  // Blue peak (450nm -> x=145) decreases as planarization p increases; Red peak (610nm -> x=355) increases
+  const ampBlue=16+(1-p)*66;
+  const ampRed=14+p*68;
+  const bPath=buildGaussianPath(145,38,ampBlue);
+  const rPath=buildGaussianPath(355,46,ampRed);
+  if(vieCurveBlue)vieCurveBlue.setAttribute('d',bPath.line);
+  if(vieAreaBlue)vieAreaBlue.setAttribute('d',bPath.area);
+  if(vieCurveRed)vieCurveRed.setAttribute('d',rPath.line);
+  if(vieAreaRed)vieAreaRed.setAttribute('d',rPath.area);
+  if(viePctVal)viePctVal.textContent=Math.round(p*100)+'%';
+  const ratio=(ampRed/ampBlue).toFixed(2);
+  if(vieRatioVal)vieRatioVal.textContent=ratio;
+  // Interpolate cuvette glow color: cyan-blue (40,225,195) -> violet-pink (215,125,220) -> warm red-orange (228,96,58)
+  const r=Math.round(p<0.5?40+(215-40)*(p*2):215+(228-215)*((p-0.5)*2));
+  const g=Math.round(p<0.5?225+(125-225)*(p*2):125+(96-125)*((p-0.5)*2));
+  const b=Math.round(p<0.5?195+(220-195)*(p*2):220+(58-220)*((p-0.5)*2));
+  vieTunerEl?.style.setProperty('--vie-color',`rgb(${r},${g},${b})`);
+  viePresets.forEach(btn=>{
+    btn.classList.toggle('active',Math.abs(Number(btn.dataset.vie)-p*100)<12);
+  });
+};
+if(vieSlider){
+  updateVieSpectrum(vieSlider.value);
+  vieSlider.addEventListener('input',e=>updateVieSpectrum(e.target.value));
+  viePresets.forEach(btn=>btn.addEventListener('click',()=>{
+    vieSlider.value=btn.dataset.vie;
+    updateVieSpectrum(btn.dataset.vie);
+  }));
+}
+
+// Six-Axis Interdisciplinary Radar & Skill Card Synergy
+const radarMeta=[
+  {zh:'当前聚焦：01 · 油气储运工程（专业核心）',en:'Focus: 01 · Oil & Gas Storage and Transportation',metricZh:'RANK 01 / 91 · 物理化学 95 / 天然气加工 95',metricEn:'RANK 01 / 91 · Phys. Chem 95 / Gas Proc. 95'},
+  {zh:'当前聚焦：02 · Python 与科学文献数据工程',en:'Focus: 02 · Python & Scientific Data Engineering',metricZh:'48 份催化 PDF → 288 条可追溯实验记录',metricEn:'48 Catalysis PDFs → 288 Auditable Records'},
+  {zh:'当前聚焦：03 · 数学竞赛与统计优化建模',en:'Focus: 03 · Mathematics & Optimization Modeling',metricZh:'全国大学生数学竞赛省级二等奖 · 高数 97',metricEn:'National Math Competition 2nd Prize · Calc 97'},
+  {zh:'当前聚焦：04 · VIE 荧光诱导发光分子合成',en:'Focus: 04 · VIE Fluorophore Wet-Lab Synthesis',metricZh:'贺晓鹏教授课题组 · 有机化学 96 / 分析化学 96',metricEn:'Prof. X. He Lab · Organic 96 / Analytical 96'},
+  {zh:'当前聚焦：05 · 学术英语与英文文献精读',en:'Focus: 05 · Academic English & Literature Review',metricZh:'CET-4 583 / CET-6 540 · 37 篇核心催化文献标注',metricEn:'CET-4 583 / CET-6 540 · 37 Papers Annotated'},
+  {zh:'当前聚焦：06 · 机器学习与计算机视觉探索',en:'Focus: 06 · Machine Learning & Computer Vision',metricZh:'AI 与数字经济 100 · 受控大模型抽取与视觉实训',metricEn:'AI & Digital Econ 100 · Controlled LLM & CV'}
+];
+let curRadarIdx=0;
+const skillCards=[...document.querySelectorAll('#skillsGrid .skill-card')];
+const radarAxes=[...document.querySelectorAll('.radar-axis')];
+const radarNodes=[...document.querySelectorAll('.radar-node')];
+const radarLabels=[...document.querySelectorAll('.radar-label')];
+const synActiveName=document.getElementById('synActiveName');
+const synActiveMetric=document.getElementById('synActiveMetric');
+
+const paintRadarInfo=(idx)=>{
+  curRadarIdx=idx;
+  const item=radarMeta[idx];
+  if(!item)return;
+  const isEn=document.documentElement.dataset.lang==='en';
+  if(synActiveName)synActiveName.textContent=isEn?item.en:item.zh;
+  if(synActiveMetric)synActiveMetric.textContent=isEn?item.metricEn:item.metricZh;
+  radarAxes.forEach((el,i)=>el.classList.toggle('active',i===idx));
+  radarNodes.forEach((el,i)=>el.classList.toggle('active',i===idx));
+  radarLabels.forEach((el,i)=>el.classList.toggle('active',i===idx));
+  skillCards.forEach((el,i)=>el.classList.toggle('radar-focus',i===idx));
+};
+skillCards.forEach((card,idx)=>{
+  card.addEventListener('pointerenter',()=>paintRadarInfo(idx));
+});
+radarNodes.forEach((node,idx)=>{
+  node.addEventListener('pointerenter',()=>paintRadarInfo(idx));
+  node.addEventListener('click',()=>skillCards[idx]?.scrollIntoView({behavior:'smooth',block:'nearest'}));
+});
+radarLabels.forEach((lbl,idx)=>{
+  lbl.addEventListener('pointerenter',()=>paintRadarInfo(idx));
+  lbl.addEventListener('click',()=>skillCards[idx]?.scrollIntoView({behavior:'smooth',block:'nearest'}));
+});
 if(document.documentElement.dataset.lang==='en')applyLang('en');
 langBtn?.addEventListener('click',()=>{
   const next=document.documentElement.dataset.lang==='en'?'zh':'en';

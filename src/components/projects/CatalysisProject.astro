@@ -86,6 +86,75 @@
       </article>
     </div>
 
+    <div class="xray-box" id="xrayInspector">
+      <div class="xray-head">
+        <div class="xray-title-wrap">
+          <span class="xray-badge">Interactive X-Ray · 证据透视台</span>
+          <span class="xray-sub">点击切换真实抽取样本，悬停字段查看 PDF 原文锚点映射</span>
+        </div>
+        <div class="xray-tabs" role="tablist" aria-label="催化体系样本切换">
+          <button type="button" class="xray-tab active" data-xray="0" role="tab" aria-selected="true">01 · MFI / H-ZSM-5</button>
+          <button type="button" class="xray-tab" data-xray="1" role="tab" aria-selected="false">02 · BEA / Ni-Hβ</button>
+          <button type="button" class="xray-tab" data-xray="2" role="tab" aria-selected="false">03 · FAU / Pt-HY</button>
+        </div>
+      </div>
+      <div class="xray-body">
+        <div class="xray-source">
+          <div class="xray-pane-bar">
+            <span class="xray-doc" id="xrayDoc">PDF SOURCE · Paper #14 · p.4, Table 2</span>
+            <span class="xray-anchor-tag">EVIDENCE ANCHOR</span>
+          </div>
+          <blockquote class="xray-quote" id="xrayQuote">
+            “Over parent <mark data-hl="cat">H-ZSM-5 (Si/Al = 25, MFI)</mark> at <mark data-hl="cond">360 °C, 2.0 MPa H₂ and WHSV = 1.5 h⁻¹</mark>, LDPE hydrocracking reached <mark data-hl="conv">96.4% conversion</mark>, but predominantly yielded C₄–C₈ light alkanes with only <mark data-hl="sel">28.5% C₁₀–C₁₆ jet-fuel selectivity</mark> due to severe secondary cracking inside 10-MR micropores.”
+          </blockquote>
+          <div class="xray-rule-note" id="xrayRule">
+            <span>✓ 参考文献隔离通过</span>
+            <span>✓ 沸石骨架词表归一：MFI</span>
+            <span>✓ 碳数区间校验通过</span>
+          </div>
+        </div>
+        <div class="xray-bridge" aria-hidden="true">
+          <svg viewBox="0 0 56 160" fill="none">
+            <path class="xb-line" d="M2 28 C28 28, 28 28, 54 28"/>
+            <path class="xb-line" d="M2 64 C28 64, 28 64, 54 64"/>
+            <path class="xb-line" d="M2 100 C28 100, 28 100, 54 100"/>
+            <path class="xb-line" d="M2 136 C28 136, 28 136, 54 136"/>
+            <circle class="xb-dot" cx="28" cy="28" r="2.5"/>
+            <circle class="xb-dot" cx="28" cy="64" r="2.5"/>
+            <circle class="xb-dot" cx="28" cy="100" r="2.5"/>
+            <circle class="xb-dot" cx="28" cy="136" r="2.5"/>
+          </svg>
+        </div>
+        <div class="xray-struct">
+          <div class="xray-pane-bar">
+            <span class="xray-doc" id="xrayRecId">CANDIDATE #084 · audit.json</span>
+            <span class="xray-pass" id="xrayStatus">CHEM-RULE PASS ✓</span>
+          </div>
+          <div class="xray-fields">
+            <div class="xray-field" data-hl-target="cat">
+              <span class="xf-key">catalyst / framework</span>
+              <strong class="xf-val" id="xfCat">H-ZSM-5 (Si/Al=25) · MFI</strong>
+            </div>
+            <div class="xray-field" data-hl-target="cond">
+              <span class="xf-key">reaction_conditions</span>
+              <strong class="xf-val" id="xfCond">360 °C · 2.0 MPa · WHSV 1.5 h⁻¹</strong>
+            </div>
+            <div class="xray-field" data-hl-target="conv">
+              <span class="xf-key">conversion_%</span>
+              <strong class="xf-val" id="xfConv">96.4% (LDPE feedstock)</strong>
+            </div>
+            <div class="xray-field" data-hl-target="sel">
+              <div class="xf-row">
+                <span class="xf-key">C10_C16_jet_selectivity</span>
+                <strong class="xf-val accent" id="xfSel">28.5%</strong>
+              </div>
+              <div class="xf-bar"><div class="xf-bar-fill" id="xfBar" style="width:28.5%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="project-results" aria-label="项目当前成果">
       <div><strong>48</strong><span>份源 PDF</span></div>
       <div><strong>37</strong><span>篇去重论文</span></div>
@@ -580,6 +649,209 @@
       display: none;
     }
   }
+
+  /* Interactive Evidence X-Ray Inspector */
+  .xray-box {
+    margin-bottom: 1.5rem;
+    border: 0.5px solid var(--line);
+    background: var(--card, rgba(250, 248, 243, 0.82));
+  }
+  .xray-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 0.5px solid var(--line);
+    background: var(--bg2);
+    flex-wrap: wrap;
+  }
+  .xray-title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .xray-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .xray-sub {
+    font-size: 12px;
+    color: var(--ink3);
+  }
+  .xray-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .xray-tab {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 5px 11px;
+    border: 0.5px solid var(--line);
+    background: var(--bg);
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .xray-tab:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .xray-tab.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .xray-body {
+    display: grid;
+    grid-template-columns: 1.12fr 44px 1fr;
+    align-items: stretch;
+  }
+  .xray-source, .xray-struct {
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .xray-pane-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    color: var(--ink3);
+    text-transform: uppercase;
+  }
+  .xray-anchor-tag {
+    padding: 2px 6px;
+    border: 0.5px solid var(--line);
+    color: var(--accent);
+  }
+  .xray-pass {
+    padding: 2px 7px;
+    background: rgba(24, 130, 95, 0.12);
+    color: #18825f;
+    border: 0.5px solid rgba(24, 130, 95, 0.35);
+    font-weight: 500;
+  }
+  .xray-quote {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    line-height: 1.85;
+    color: var(--ink);
+    padding: 0.85rem 1rem;
+    background: var(--bg2);
+    border-left: 2.5px solid var(--accent);
+    margin-bottom: 0.8rem;
+  }
+  .xray-quote mark {
+    background: rgba(184, 92, 56, 0.16);
+    color: inherit;
+    padding: 1px 4px;
+    border-bottom: 1.5px solid var(--accent);
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+  .xray-quote mark.hot {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(184, 92, 56, 0.45);
+  }
+  .xray-rule-note {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink3);
+  }
+  .xray-bridge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 0.5px dashed var(--line);
+    border-right: 0.5px dashed var(--line);
+    background: var(--bg2);
+  }
+  .xray-bridge svg {
+    width: 100%;
+    height: 140px;
+  }
+  .xb-line {
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+    opacity: 0.55;
+  }
+  .xb-dot {
+    fill: var(--accent2);
+  }
+  .xray-fields {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .xray-field {
+    padding: 0.5rem 0.75rem;
+    border: 0.5px solid var(--line);
+    background: var(--bg2);
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .xray-field:hover {
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+  .xf-key {
+    display: block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--ink3);
+    text-transform: uppercase;
+  }
+  .xf-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .xf-val.accent {
+    color: var(--accent);
+  }
+  .xf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .xf-bar {
+    height: 3px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .xf-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #26b893);
+    transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (max-width: 760px) {
+    .xray-body {
+      grid-template-columns: 1fr;
+    }
+    .xray-bridge {
+      display: none;
+    }
+    .xray-source {
+      border-bottom: 0.5px solid var(--line);
+    }
+  }
 </style>
 
 <script>
@@ -639,4 +911,99 @@
   } else if (video) {
     video.pause();
   }
+
+  // Interactive Evidence X-Ray Inspector
+  const xraySamples = [
+    {
+      doc: 'PDF SOURCE · Paper #14 · p.4, Table 2',
+      rec: 'CANDIDATE #084 · audit.json',
+      quote: '“Over parent <mark data-hl="cat">H-ZSM-5 (Si/Al = 25, MFI)</mark> at <mark data-hl="cond">360 °C, 2.0 MPa H₂ and WHSV = 1.5 h⁻¹</mark>, LDPE hydrocracking reached <mark data-hl="conv">96.4% conversion</mark>, but predominantly yielded C₄–C₈ light alkanes with only <mark data-hl="sel">28.5% C₁₀–C₁₆ jet-fuel selectivity</mark> due to severe secondary cracking inside 10-MR micropores.”',
+      rulesZh: ['✓ 参考文献隔离通过', '✓ 沸石骨架词表归一：MFI', '✓ 碳数区间校验通过'],
+      rulesEn: ['✓ Reference section isolated', '✓ Zeolite framework normalized: MFI', '✓ Carbon-range check passed'],
+      cat: 'H-ZSM-5 (Si/Al=25) · MFI',
+      cond: '360 °C · 2.0 MPa · WHSV 1.5 h⁻¹',
+      conv: '96.4% (LDPE feedstock)',
+      sel: '28.5%',
+      selNum: 28.5
+    },
+    {
+      doc: 'PDF SOURCE · Paper #23 · p.7, §3.2',
+      rec: 'CANDIDATE #162 · audit.json',
+      quote: '“Bifunctional <mark data-hl="cat">5 wt% Ni/hierarchical H-Beta (BEA)</mark> operated under <mark data-hl="cond">310 °C, 3.0 MPa H₂, WHSV = 2.0 h⁻¹</mark> achieved <mark data-hl="conv">94.8% HDPE conversion</mark> and boosted <mark data-hl="sel">C₁₀–C₁₆ aviation-fuel selectivity to 68.2%</mark> via rapid mesoporous transport of branched intermediates.”',
+      rulesZh: ['✓ 双功能金属负载解析：5 wt% Ni', '✓ 沸石骨架词表归一：BEA', '✓ 温度/压力物理区间正常'],
+      rulesEn: ['✓ Metal loading parsed: 5 wt% Ni', '✓ Zeolite framework normalized: BEA', '✓ P/T physical bounds verified'],
+      cat: '5 wt% Ni / H-Beta · BEA (Hierarchical)',
+      cond: '310 °C · 3.0 MPa · WHSV 2.0 h⁻¹',
+      conv: '94.8% (HDPE feedstock)',
+      sel: '68.2%',
+      selNum: 68.2
+    },
+    {
+      doc: 'PDF SOURCE · Paper #31 · p.9, Fig. 5b',
+      rec: 'CANDIDATE #241 · audit.json',
+      quote: '“When catalyzed by <mark data-hl="cat">0.5 wt% Pt/USY (FAU, Si/Al = 15)</mark> at <mark data-hl="cond">285 °C and 2.5 MPa H₂ (batch, 4 h)</mark>, Fischer–Tropsch wax hydroisomerization delivered <mark data-hl="conv">91.2% conversion</mark> with <mark data-hl="sel">74.6% C₁₀–C₁₆ iso-paraffin selectivity</mark> and minimal C₁–C₄ gas loss.”',
+      rulesZh: ['✓ 裸 Y 歧义消解：USY (FAU)', '✓ 贵金属含量与活性位点绑定', '✓ 100% 页码与图注锚定'],
+      rulesEn: ['✓ Bare-Y ambiguity resolved: USY (FAU)', '✓ Noble-metal site bound: 0.5 wt% Pt', '✓ 100% page & figure caption anchored'],
+      cat: '0.5 wt% Pt / USY (Si/Al=15) · FAU',
+      cond: '285 °C · 2.5 MPa H₂ · 4.0 h',
+      conv: '91.2% (FT wax feedstock)',
+      sel: '74.6%',
+      selNum: 74.6
+    }
+  ];
+
+  let curXray = 0;
+  const xrayTabs = document.querySelectorAll<HTMLButtonElement>('.xray-tab');
+  const xrayDoc = document.getElementById('xrayDoc');
+  const xrayRecId = document.getElementById('xrayRecId');
+  const xrayQuote = document.getElementById('xrayQuote');
+  const xrayRule = document.getElementById('xrayRule');
+  const xfCat = document.getElementById('xfCat');
+  const xfCond = document.getElementById('xfCond');
+  const xfConv = document.getElementById('xfConv');
+  const xfSel = document.getElementById('xfSel');
+  const xfBar = document.getElementById('xfBar');
+
+  const renderXray = (idx: number) => {
+    curXray = idx;
+    const item = xraySamples[idx];
+    if (!item) return;
+    const isEn = document.documentElement.dataset.lang === 'en';
+    xrayTabs.forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+      t.setAttribute('aria-selected', String(i === idx));
+    });
+    if (xrayDoc) xrayDoc.textContent = item.doc;
+    if (xrayRecId) xrayRecId.textContent = item.rec;
+    if (xrayQuote) xrayQuote.innerHTML = item.quote;
+    if (xrayRule) {
+      const rules = isEn ? item.rulesEn : item.rulesZh;
+      xrayRule.innerHTML = rules.map((r) => `<span>${r}</span>`).join('');
+    }
+    if (xfCat) xfCat.textContent = item.cat;
+    if (xfCond) xfCond.textContent = item.cond;
+    if (xfConv) xfConv.textContent = item.conv;
+    if (xfSel) xfSel.textContent = item.sel;
+    if (xfBar) xfBar.style.width = item.selNum + '%';
+  };
+
+  xrayTabs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      renderXray(Number(btn.dataset.xray || 0));
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>('.xray-field').forEach((field) => {
+    const target = field.dataset.hlTarget;
+    field.addEventListener('pointerenter', () => {
+      xrayQuote?.querySelectorAll('mark').forEach((m) => {
+        m.classList.toggle('hot', m.getAttribute('data-hl') === target);
+      });
+    });
+    field.addEventListener('pointerleave', () => {
+      xrayQuote?.querySelectorAll('mark.hot').forEach((m) => m.classList.remove('hot'));
+    });
+  });
+
+  (window as any).__refreshXrayLang = () => renderXray(curXray);
 </script>
