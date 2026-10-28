@@ -2049,64 +2049,61 @@ document.querySelectorAll('[data-copy]').forEach(btn=>{
   });
 });
 
-// Multi-tier resilient visit counter (instant baseline + local cache + remote API + busuanzi sync)
+// Real visit counter (busuanzi + real remote counter API + local cache fallback, no artificial baseline)
 (()=>{
   const pvNumEl=document.getElementById('site_pv_num');
   const pvWrap=document.getElementById('busuanzi_container_site_pv');
   if(!pvNumEl)return;
   if(pvWrap)pvWrap.style.setProperty('display','inline-flex','important');
 
-  const LAUNCH_UTC=Date.UTC(2026,2,1,0,0,0);
-  const hoursSinceLaunch=Math.max(1,Math.floor((Date.now()-LAUNCH_UTC)/3600000));
-  const baselinePv=280+Math.floor(hoursSinceLaunch*0.12);
-
-  let localHits=0;
-  let cachedRemote=0;
+  let localHits=1;
+  let cachedReal=0;
   let sessionCounted=false;
   try{
-    localHits=parseInt(localStorage.getItem('zts_local_hits')||'0',10)||0;
-    cachedRemote=parseInt(localStorage.getItem('zts_remote_pv')||'0',10)||0;
-    sessionCounted=sessionStorage.getItem('zts_pv_counted')==='1';
+    localStorage.removeItem('zts_remote_pv');
+    localHits=parseInt(localStorage.getItem('zts_real_local_hits')||'0',10)||0;
+    cachedReal=parseInt(localStorage.getItem('zts_real_pv')||'0',10)||0;
+    sessionCounted=sessionStorage.getItem('zts_real_pv_counted')==='1';
     if(!sessionCounted){
       localHits+=1;
-      localStorage.setItem('zts_local_hits',String(localHits));
-      sessionStorage.setItem('zts_pv_counted','1');
+      localStorage.setItem('zts_real_local_hits',String(localHits));
+      sessionStorage.setItem('zts_real_pv_counted','1');
     }
   }catch{}
 
-  let currentPv=Math.max(baselinePv+localHits,cachedRemote);
+  let currentPv=Math.max(1,localHits,cachedReal);
   const renderPv=(val)=>{
     const n=Math.max(currentPv,Math.floor(Number(val)||0));
     currentPv=n;
     pvNumEl.textContent=n.toLocaleString('en-US');
-    try{localStorage.setItem('zts_remote_pv',String(n));}catch{}
+    try{localStorage.setItem('zts_real_pv',String(n));}catch{}
   };
   renderPv(currentPv);
 
-  // Tier 2: Lightweight CORS counter API
+  // Primary real counter API (CORS JSON counter, increments once per browser session)
   const endpoint=sessionCounted
-    ?'https://abacus.jasoncameron.dev/get/zts666.me/visits'
-    :'https://abacus.jasoncameron.dev/hit/zts666.me/visits';
+    ?'https://abacus.jasoncameron.dev/get/zts666.me/real_pv'
+    :'https://abacus.jasoncameron.dev/hit/zts666.me/real_pv';
   const ctrl=typeof AbortController!=='undefined'?new AbortController():null;
   const timer=ctrl?setTimeout(()=>ctrl.abort(),4500):null;
   fetch(endpoint,{mode:'cors',signal:ctrl?.signal})
     .then(r=>r.ok?r.json():null)
     .then(data=>{
       if(data&&typeof data.value==='number'&&data.value>0){
-        renderPv(baselinePv+data.value);
+        renderPv(data.value);
       }
     })
     .catch(()=>{})
     .finally(()=>{if(timer)clearTimeout(timer);});
 
-  // Tier 3: Sync with busuanzi if it populates a valid number
+  // Sync with busuanzi if it populates a real count
   ['busuanzi_site_pv','busuanzi_value_site_pv'].forEach(id=>{
     const el=document.getElementById(id);
     if(!el||typeof MutationObserver==='undefined')return;
     const syncBsz=()=>{
       const raw=(el.textContent||'').replace(/[^\d]/g,'');
       const num=parseInt(raw,10);
-      if(num>0)renderPv(num>currentPv?num:baselinePv+num);
+      if(num>0)renderPv(num);
     };
     new MutationObserver(syncBsz).observe(el,{childList:true,characterData:true,subtree:true});
   });
