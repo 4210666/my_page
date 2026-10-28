@@ -667,14 +667,48 @@ html.intro-closing .intro-grid,html.intro-closing .intro-axis,html.intro-closing
 .vie-glow .research-item-title em,.vie-glow .skill-name{transition:color .3s,text-shadow .3s;}
 .vie-glow:hover .research-item-title em,.vie-glow:hover .skill-name{color:#12b898;text-shadow:0 0 14px rgba(40,235,190,.6);}
 
-/* Folder-style certificate wall */
-.cert-img-wrap{position:relative;}
+/* Folder-style certificate wall + Archival Foil Sheen */
+.cert-img-wrap{position:relative;overflow:hidden;}
+@media(hover:hover) and (pointer:fine){
+  .cert-img-wrap::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .35s ease;
+    background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(255,248,228,0.42),rgba(184,92,56,0.12) 45%,transparent 72%);
+    mix-blend-mode:soft-light;}
+  .cert-item:hover .cert-img-wrap::before{opacity:1;}
+}
 .cert-img-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:26%;background:var(--bg2);border-top:1px solid var(--line);
   clip-path:polygon(0 22%,24% 22%,30% 0,100% 0,100% 100%,0 100%);transition:transform .45s cubic-bezier(.16,1,.3,1);z-index:2;}
 .cert-img-wrap img{transition:transform .45s cubic-bezier(.16,1,.3,1);}
 .cert-item:hover .cert-img-wrap::after{transform:translateY(105%);}
 .cert-item:hover .cert-img-wrap img{transform:translateY(-3%) scale(1.04);}
 @media(hover:none){.cert-img-wrap::after{display:none;}}
+
+/* Editorial Command Palette (Cmd+K / Ctrl+K) */
+.cmd-overlay{position:fixed;inset:0;z-index:1200;background:rgba(20,18,16,0.58);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:12vh 1rem 2rem;}
+.cmd-overlay.open{display:flex;}
+.cmd-modal{width:100%;max-width:540px;background:var(--bg);border:0.5px solid var(--ink);box-shadow:0 28px 70px rgba(20,18,16,0.28);overflow:hidden;}
+.cmd-top{display:flex;align-items:center;gap:10px;padding:.75rem 1rem;border-bottom:0.5px solid var(--line);background:var(--bg2);}
+.cmd-prompt{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--accent);text-transform:uppercase;flex:none;}
+.cmd-input{flex:1;border:none;background:transparent;color:var(--ink);font-family:var(--sans);font-size:14px;outline:none;}
+.cmd-input::placeholder{color:var(--ink3);font-size:13px;}
+.cmd-esc{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--ink3);border:0.5px solid var(--line);padding:2px 6px;background:var(--bg);cursor:pointer;}
+.cmd-list{max-height:340px;overflow-y:auto;padding:.4rem 0;}
+.cmd-group{padding:.35rem 1rem .2rem;font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);}
+.cmd-item{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.55rem 1rem;border:none;background:transparent;color:var(--ink);font-family:var(--sans);font-size:13.5px;text-align:left;cursor:pointer;transition:background .15s,color .15s;}
+.cmd-item:hover,.cmd-item.active{background:var(--bg2);color:var(--accent);}
+.cmd-item-left{display:flex;align-items:baseline;gap:.65rem;min-width:0;}
+.cmd-item-code{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.08em;flex:none;width:24px;}
+.cmd-item-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmd-item-hint{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:0.08em;flex:none;}
+.cmd-foot{display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;border-top:0.5px solid var(--line);background:var(--bg2);font-family:var(--mono);font-size:9.5px;color:var(--ink3);letter-spacing:0.1em;}
+
+/* Now Section & Live Shanghai Clock */
+.now-head{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;margin-bottom:.55rem;}
+.now-head .aside-title{margin-bottom:0;}
+.now-clock{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;color:var(--accent);font-variant-numeric:tabular-nums;}
+.now-list{list-style:none;margin-top:.65rem;padding-top:.65rem;border-top:0.5px dashed var(--line);display:grid;gap:.45rem;}
+.now-list li{font-size:12px;line-height:1.55;color:var(--ink2);display:flex;align-items:baseline;gap:6px;}
+.now-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;color:var(--accent);border:0.5px solid var(--line);background:var(--bg);padding:0 5px;flex:none;}
+@media print{.cmd-overlay{display:none!important;}}
 
 /* Contact additions */
 .contact-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.4rem;}
@@ -973,6 +1007,20 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
   </div>
 </div>
 <div class="copy-toast" id="copyToast" role="status" aria-live="polite"></div>
+<div class="cmd-overlay" id="cmdOverlay" role="dialog" aria-modal="true" aria-label="快捷指令与索引面板">
+  <div class="cmd-modal">
+    <div class="cmd-top">
+      <span class="cmd-prompt">INDEX //</span>
+      <input class="cmd-input" id="cmdInput" type="text" placeholder="搜索章节、课程、证书或执行快捷动作..." autocomplete="off">
+      <button class="cmd-esc" type="button" id="cmdClose">ESC</button>
+    </div>
+    <div class="cmd-list" id="cmdList" role="listbox"></div>
+    <div class="cmd-foot">
+      <span id="cmdFootLeft">↑↓ 选择 · ENTER 执行 · ESC 关闭</span>
+      <span>zts666.me · ARCHIVE</span>
+    </div>
+  </div>
+</div>
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部 / Back to top">
   <span class="bt-arrow" aria-hidden="true">↑</span>
   <span>TOP</span>
@@ -1000,6 +1048,7 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
     <li><a href="/notes">笔记</a></li>
   </ul>
   <div class="nav-tools">
+    <button class="tool-btn" type="button" id="cmdTrigger" aria-label="快捷指令面板 / Command Palette" title="Command Palette (Ctrl+K / ⌘K)">⌘K</button>
     <button class="tool-btn" type="button" id="langToggle" aria-label="切换语言 / Switch language">EN</button>
     <button class="tool-btn" type="button" id="themeToggle" aria-label="切换深浅色主题">☾</button>
   </div>
@@ -1642,8 +1691,16 @@ html[data-lang="en"] .nav-links a,html[data-lang="en"] .mobile-menu a{letter-spa
       </div>
       <div class="aside-col">
         <div class="aside-box">
-          <div class="aside-title">— 当前状态</div>
+          <div class="now-head">
+            <div class="aside-title">— 当前状态 · NOW</div>
+            <span class="now-clock" id="shanghaiClock">UTC+8 · SHANGHAI</span>
+          </div>
           <p class="aside-text"><span class="status-dot"></span>正在积极寻找科研合作 / 实习机会</p>
+          <ul class="now-list" id="nowList">
+            <li><span class="now-tag">LAB</span><span class="now-txt">贺晓鹏教授课题组 · VIE 荧光分子合成与光谱表征</span></li>
+            <li><span class="now-tag">SYS</span><span class="now-txt">催化文献数据引擎 v2.1 · 288 条实验候选记录复核</span></li>
+            <li><span class="now-tag">MOD</span><span class="now-txt">全国大学生数学建模竞赛（CUMCM）算法与建模备赛</span></li>
+          </ul>
         </div>
         <div class="aside-box">
           <div class="aside-title">— 专业方向</div>
@@ -2214,6 +2271,9 @@ const i18nNodes=[
   ['#projects .project-actions a:nth-of-type(1)','项目详情页 →','Case Study →'],
   ['#projects .project-actions a:nth-of-type(2)','查看动态演示','Watch Demo'],
   ['#projects .project-actions a:nth-of-type(3)','联系合作','Collaborate'],
+  ['#citeToggleBtn','Cite · 引用格式','Cite · BibTeX'],
+  ['#citeDrawerTitle','Academic Citation · 学术引用格式（APA & BibTeX）','Academic Citation (APA & BibTeX)'],
+  ['#citeCopyBtn','复制 BibTeX ⧉','Copy BibTeX ⧉'],
   ['#projects .project-actions > span','Technical report · 尚未公开','Technical report · In preparation'],
   ['#projects .xray-badge','Interactive X-Ray · 证据透视台','Interactive X-Ray · Evidence Inspector'],
   ['#projects .xray-sub','点击切换真实抽取样本，悬停字段查看 PDF 原文锚点映射','Switch catalyst samples & hover fields to inspect PDF quote anchors'],
@@ -2333,8 +2393,12 @@ const i18nNodes=[
   ['#quickMail select[name="role"] option:nth-child(4)','其他','Other'],
   ['#quickMail button[type="submit"]','生成邮件 →','Compose Email →'],
   ['#quickMail .hint','点击后会在您的邮件客户端中预填内容，确认后发出。','Pre-fills an email in your mail client for you to review and send.'],
-  ['.aside-col .aside-box:nth-child(1) .aside-title','— 当前状态','— Current Status'],
+  ['.aside-col .aside-box:nth-child(1) .aside-title','— 当前状态 · NOW','— Now & Status'],
   ['.aside-col .aside-box:nth-child(1) .aside-text','<span class="status-dot"></span>正在积极寻找科研合作 / 实习机会','<span class="status-dot"></span>Open to research collaborations &amp; internships',true],
+  ['#nowList li:nth-child(1) .now-txt','贺晓鹏教授课题组 · VIE 荧光分子合成与光谱表征','Prof. X. He Lab · VIE Fluorophore Synthesis & Spectroscopy'],
+  ['#nowList li:nth-child(2) .now-txt','催化文献数据引擎 v2.1 · 288 条实验候选记录复核','Catalysis Engine v2.1 · Auditing 288 Candidate Records'],
+  ['#nowList li:nth-child(3) .now-txt','全国大学生数学建模竞赛（CUMCM）算法与建模备赛','Preparing for CUMCM Mathematical Modeling Contest'],
+  ['#cmdFootLeft','↑↓ 选择 · ENTER 执行 · ESC 关闭','↑↓ Navigate · ENTER Execute · ESC Close'],
   ['.aside-col .aside-box:nth-child(2) .aside-title','— 专业方向','— Focus Areas'],
   ['.aside-col .aside-box:nth-child(2) .aside-text','油气储运工程（主修）<br>机器学习 / 计算机视觉（自学方向）<br>数学建模（备赛中）','Oil &amp; Gas Storage and Transportation (Major)<br>Machine Learning &amp; Computer Vision<br>Mathematical Modeling (CUMCM)',true],
   ['.aside-col .aside-box:nth-child(3) .aside-title','— 扫码名片','— QR Business Card'],
@@ -2386,8 +2450,124 @@ const applyLang=(lang)=>{
   paintCourseToggle();
   paintRadarInfo(curRadarIdx);
   if(window.__refreshXrayLang)window.__refreshXrayLang();
+  const cmdIn=document.getElementById('cmdInput');
+  if(cmdIn)cmdIn.placeholder=isEn?'Search sections, courses, certs, or run actions...':'搜索章节、课程、证书或执行快捷动作...';
+  if(typeof renderCmdList==='function')renderCmdList();
   if(lbEl?.classList.contains('open'))renderLb();
 };
+
+// Live Shanghai UTC+8 Telemetry Clock
+const shClockEl=document.getElementById('shanghaiClock');
+const updateShanghaiClock=()=>{
+  if(!shClockEl)return;
+  try{
+    const t=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());
+    shClockEl.textContent=`SHANGHAI · UTC+8 · ${t}`;
+  }catch{}
+};
+updateShanghaiClock();
+setInterval(updateShanghaiClock,1000);
+
+// Editorial Command Palette (Cmd+K / Ctrl+K)
+const cmdOverlay=document.getElementById('cmdOverlay');
+const cmdInput=document.getElementById('cmdInput');
+const cmdList=document.getElementById('cmdList');
+const cmdTrigger=document.getElementById('cmdTrigger');
+const cmdClose=document.getElementById('cmdClose');
+let cmdActiveIdx=0;
+let cmdFiltered=[];
+
+const cmdItems=[
+  {groupZh:'快捷指令 · Quick Actions',groupEn:'Quick Actions',code:'↓',zh:'下载个人简历 PDF',en:'Download Résumé PDF',hint:'PDF',kw:'resume cv pdf 简历 下载',run:()=>{const a=document.createElement('a');a.href='/zhangtianshuo-resume.pdf';a.download='';a.click();}},
+  {groupZh:'快捷指令 · Quick Actions',groupEn:'Quick Actions',code:'⧉',zh:'复制邮箱地址（24010663@mail.ecust.edu.cn）',en:'Copy Email Address',hint:'COPY',kw:'email mail 邮箱 复制',run:()=>{document.querySelector('[data-label="邮箱地址"]')?.click();}},
+  {groupZh:'快捷指令 · Quick Actions',groupEn:'Quick Actions',code:'⧉',zh:'复制微信号（WeChat ID）',en:'Copy WeChat ID',hint:'COPY',kw:'wechat 微信 复制',run:()=>{document.querySelector('[data-label="微信号"]')?.click();}},
+  {groupZh:'快捷指令 · Quick Actions',groupEn:'Quick Actions',code:'◐',zh:'切换深色 / 浅色主题',en:'Toggle Dark / Light Theme',hint:'THEME',kw:'dark light theme 深色 浅色 夜间 主题',run:()=>{themeBtn?.click();}},
+  {groupZh:'快捷指令 · Quick Actions',groupEn:'Quick Actions',code:'文',zh:'切换语言（中文 / English）',en:'Switch Language (ZH / EN)',hint:'LANG',kw:'english chinese lang 英文 中文 语言',run:()=>{langBtn?.click();}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'01',zh:'关于我 & 成长轨迹（专业第一 1/91 · 入党推优）',en:'01 About Me & Journey (Rank 1/91)',hint:'#about',kw:'about journey 简介 关于 成长 华东理工',run:()=>{location.hash='#about';}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'02',zh:'学术成就 & VIE 双发射光谱调谐器（GPA 3.672 / 91.6）',en:'02 Academic Record & VIE Spectrum Tuner',hint:'#academics',kw:'academics gpa vie 学术 成绩 物理化学 电工学 高等数学 荧光',run:()=>{location.hash='#academics';}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'03',zh:'催化文献智能数据引擎 & X-Ray 证据透视台（288 条记录）',en:'03 Catalysis Literature Engine & X-Ray Inspector',hint:'#projects',kw:'projects catalysis nlp pdf xray 催化 文献 项目',run:()=>{location.hash='#projects';}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'04',zh:'六维交叉学科拓扑星图 & 技能矩阵',en:'04 Six-Axis Competency Radar & Skills',hint:'#skills',kw:'skills radar python math 技能 雷达 建模',run:()=>{location.hash='#skills';}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'05',zh:'校园活动 · 班长 / 团委财务 / 200h+ 志愿 / 数学竞赛',en:'05 Campus Leadership & Math Competition',hint:'#activities',kw:'activities volunteer 活动 班长 志愿 数学竞赛',run:()=>{location.hash='#activities';}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'06',zh:'证书荣誉墙（CET-6 / CET-4 / 奖学金 / 优秀学生）',en:'06 Honors & Certificates Wall',hint:'#certs',kw:'certs honors cet4 cet6 证书 奖学金 四级 六级',run:()=>{location.hash='#certs';}},
+  {groupZh:'章节与档案检索 · Archive Index',groupEn:'Archive & Sections',code:'07',zh:'联系方式 & 快速邮件留言 & 扫码名片',en:'07 Contact, Quick Mail & QR Card',hint:'#contact',kw:'contact qr 联系 留言 名片',run:()=>{location.hash='#contact';}},
+  {groupZh:'独立页面 · Standalone Pages',groupEn:'Standalone Pages',code:'→',zh:'打开：催化文献引擎完整架构页',en:'Open: Catalysis Engine Full Case Study',hint:'/projects/catalysis',kw:'case study catalysis 详情',run:()=>{location.href='/projects/catalysis';}},
+  {groupZh:'独立页面 · Standalone Pages',groupEn:'Standalone Pages',code:'→',zh:'打开：一页式在线学术简历',en:'Open: Web Academic Résumé',hint:'/resume',kw:'web resume 在线简历',run:()=>{location.href='/resume';}},
+  {groupZh:'独立页面 · Standalone Pages',groupEn:'Standalone Pages',code:'→',zh:'打开：科研与学习笔记专栏',en:'Open: Research & Study Notes',hint:'/notes',kw:'notes blog 笔记',run:()=>{location.href='/notes';}}
+];
+
+function renderCmdList(){
+  if(!cmdList)return;
+  const isEn=document.documentElement.dataset.lang==='en';
+  const q=(cmdInput?.value||'').trim().toLowerCase();
+  cmdFiltered=cmdItems.filter(it=>!q||it.zh.toLowerCase().includes(q)||it.en.toLowerCase().includes(q)||it.kw.includes(q)||it.hint.toLowerCase().includes(q));
+  if(cmdActiveIdx>=cmdFiltered.length)cmdActiveIdx=0;
+  let lastGroup='';
+  let html='';
+  cmdFiltered.forEach((it,idx)=>{
+    const grp=isEn?it.groupEn:it.groupZh;
+    if(grp!==lastGroup){
+      lastGroup=grp;
+      html+=`<div class="cmd-group">${grp}</div>`;
+    }
+    const title=isEn?it.en:it.zh;
+    html+=`<button type="button" class="cmd-item${idx===cmdActiveIdx?' active':''}" data-cmd-idx="${idx}" role="option" aria-selected="${idx===cmdActiveIdx}">
+      <span class="cmd-item-left"><span class="cmd-item-code">${it.code}</span><span class="cmd-item-title">${title}</span></span>
+      <span class="cmd-item-hint">${it.hint}</span>
+    </button>`;
+  });
+  if(!cmdFiltered.length){
+    html=`<div class="cmd-group" style="padding:1rem;text-align:center;">${isEn?'No matching entries':'未找到匹配条目'}</div>`;
+  }
+  cmdList.innerHTML=html;
+  cmdList.querySelectorAll('.cmd-item').forEach(btn=>{
+    btn.addEventListener('pointerenter',()=>{
+      cmdActiveIdx=Number(btn.getAttribute('data-cmd-idx')||0);
+      cmdList.querySelectorAll('.cmd-item').forEach((b,i)=>b.classList.toggle('active',i===cmdActiveIdx));
+    });
+    btn.addEventListener('click',()=>{
+      const item=cmdFiltered[Number(btn.getAttribute('data-cmd-idx')||0)];
+      closeCmd();
+      item?.run();
+    });
+  });
+}
+
+const openCmd=()=>{
+  if(!cmdOverlay)return;
+  cmdOverlay.classList.add('open');
+  if(cmdInput){cmdInput.value='';}
+  cmdActiveIdx=0;
+  renderCmdList();
+  requestAnimationFrame(()=>cmdInput?.focus());
+};
+const closeCmd=()=>{
+  cmdOverlay?.classList.remove('open');
+};
+cmdTrigger?.addEventListener('click',openCmd);
+cmdClose?.addEventListener('click',closeCmd);
+cmdOverlay?.addEventListener('click',e=>{if(e.target===cmdOverlay)closeCmd();});
+cmdInput?.addEventListener('input',()=>{cmdActiveIdx=0;renderCmdList();});
+window.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){
+    e.preventDefault();
+    if(cmdOverlay?.classList.contains('open'))closeCmd();
+    else openCmd();
+    return;
+  }
+  if(!cmdOverlay?.classList.contains('open'))return;
+  if(e.key==='Escape'){e.preventDefault();closeCmd();}
+  else if(e.key==='ArrowDown'){
+    e.preventDefault();
+    if(cmdFiltered.length){cmdActiveIdx=(cmdActiveIdx+1)%cmdFiltered.length;renderCmdList();}
+  }else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    if(cmdFiltered.length){cmdActiveIdx=(cmdActiveIdx-1+cmdFiltered.length)%cmdFiltered.length;renderCmdList();}
+  }else if(e.key==='Enter'){
+    e.preventDefault();
+    const item=cmdFiltered[cmdActiveIdx];
+    if(item){closeCmd();item.run();}
+  }
+});
 
 // Interactive VIE Dual-Emission Spectrum Tuner
 const vieSlider=document.getElementById('vieSlider');

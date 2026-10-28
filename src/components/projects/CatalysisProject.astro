@@ -184,7 +184,25 @@
       <a class="project-action-primary" href="/projects/catalysis">项目详情页 →</a>
       <a class="project-action-secondary" href="#catalysis-showcase-video">查看动态演示</a>
       <a class="project-action-secondary" href="#contact">联系合作</a>
+      <button type="button" class="project-action-secondary cite-btn" id="citeToggleBtn" aria-expanded="false" aria-controls="citeDrawer">Cite · 引用格式</button>
       <span>Technical report · 尚未公开</span>
+    </div>
+
+    <div class="cite-drawer" id="citeDrawer" hidden>
+      <div class="cite-head">
+        <span class="cite-label" id="citeDrawerTitle">Academic Citation · 学术引用格式（APA &amp; BibTeX）</span>
+        <button type="button" class="cite-copy-btn" id="citeCopyBtn">复制 BibTeX ⧉</button>
+      </div>
+      <p class="cite-apa">
+        Zhang, T. (2026). <em>Catalysis Literature Intelligence Engine: Evidence-First Extraction and Chemical Validation Pipeline (v2.1)</em> [Research System]. East China University of Science and Technology. https://zts666.me/projects/catalysis
+      </p>
+      <pre class="cite-bib" id="citeBibCode"><code>@software&#123;zhang2026catalysis,
+  author       = &#123;Zhang, Tianshuo&#125;,
+  title        = &#123;Catalysis Literature Intelligence Engine: Evidence-First Extraction Pipeline (v2.1)&#125;,
+  year         = &#123;2026&#125;,
+  organization = &#123;East China University of Science and Technology&#125;,
+  url          = &#123;https://zts666.me/projects/catalysis&#125;
+&#125;</code></pre>
     </div>
   </div>
 </section>
@@ -852,6 +870,66 @@
       border-bottom: 0.5px solid var(--line);
     }
   }
+
+  /* Academic Citation / BibTeX Drawer */
+  .cite-btn {
+    cursor: pointer;
+    font-family: var(--mono);
+  }
+  .cite-drawer {
+    margin-top: 1rem;
+    border: 0.5px solid var(--line);
+    background: var(--bg2);
+    padding: 1rem 1.25rem;
+  }
+  .cite-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--line);
+  }
+  .cite-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cite-copy-btn {
+    background: var(--bg);
+    border: 0.5px solid var(--line);
+    color: var(--ink2);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cite-copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .cite-apa {
+    font-family: var(--serif);
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ink2);
+    margin-bottom: 0.75rem;
+  }
+  .cite-bib {
+    background: var(--bg);
+    border: 0.5px solid var(--line);
+    padding: 0.75rem 0.9rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.65;
+    color: var(--ink);
+    overflow-x: auto;
+  }
 </style>
 
 <script>
@@ -1006,4 +1084,30 @@
   });
 
   (window as any).__refreshXrayLang = () => renderXray(curXray);
+
+  const citeToggleBtn = document.getElementById('citeToggleBtn');
+  const citeDrawer = document.getElementById('citeDrawer');
+  const citeCopyBtn = document.getElementById('citeCopyBtn');
+  const citeBibCode = document.getElementById('citeBibCode');
+
+  citeToggleBtn?.addEventListener('click', () => {
+    if (!citeDrawer) return;
+    const isHidden = citeDrawer.hasAttribute('hidden');
+    if (isHidden) citeDrawer.removeAttribute('hidden');
+    else citeDrawer.setAttribute('hidden', '');
+    citeToggleBtn.setAttribute('aria-expanded', String(isHidden));
+  });
+
+  citeCopyBtn?.addEventListener('click', async () => {
+    const raw = citeBibCode?.textContent || '';
+    const isEn = document.documentElement.dataset.lang === 'en';
+    try {
+      await navigator.clipboard.writeText(raw);
+    } catch {}
+    citeCopyBtn.textContent = isEn ? 'Copied ✓' : '已复制 ✓';
+    setTimeout(() => {
+      const enNow = document.documentElement.dataset.lang === 'en';
+      citeCopyBtn.textContent = enNow ? 'Copy BibTeX ⧉' : '复制 BibTeX ⧉';
+    }, 1800);
+  });
 </script>
