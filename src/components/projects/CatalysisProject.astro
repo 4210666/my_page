@@ -169,10 +169,45 @@
     </article>
 
     <!-- ═══ LAB 02: WET-LAB · VIE FLUORESCENCE ═══ -->
-    <article class="lab-unit lab-unit-vie" id="vieLab" aria-labelledby="vieLabTitle">
+    <article class="lab-unit lab-unit-vie uv-active" id="vieLab" aria-labelledby="vieLabTitle">
+      <!-- Hidden 365nm UV-Reactive Fluorescent Molecular Watermark -->
+      <div class="uv-secret-layer" aria-hidden="true">
+        <div class="uv-beam-glow"></div>
+        <svg class="uv-chem-svg" viewBox="0 0 920 280" fill="none">
+          <!-- Dihydrodibenzo[a,c]phenazine (DPAC) Bent Saddle -> Planarized Skeleton -->
+          <g stroke="currentColor" stroke-width="1.25" opacity="0.88">
+            <polygon points="88,96 122,76 156,96 156,136 122,156 88,136"/>
+            <polygon points="156,96 192,76 226,96 226,136 192,156 156,136"/>
+            <polygon points="226,96 260,76 294,96 294,136 260,156 226,136"/>
+            <polygon points="134,42 168,22 202,42 192,76 156,76"/>
+            <polygon points="192,156 226,156 242,192 208,214 176,192"/>
+            <line x1="156" y1="96" x2="156" y2="76" stroke-dasharray="3 2"/>
+            <circle cx="156" cy="96" r="3.5" fill="currentColor"/>
+            <circle cx="226" cy="136" r="3.5" fill="currentColor"/>
+          </g>
+          <text x="86" y="242" fill="currentColor" font-family="monospace" font-size="11" letter-spacing="2">DPAC · S₁ BENT (θ ≈ 138°) → S₁ PLANAR (θ ≈ 176°)</text>
+          <text x="86" y="260" fill="currentColor" font-family="monospace" font-size="10" opacity="0.75">λ_ex = 365 nm UV · Δν_Stokes = 6,120 cm⁻¹ · RATIOMETRIC DUAL EMISSION</text>
+
+          <g transform="translate(560, 28)" stroke="currentColor" stroke-width="1.1" opacity="0.82">
+            <path d="M20 140 C65 140, 75 34, 118 34 C160 34, 168 118, 206 118 C242 118, 255 18, 298 18" stroke-dasharray="4 4"/>
+            <circle cx="118" cy="34" r="4" fill="currentColor"/>
+            <circle cx="298" cy="18" r="4" fill="currentColor"/>
+            <text x="84" y="24" fill="currentColor" font-family="monospace" font-size="10">S₁* (Bent · 450nm)</text>
+            <text x="232" y="12" fill="currentColor" font-family="monospace" font-size="10">S₁* (Planar · 610nm)</text>
+            <text x="128" y="168" fill="currentColor" font-family="monospace" font-size="10.5" letter-spacing="1.5">VIBRATION-INDUCED PLANARIZATION</text>
+          </g>
+        </svg>
+      </div>
+
       <div class="lab-unit-bar">
         <span class="lab-tag vie"><i class="lab-dot vie"></i>LAB 02 // WET-LAB · MOLECULAR PHOTOPHYSICS (10⁻⁹ m)</span>
-        <span class="lab-year" id="vieYearTag">贺晓鹏教授课题组 · 校创新人才培养计划 · 2025–至今</span>
+        <div class="lab-bar-right">
+          <span class="lab-year" id="vieYearTag">贺晓鹏教授课题组 · 校创新人才培养计划 · 2025–至今</span>
+          <button type="button" class="uv-torch-btn active" id="uvTorchBtn" aria-pressed="true" title="切换 365nm 紫外激发手电筒透视分子暗纹">
+            <i class="uv-led"></i>
+            <span id="uvTorchLbl">UV 365nm · ON</span>
+          </button>
+        </div>
       </div>
 
       <div class="vie-lab-grid">
@@ -874,9 +909,93 @@
     overflow-x: auto;
   }
 
-  /* LAB 02: VIE Wet-Lab Darkroom */
+  /* LAB 02: VIE Wet-Lab Darkroom + 365nm UV Torch */
   .lab-unit-vie {
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(135deg, #171615 0%, #131616 100%);
+  }
+
+  .lab-unit-vie > :not(.uv-secret-layer) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lab-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .uv-torch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(154, 120, 255, 0.35);
+    color: #c6b6ff;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .uv-torch-btn:hover {
+    border-color: #a98bff;
+    background: rgba(124, 92, 255, 0.18);
+  }
+
+  .uv-led {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #655b7c;
+    transition: all 0.18s;
+  }
+
+  .uv-torch-btn.active .uv-led {
+    background: #a47dff;
+    box-shadow: 0 0 10px #a47dff, 0 0 18px var(--vie-color, #3cebbe);
+  }
+
+  .uv-secret-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--vie-color, #3cebbe);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    -webkit-mask-image: radial-gradient(230px circle at var(--uv-x, -999px) var(--uv-y, -999px), #000 0%, rgba(0,0,0,0.65) 46%, transparent 78%);
+    mask-image: radial-gradient(230px circle at var(--uv-x, -999px) var(--uv-y, -999px), #000 0%, rgba(0,0,0,0.65) 46%, transparent 78%);
+  }
+
+  .lab-unit-vie.uv-active.uv-hovering .uv-secret-layer {
+    opacity: 1;
+  }
+
+  .uv-beam-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(240px circle at var(--uv-x, -999px) var(--uv-y, -999px), rgba(148, 102, 255, 0.16), rgba(60, 235, 190, 0.06) 45%, transparent 75%);
+  }
+
+  .uv-chem-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: drop-shadow(0 0 8px var(--vie-color, #3cebbe));
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .uv-torch-btn,
+    .uv-secret-layer {
+      display: none !important;
+    }
   }
 
   .vie-lab-grid {
@@ -1209,8 +1328,40 @@
   xrayTabs.forEach((btn) => {
     btn.addEventListener('click', () => {
       renderXray(Number(btn.dataset.xray || 0));
+      (window as any).__playTick?.(960);
     });
   });
+
+  // 365nm UV Torch Spotlight inside LAB 02
+  const vieLabEl = document.getElementById('vieLab');
+  const uvTorchBtn = document.getElementById('uvTorchBtn');
+  const uvTorchLbl = document.getElementById('uvTorchLbl');
+  const finePtr = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  const paintUvLabel = () => {
+    if (!uvTorchBtn || !uvTorchLbl) return;
+    const on = vieLabEl?.classList.contains('uv-active');
+    uvTorchBtn.classList.toggle('active', Boolean(on));
+    uvTorchBtn.setAttribute('aria-pressed', String(Boolean(on)));
+    uvTorchLbl.textContent = on ? 'UV 365nm · ON' : 'UV 365nm · OFF';
+  };
+
+  uvTorchBtn?.addEventListener('click', () => {
+    vieLabEl?.classList.toggle('uv-active');
+    paintUvLabel();
+    (window as any).__playTick?.(1180);
+  });
+
+  if (vieLabEl && finePtr && !reduceMotion) {
+    vieLabEl.addEventListener('pointerenter', () => vieLabEl.classList.add('uv-hovering'));
+    vieLabEl.addEventListener('pointerleave', () => vieLabEl.classList.remove('uv-hovering'));
+    vieLabEl.addEventListener('pointermove', (e) => {
+      if (!vieLabEl.classList.contains('uv-active')) return;
+      const r = vieLabEl.getBoundingClientRect();
+      vieLabEl.style.setProperty('--uv-x', `${(e.clientX - r.left).toFixed(1)}px`);
+      vieLabEl.style.setProperty('--uv-y', `${(e.clientY - r.top).toFixed(1)}px`);
+    });
+  }
 
   document.querySelectorAll<HTMLElement>('.xray-field').forEach((field) => {
     const target = field.dataset.hlTarget;

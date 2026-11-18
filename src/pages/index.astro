@@ -114,8 +114,14 @@ nav.scrolled{box-shadow:0 10px 30px rgba(22,21,19,0.06);}
 .nav-tools{display:flex;align-items:center;gap:7px;}
 .tool-btn{background:transparent;border:1px solid var(--line);color:var(--ink2);font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;min-width:34px;height:28px;padding:0 8px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;justify-content:center;}
 .tool-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tool-btn.muted{opacity:0.42;text-decoration:line-through;}
 .nav-toggle{display:none;background:transparent;border:1px solid var(--line);padding:5px 10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--ink);cursor:pointer;}
 .scroll-line{position:absolute;bottom:-1px;left:0;height:2px;background:var(--accent);width:0%;z-index:200;transition:width 0.08s linear;pointer-events:none;}
+.scroll-line::after{content:'';position:absolute;right:-2px;top:-1.5px;width:10px;height:5px;border-radius:99px;background:var(--re-color,var(--accent));box-shadow:0 0 10px var(--re-color,var(--accent));opacity:var(--re-op,0);transition:opacity .25s ease;}
+.re-badge{position:fixed;top:62px;right:2.5rem;z-index:96;display:inline-flex;align-items:center;gap:6px;padding:3px 9px;background:var(--nav-bg);backdrop-filter:blur(8px);border:1px solid var(--line-strong);font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;color:var(--ink2);font-variant-numeric:tabular-nums;pointer-events:none;opacity:0;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease;}
+.re-badge.active{opacity:1;transform:translateY(0);}
+.re-dot{width:6px;height:6px;border-radius:50%;background:var(--re-color,#14967b);box-shadow:0 0 8px var(--re-color,#14967b);}
+@media(max-width:700px){.re-badge{display:none;}}
 
 .mobile-menu{display:none;position:fixed;top:54px;left:0;right:0;bottom:0;background:var(--menu-bg);z-index:99;padding:1.5rem;flex-direction:column;overflow-y:auto;}
 .mobile-menu.open{display:flex;}
@@ -223,8 +229,14 @@ html.intro-on:not(.intro-closing) #hero{opacity:0.2;transform:translateY(10px);}
 .sec-h2{font-family:var(--serif);font-size:clamp(30px,3.6vw,42px);font-weight:900;line-height:1.1;letter-spacing:-0.8px;color:var(--ink);margin-bottom:1.2rem;}
 .sec-h2 em{font-style:italic;color:var(--accent);}
 
-.giant-rank{font-family:var(--serif);font-size:clamp(68px,7.5vw,98px);font-weight:900;line-height:0.92;letter-spacing:-3px;color:var(--ink);font-variant-numeric:tabular-nums;margin:0.5rem 0 0.4rem;}
+.giant-rank-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0.4rem 0 0.35rem;}
+.giant-rank{font-family:var(--serif);font-size:clamp(68px,7.5vw,98px);font-weight:900;line-height:0.92;letter-spacing:-3px;color:var(--ink);font-variant-numeric:tabular-nums;}
 .giant-rank span{font-size:0.38em;font-weight:400;letter-spacing:0;color:var(--accent);margin-left:4px;}
+.archival-stamp{position:relative;width:84px;height:84px;padding:0;border:none;background:transparent;color:var(--accent);cursor:pointer;flex:none;opacity:0.86;transition:transform .18s cubic-bezier(.22,1,.36,1),opacity .18s;}
+.archival-stamp:hover{opacity:1;transform:scale(1.05);}
+.archival-stamp.stamped{animation:stampPress .34s cubic-bezier(.22,1,.36,1);}
+@keyframes stampPress{0%{transform:scale(1);}35%{transform:scale(0.86) rotate(-4deg);}100%{transform:scale(1) rotate(0);}}
+.stamp-ring{transform-origin:50px 50px;transform:rotate(var(--stamp-rot,0deg));}
 .giant-caption{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);padding-bottom:1.2rem;margin-bottom:1.2rem;border-bottom:1.5px solid var(--ink);}
 
 .ledger-kv{display:grid;gap:0;}
@@ -363,6 +375,16 @@ html[data-theme="dark"] .radar-area{fill:rgba(228,131,97,0.18);}
 .qr-row img{width:92px;height:92px;background:#fff;padding:5px;border:1px solid var(--line);flex:none;}
 .qr-row p{font-size:13px;color:var(--ink2);margin-bottom:6px;}
 .qr-row a{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;}
+.qr-box{position:relative;padding:0;overflow:visible;background:transparent;border:none;}
+.ticket-upper{border:1px solid var(--line-strong);border-bottom:none;padding:1.35rem 1.4rem 1.15rem;background:var(--bg2);}
+.ticket-perf{position:relative;height:18px;background:var(--bg2);border-left:1px solid var(--line-strong);border-right:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;}
+.ticket-perf::before,.ticket-perf::after{content:'';position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);transform:translateY(-50%);}
+.ticket-perf::before{left:-8px;clip-path:inset(0 0 0 50%);}
+.ticket-perf::after{right:-8px;clip-path:inset(0 50% 0 0);}
+.ticket-perf-line{width:calc(100% - 22px);border-top:1.5px dashed var(--line-strong);}
+.ticket-stub{width:100%;display:flex;align-items:center;justify-content:space-between;gap:0.6rem;padding:0.8rem 1.4rem;background:var(--bg2);border:1px solid var(--line-strong);border-top:none;color:var(--ink);font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transform-origin:left top;transition:transform .38s cubic-bezier(.22,1,.36,1),background .18s,color .18s,box-shadow .38s;}
+.ticket-stub:hover{background:var(--bg3);color:var(--accent);}
+.ticket-stub.torn{transform:translateY(10px) rotate(2.8deg);background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:0 14px 28px rgba(0,0,0,0.18);}
 
 /* FOOTER */
 footer{padding:1.8rem 2.5rem;border-top:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;max-width:1160px;margin:0 auto;position:relative;z-index:1;}
@@ -548,6 +570,7 @@ section.visible .motion-reveal{opacity:1;transform:none;}
       <li><a href="/notes">笔记 ↗</a></li>
     </ul>
     <div class="nav-tools">
+      <button class="tool-btn" type="button" id="sfxToggle" aria-pressed="true" aria-label="切换精密机械音效" title="机械阻尼微音效 / Tactile Sound">♪</button>
       <button class="tool-btn" type="button" id="cmdTrigger" aria-label="快捷指令面板" title="Command Palette (Ctrl+K / ⌘K)">⌘K</button>
       <button class="tool-btn" type="button" id="langToggle" aria-label="切换中英文">EN</button>
       <button class="tool-btn" type="button" id="themeToggle" aria-label="切换深浅色模式">☾</button>
@@ -556,6 +579,7 @@ section.visible .motion-reveal{opacity:1;transform:none;}
   </div>
   <div class="scroll-line" id="scrollLine"></div>
 </nav>
+<div class="re-badge" id="reBadge" aria-hidden="true"><i class="re-dot"></i><span id="reText">Re = 820 · LAMINAR</span></div>
 
 <div class="mobile-menu" id="mobileMenu" aria-label="章节导航">
   <a href="#projects"><span>01</span>代表作实验台</a>
@@ -716,7 +740,25 @@ section.visible .motion-reveal{opacity:1;transform:none;}
       <div class="ledger-sticky motion-reveal">
         <span class="sec-eyebrow">02 / ACADEMIC LEDGER</span>
         <h2 class="sec-h2" id="acadTitle">学术 <em>总账</em></h2>
-        <div class="giant-rank">1<span>/ 91</span></div>
+        <div class="giant-rank-row">
+          <div class="giant-rank">1<span>/ 91</span></div>
+          <button type="button" class="archival-stamp" id="ledgerStamp" aria-label="点击加盖成绩单核验骑缝章" title="点击核验成绩单签注 / Click to stamp">
+            <svg viewBox="0 0 100 100" fill="none">
+              <defs>
+                <path id="stampCirclePath" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/>
+              </defs>
+              <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 2"/>
+              <circle cx="50" cy="50" r="27" stroke="currentColor" stroke-width="0.9"/>
+              <g class="stamp-ring">
+                <text fill="currentColor" font-family="monospace" font-size="6.4" letter-spacing="1.75">
+                  <textPath href="#stampCirclePath">ECUST · PETROLEUM ENG · VERIFIED 2026 ·</textPath>
+                </text>
+              </g>
+              <text x="50" y="48" text-anchor="middle" fill="currentColor" font-family="serif" font-weight="900" font-size="11">3.672</text>
+              <text x="50" y="59" text-anchor="middle" fill="currentColor" font-family="monospace" font-size="6.2" letter-spacing="1">VERIFIED</text>
+            </svg>
+          </button>
+        </div>
         <div class="giant-caption" id="acadRankCap">油气储运工程 · 专业综合排名第一</div>
 
         <div class="ledger-kv">
@@ -984,15 +1026,22 @@ section.visible .motion-reveal{opacity:1;transform:none;}
           </ul>
         </div>
 
-        <div class="aside-box qr-box">
-          <div class="aside-title" id="qrBoxTitle">— 数字名片 · QR DOSSIER</div>
-          <div class="qr-row">
-            <img src="/qr-zts666.svg" width="92" height="92" alt="zts666.me 二维码" loading="lazy">
-            <div>
-              <p id="qrDesc">手机扫码打开 zts666.me</p>
-              <a href="/card-zhangtianshuo.png" id="qrDlLink" download>保存高清名片图 ↓</a>
+        <div class="aside-box qr-box" id="qrTicket">
+          <div class="ticket-upper">
+            <div class="aside-title" id="qrBoxTitle">— 数字名片 · QR DOSSIER</div>
+            <div class="qr-row">
+              <img src="/qr-zts666.svg" width="92" height="92" alt="zts666.me 二维码" loading="lazy">
+              <div>
+                <p id="qrDesc">手机扫码打开 zts666.me</p>
+                <a href="/card-zhangtianshuo.png" id="qrDlLink" download>保存高清名片图 ↓</a>
+              </div>
             </div>
           </div>
+          <div class="ticket-perf" aria-hidden="true"><div class="ticket-perf-line"></div></div>
+          <button type="button" class="ticket-stub" id="tearStubBtn">
+            <span id="stubText">✂ 撕下名片存根 · 复制全套名片信息</span>
+            <span>NO. 01/91 ⧉</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1034,7 +1083,7 @@ if(document.documentElement.classList.contains('intro-on')){
   window.addEventListener('keydown', closeIntro, {once:true});
 }
 
-// 2. Theme Toggle
+// 2. Theme Toggle & Pure-Code Micrometer Detent Audio Synthesizer
 const themeBtn = document.getElementById('themeToggle');
 const metaTheme = document.querySelector('meta[name="theme-color"]');
 const paintTheme = () => {
@@ -1048,6 +1097,48 @@ themeBtn?.addEventListener('click', () => {
   document.documentElement.dataset.theme = next;
   try{ localStorage.setItem('theme', next); }catch(e){}
   paintTheme();
+  window.__playTick?.(920);
+});
+
+const sfxBtn = document.getElementById('sfxToggle');
+let sfxOn = true;
+try{ sfxOn = localStorage.getItem('zts_sfx') !== '0'; }catch(e){}
+let audioCtx = null;
+const paintSfx = () => {
+  if(!sfxBtn) return;
+  sfxBtn.classList.toggle('muted', !sfxOn);
+  sfxBtn.setAttribute('aria-pressed', String(sfxOn));
+};
+paintSfx();
+
+window.__playTick = (freq = 1320, gainPeak = 0.028) => {
+  if(!sfxOn || reduceMotion) return;
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    if(!audioCtx) audioCtx = new AC();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const t0 = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, t0);
+    osc.frequency.exponentialRampToValueAtTime(240, t0 + 0.014);
+    gain.gain.setValueAtTime(gainPeak, t0);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.016);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(t0);
+    osc.stop(t0 + 0.017);
+    navigator.vibrate?.(3);
+  }catch(e){}
+};
+
+sfxBtn?.addEventListener('click', () => {
+  sfxOn = !sfxOn;
+  try{ localStorage.setItem('zts_sfx', sfxOn ? '1' : '0'); }catch(e){}
+  paintSfx();
+  if(sfxOn) window.__playTick(1480, 0.036);
 });
 
 // 3. Signature Tactile Vernier Scale Dial (Hero)
@@ -1131,14 +1222,23 @@ const paintScale = (idx) => {
 paintScale(1);
 
 vernierBtns.forEach(btn=>{
-  btn.addEventListener('click', ()=>paintScale(Number(btn.dataset.scale||0)));
+  btn.addEventListener('click', ()=>{
+    paintScale(Number(btn.dataset.scale||0));
+    window.__playTick?.(1120, 0.035);
+  });
 });
 
+let lastTickIdx = -1;
 if(vernierRuler && isFinePointer && !reduceMotion){
   vernierRuler.addEventListener('pointermove', e=>{
     const rect = vernierRuler.getBoundingClientRect();
     const ratio = Math.min(Math.max((e.clientX - rect.left)/rect.width, 0), 1);
     const centerIdx = ratio * (TICK_COUNT - 1);
+    const roundedIdx = Math.round(centerIdx);
+    if(roundedIdx !== lastTickIdx){
+      lastTickIdx = roundedIdx;
+      window.__playTick?.(1420 + (roundedIdx % 8) * 35, 0.016);
+    }
     vTicks.forEach((t,i)=>{
       const dist = Math.abs(i - centerIdx);
       const lift = dist < 6 ? 1 + (1 - dist/6)*1.15 : 1;
@@ -1146,31 +1246,77 @@ if(vernierRuler && isFinePointer && !reduceMotion){
     });
   });
   vernierRuler.addEventListener('pointerleave', ()=>{
+    lastTickIdx = -1;
     vTicks.forEach(t=>{ t.style.transform = ''; });
   });
   vernierRuler.addEventListener('click', e=>{
     const rect = vernierRuler.getBoundingClientRect();
     const ratio = (e.clientX - rect.left)/rect.width;
     paintScale(ratio < 0.34 ? 0 : ratio < 0.67 ? 1 : 2);
+    window.__playTick?.(1040, 0.036);
   });
 }
 
-// 4. Scroll Telemetry, Active Chapter & Journey Progress
+// 4. Scroll Telemetry, Reynolds Number (Re) Flow Regime, Stamp Gear & Journey
 let scrollTick = false;
+let lastScrollY = window.scrollY;
+let lastScrollTs = performance.now();
+let reFadeTimer = 0;
 const backTopBtn = document.getElementById('backTop');
 const pipeRail = document.getElementById('pipeRail');
 const railNodes = [...document.querySelectorAll('.rail-node')];
 const journeyList = document.getElementById('journeyList');
 const jItems = [...document.querySelectorAll('.journey-item')];
+const reBadge = document.getElementById('reBadge');
+const reText = document.getElementById('reText');
+const ledgerStamp = document.getElementById('ledgerStamp');
 
 backTopBtn?.addEventListener('click', ()=>window.scrollTo({top:0, behavior:reduceMotion?'auto':'smooth'}));
 
 const onScrollFrame = () => {
+  const now = performance.now();
+  const dy = Math.abs(window.scrollY - lastScrollY);
+  const dt = Math.max(now - lastScrollTs, 16);
+  const vel = (dy / dt) * 1000; // px/sec
+  lastScrollY = window.scrollY;
+  lastScrollTs = now;
+
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
   const p = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
   const sl = document.getElementById('scrollLine');
   if(sl) sl.style.width = p + '%';
   document.getElementById('siteNav')?.classList.toggle('scrolled', window.scrollY > 20);
+
+  // Scroll-geared circular verification stamp rotation
+  if(ledgerStamp && !reduceMotion){
+    ledgerStamp.style.setProperty('--stamp-rot', `${(window.scrollY * 0.075).toFixed(1)}deg`);
+  }
+
+  // Pipe Flow Reynolds Number (Re) Laminar / Transitional / Turbulent indicator
+  if(isFinePointer && dy > 1 && reBadge && reText){
+    const re = Math.min(9800, Math.round(420 + vel * 1.45));
+    const isEn = document.documentElement.dataset.lang === 'en';
+    let regime = isEn ? 'LAMINAR' : '层流 LAMINAR';
+    let col = '#14967b';
+    if(re >= 4000){
+      regime = isEn ? 'TURBULENT' : '湍流 TURBULENT';
+      col = '#d85c38';
+    }else if(re >= 2100){
+      regime = isEn ? 'TRANSITION' : '过渡流 TRANSITION';
+      col = '#c98a2c';
+    }
+    reText.textContent = `Re = ${re.toLocaleString('en-US')} · ${regime}`;
+    reBadge.style.setProperty('--re-color', col);
+    sl?.style.setProperty('--re-color', col);
+    sl?.style.setProperty('--re-op', '1');
+    reBadge.classList.add('active');
+    clearTimeout(reFadeTimer);
+    reFadeTimer = setTimeout(()=>{
+      reBadge.classList.remove('active');
+      sl?.style.setProperty('--re-op', '0');
+    }, 780);
+  }
+
   if(backTopBtn){
     backTopBtn.classList.toggle('visible', window.scrollY > window.innerHeight * 0.65);
     backTopBtn.style.setProperty('--bt-p', p.toFixed(1) + '%');
@@ -1277,7 +1423,9 @@ const updateVieSpectrum = (val) => {
   const r = Math.round(p<0.5 ? 60+(235-60)*(p*2) : 235+(240-235)*((p-0.5)*2));
   const g = Math.round(p<0.5 ? 235+(175-235)*(p*2) : 175+(120-175)*((p-0.5)*2));
   const b = Math.round(p<0.5 ? 190+(220-190)*(p*2) : 220+(80-220)*((p-0.5)*2));
-  vieTunerEl?.style.setProperty('--vie-color', `rgb(${r},${g},${b})`);
+  const vieCol = `rgb(${r},${g},${b})`;
+  vieTunerEl?.style.setProperty('--vie-color', vieCol);
+  document.getElementById('vieLab')?.style.setProperty('--vie-color', vieCol);
   viePresets.forEach(btn=>btn.classList.toggle('active', Math.abs(Number(btn.dataset.vie) - p*100) < 12));
 };
 if(vieSlider){
@@ -1286,6 +1434,7 @@ if(vieSlider){
   viePresets.forEach(btn=>btn.addEventListener('click', ()=>{
     vieSlider.value = btn.dataset.vie;
     updateVieSpectrum(btn.dataset.vie);
+    window.__playTick?.(1160);
   }));
 }
 
@@ -1359,9 +1508,9 @@ const paintRadarInfo = (idx) => {
   if(dEl) dEl.textContent = isEn ? item.descEn : item.descZh;
   if(gEl) gEl.innerHTML = (isEn ? item.tagsEn : item.tagsZh).map(t=>`<span>${t}</span>`).join('');
 };
-radarNodes.forEach((n,i)=>{ n.addEventListener('pointerenter', ()=>paintRadarInfo(i)); n.addEventListener('click', ()=>paintRadarInfo(i)); });
-radarLabels.forEach((l,i)=>{ l.addEventListener('pointerenter', ()=>paintRadarInfo(i)); l.addEventListener('click', ()=>paintRadarInfo(i)); });
-topoPills.forEach((p,i)=>p.addEventListener('click', ()=>paintRadarInfo(i)));
+radarNodes.forEach((n,i)=>{ n.addEventListener('pointerenter', ()=>paintRadarInfo(i)); n.addEventListener('click', ()=>{ paintRadarInfo(i); window.__playTick?.(1080); }); });
+radarLabels.forEach((l,i)=>{ l.addEventListener('pointerenter', ()=>paintRadarInfo(i)); l.addEventListener('click', ()=>{ paintRadarInfo(i); window.__playTick?.(1080); }); });
+topoPills.forEach((p,i)=>p.addEventListener('click', ()=>{ paintRadarInfo(i); window.__playTick?.(1080); }));
 
 // 7. Awwwards Cursor-Tracked Certificate Preview + Watermarked Lightbox
 const certs = [
@@ -1468,6 +1617,46 @@ document.querySelectorAll('#portraitWrap,#lightbox,.cert-float').forEach(el=>{
 
 const toastEl = document.getElementById('copyToast');
 let toastTimer;
+const showToast = (msg, ms = 2400) => {
+  if(!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('show'), ms);
+};
+
+// Archival Verification Stamp Press
+ledgerStamp?.addEventListener('click', ()=>{
+  ledgerStamp.classList.remove('stamped');
+  void ledgerStamp.offsetWidth;
+  ledgerStamp.classList.add('stamped');
+  window.__playTick?.(520, 0.045);
+  const isEn = document.documentElement.dataset.lang === 'en';
+  showToast(isEn
+    ? '✓ Transcript Verified · Issued 2026-07-11 · Rank 1/91 · GPA 3.672'
+    : '✓ 成绩单签注已核验 · 制表日 2026-07-11 · 专业第 1/91 · GPA 3.672', 2800);
+});
+
+// Perforated Tear-Off Contact Stub
+const tearStubBtn = document.getElementById('tearStubBtn');
+let stubTimer = 0;
+tearStubBtn?.addEventListener('click', async()=>{
+  tearStubBtn.classList.add('torn');
+  window.__playTick?.(760, 0.04);
+  setTimeout(()=>window.__playTick?.(1240, 0.03), 55);
+  const isEn = document.documentElement.dataset.lang === 'en';
+  const email = decB64('MjQwMTA2NjNAbWFpbC5lY3VzdC5lZHUuY24=');
+  const cardText = isEn
+    ? `Tianshuo Zhang (张天硕) | ECUST Oil & Gas Eng. (Rank 1/91) | Email: ${email} | Web: https://zts666.me`
+    : `张天硕 (Tianshuo Zhang)｜华东理工大学油气储运工程（专业排名 1/91）｜Email: ${email}｜主页: https://zts666.me`;
+  try{ await navigator.clipboard.writeText(cardText); }catch{}
+  showToast(isEn
+    ? '✂ Stub Torn Off · Full Contact Card Copied to Clipboard'
+    : '✂ 已撕下名片存根 · 完整联系名片已写入剪贴板', 2800);
+  clearTimeout(stubTimer);
+  stubTimer = setTimeout(()=>tearStubBtn.classList.remove('torn'), 2800);
+});
+
 document.querySelectorAll('[data-copy]').forEach(btn=>{
   btn.addEventListener('click', async()=>{
     const val = btn.getAttribute('data-copy');
@@ -1475,10 +1664,8 @@ document.querySelectorAll('[data-copy]').forEach(btn=>{
     const label = btn.getAttribute('data-label') || '内容';
     const labelEn = label === '邮箱地址' ? 'Email' : 'WeChat ID';
     try{ await navigator.clipboard.writeText(val); }catch{}
-    toastEl.textContent = isEn ? `Copied ${labelEn}: ${val}` : `已复制${label}：${val}`;
-    toastEl.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 2200);
+    window.__playTick?.(1180);
+    showToast(isEn ? `Copied ${labelEn}: ${val}` : `已复制${label}：${val}`, 2200);
   });
 });
 
@@ -1754,6 +1941,7 @@ const i18nNodes = [
   ['#qrBoxTitle','— 数字名片 · QR DOSSIER','— Digital Card · QR DOSSIER'],
   ['#qrDesc','手机扫码打开 zts666.me','Scan to open zts666.me'],
   ['#qrDlLink','保存高清名片图 ↓','Save Card PNG ↓'],
+  ['#stubText','✂ 撕下名片存根 · 复制全套名片信息','✂ Tear Off Stub · Copy Full Contact Card'],
   ['#cmdFootLeft','↑↓ 选择 · ENTER 执行 · ESC 关闭','↑↓ Navigate · ENTER Execute · ESC Close'],
   ['.footer-copy','张天硕 · 华东理工大学 · 化工学院 · 油气储运工程','Tianshuo Zhang · ECUST · Oil & Gas Storage and Transportation Engineering'],
   ['.visit-label','Visits · 累计访问','Total Visits'],
